@@ -48,12 +48,12 @@ jobs:
 
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Dependency review"
-        uses: "actions/dependency-review-action@v4"
+        uses: "actions/dependency-review-action@v5"
         with:
           # Any known vulnerability at all, at any severity. A development tool
           # with a low-severity advisory is not urgent, but it is also not

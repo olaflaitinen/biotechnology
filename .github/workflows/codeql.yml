@@ -68,7 +68,7 @@ jobs:
 
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
@@ -78,7 +78,7 @@ jobs:
       #  unresolved and the call graph is useless.
       # -----------------------------------------------------------------------
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "3.12"
           cache: "pip"
@@ -95,7 +95,7 @@ jobs:
       #  a style complaint.
       # -----------------------------------------------------------------------
       - name: "Initialise CodeQL"
-        uses: "github/codeql-action/init@v3"
+        uses: "github/codeql-action/init@v4"
         with:
           languages: "${{ matrix.language }}"
           queries: "security-and-quality"
@@ -110,10 +110,10 @@ jobs:
               - docs
 
       - name: "Autobuild"
-        uses: "github/codeql-action/autobuild@v3"
+        uses: "github/codeql-action/autobuild@v4"
 
       - name: "Perform analysis"
-        uses: "github/codeql-action/analyze@v3"
+        uses: "github/codeql-action/analyze@v4"
         with:
           category: "/language:${{ matrix.language }}"
           upload: "always"

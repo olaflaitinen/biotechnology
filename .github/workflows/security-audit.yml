@@ -63,12 +63,12 @@ jobs:
       security-events: "write"
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "3.12"
 
@@ -80,7 +80,7 @@ jobs:
         continue-on-error: true
 
       - name: "Upload Bandit findings"
-        uses: "github/codeql-action/upload-sarif@v3"
+        uses: "github/codeql-action/upload-sarif@v4"
         with:
           sarif_file: "bandit.sarif"
           category: "bandit"
@@ -102,12 +102,12 @@ jobs:
       contents: "read"
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "3.12"
 
@@ -148,7 +148,7 @@ jobs:
       contents: "read"
     steps:
       - name: "Check out the full history"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           fetch-depth: 0
           persist-credentials: false
@@ -177,12 +177,12 @@ jobs:
       security-events: "write"
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "3.12"
 
@@ -208,7 +208,7 @@ jobs:
         continue-on-error: true
 
       - name: "Upload zizmor findings"
-        uses: "github/codeql-action/upload-sarif@v3"
+        uses: "github/codeql-action/upload-sarif@v4"
         with:
           sarif_file: "zizmor.sarif"
           category: "zizmor"
@@ -229,12 +229,12 @@ jobs:
       contents: "read"
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "3.12"
 
