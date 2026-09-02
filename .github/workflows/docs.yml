@@ -176,7 +176,7 @@ jobs:
 
       - name: "Check links in the root documents"
         id: "lychee"
-        uses: "lycheeverse/lychee-action@v1"
+        uses: "lycheeverse/lychee-action@v2"
         with:
           args: >-
             --no-progress
@@ -189,7 +189,7 @@ jobs:
 
       - name: "Open or update a maintenance issue if links are dead"
         if: "steps.lychee.outputs.exit_code != 0"
-        uses: "peter-evans/create-issue-from-file@v5"
+        uses: "peter-evans/create-issue-from-file@v6"
         with:
           title: "Link rot detected in the root documents"
           content-filepath: "lychee-report.md"
