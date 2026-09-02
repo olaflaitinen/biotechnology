@@ -1,0 +1,197 @@
+# =============================================================================
+#  .pre-commit-config.yaml
+# -----------------------------------------------------------------------------
+#  Hooks that run before every commit.
+#
+#  DESIGN RULE
+#  A pre-commit hook must be FAST. Anything taking more than a couple of
+#  seconds belongs in continuous integration, not here: a slow hook trains
+#  contributors to use --no-verify, which is worse than having no hook at all.
+#  The full taxonomy walk and the documentation build therefore run in CI only.
+#
+#  SETUP
+#      pip install -e ".[dev]"
+#      pre-commit install
+#      pre-commit install --hook-type commit-msg
+#      pre-commit run --all-files
+#
+#  UPDATING
+#      pre-commit autoupdate
+#  Revisions are pinned to tags rather than to branches so that a hook cannot
+#  change under a contributor without a visible diff to this file.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+default_language_version:
+  python: "python3"
+
+default_install_hook_types:
+  - "pre-commit"
+  - "commit-msg"
+
+fail_fast: false
+
+repos:
+  # ---------------------------------------------------------------------------
+  #  Basic file hygiene. Cheap, and catches the mistakes that generate the most
+  #  pointless diff noise.
+  # ---------------------------------------------------------------------------
+  - repo: "https://github.com/pre-commit/pre-commit-hooks"
+    rev: "v4.6.0"
+    hooks:
+      - id: "trailing-whitespace"
+        args: ["--markdown-linebreak-ext=md"]
+        exclude: "^LICENCE$"
+      - id: "end-of-file-fixer"
+        exclude: "^LICENCE$"
+      - id: "check-yaml"
+        args: ["--allow-multiple-documents"]
+      - id: "check-toml"
+      - id: "check-json"
+      - id: "check-added-large-files"
+        args: ["--maxkb=512"]
+      - id: "check-merge-conflict"
+      - id: "check-case-conflict"
+      - id: "check-symlinks"
+      - id: "destroyed-symlinks"
+      - id: "mixed-line-ending"
+        args: ["--fix=lf"]
+      - id: "check-ast"
+      - id: "check-builtin-literals"
+      - id: "check-docstring-first"
+      - id: "debug-statements"
+      - id: "detect-private-key"
+      - id: "forbid-submodules"
+      - id: "no-commit-to-branch"
+        args: ["--branch", "main"]
+
+  # ---------------------------------------------------------------------------
+  #  Secrets. Two independent detectors, because they miss different things and
+  #  a committed credential cannot be un-committed. See THREAT_MODEL.md, T-05.
+  # ---------------------------------------------------------------------------
+  - repo: "https://github.com/gitleaks/gitleaks"
+    rev: "v8.18.4"
+    hooks:
+      - id: "gitleaks"
+
+  # ---------------------------------------------------------------------------
+  #  Ruff: lint and import sorting. Runs before black so that black formats
+  #  already-fixed code.
+  # ---------------------------------------------------------------------------
+  - repo: "https://github.com/astral-sh/ruff-pre-commit"
+    rev: "v0.5.7"
+    hooks:
+      - id: "ruff"
+        args: ["--fix", "--exit-non-zero-on-fix"]
+
+  # ---------------------------------------------------------------------------
+  #  Black: formatting.
+  # ---------------------------------------------------------------------------
+  - repo: "https://github.com/psf/black"
+    rev: "24.8.0"
+    hooks:
+      - id: "black"
+
+  # ---------------------------------------------------------------------------
+  #  Mypy: types. Limited to src/, because the test suite is deliberately less
+  #  strict.
+  # ---------------------------------------------------------------------------
+  - repo: "https://github.com/pre-commit/mirrors-mypy"
+    rev: "v1.11.1"
+    hooks:
+      - id: "mypy"
+        files: "^src/biotechnology/"
+        args: ["--strict", "--ignore-missing-imports"]
+
+  # ---------------------------------------------------------------------------
+  #  Bandit: Python security linter. Fast enough for pre-commit and catches the
+  #  constructs SECURITY.md promises are absent.
+  # ---------------------------------------------------------------------------
+  - repo: "https://github.com/PyCQA/bandit"
+    rev: "1.7.9"
+    hooks:
+      - id: "bandit"
+        args: ["-c", "pyproject.toml"]
+        additional_dependencies: ["bandit[toml]"]
+        files: "^(src|tools)/"
+
+  # ---------------------------------------------------------------------------
+  #  actionlint: static analysis of GitHub Actions workflows. Workflow files
+  #  are executable code with repository permissions; they deserve a linter.
+  # ---------------------------------------------------------------------------
+  - repo: "https://github.com/rhysd/actionlint"
+    rev: "v1.7.1"
+    hooks:
+      - id: "actionlint"
+
+  # ---------------------------------------------------------------------------
+  #  Conventional Commits, enforced on the commit message rather than in review.
+  # ---------------------------------------------------------------------------
+  - repo: "https://github.com/compilerla/conventional-pre-commit"
+    rev: "v3.4.0"
+    hooks:
+      - id: "conventional-pre-commit"
+        stages: ["commit-msg"]
+        args: ["feat", "fix", "data", "docs", "test", "refactor", "chore", "ci", "perf", "revert"]
+
+  # ---------------------------------------------------------------------------
+  #  Project-specific hooks. These enforce the rules that make this repository
+  #  what it is, and they are the reason this file is not boilerplate.
+  # ---------------------------------------------------------------------------
+  - repo: "local"
+    hooks:
+      - id: "facet-contract"
+        name: "every subtype package exports the six facets"
+        entry: "python tools/check_facets.py"
+        language: "system"
+        pass_filenames: false
+        files: "^src/biotechnology/branches/"
+
+      - id: "cross-references"
+        name: "every cross-reference resolves"
+        entry: "python tools/check_references.py"
+        language: "system"
+        pass_filenames: false
+        files: "^src/biotechnology/"
+
+      - id: "dual-use-screen"
+        name: "dark branch stays defensive"
+        entry: "python tools/check_defensive.py"
+        language: "system"
+        pass_filenames: false
+        files: "^src/biotechnology/"
+
+      - id: "ascii-symbols"
+        name: "metric symbols and units are ASCII"
+        entry: "python tools/check_ascii.py"
+        language: "system"
+        pass_filenames: false
+        files: "^src/biotechnology/branches/.*/metrics\\.py$"
+
+      - id: "no-em-dash"
+        name: "no em dashes or en dashes anywhere"
+        entry: "python tools/check_dashes.py"
+        language: "system"
+        pass_filenames: false
+
+      - id: "action-pinning"
+        name: "every GitHub Action is pinned to a full commit SHA"
+        entry: "python tools/check_action_pinning.py"
+        language: "system"
+        pass_filenames: false
+        files: "^\\.github/(workflows|actions)/"
+
+      - id: "no-runtime-dependencies"
+        name: "the runtime dependency list is still empty"
+        entry: "python tools/check_no_dependencies.py"
+        language: "system"
+        pass_filenames: false
+        files: "^pyproject\\.toml$"
+
+      - id: "docs-are-generated"
+        name: "docs/ has not been hand-edited"
+        entry: "python tools/check_docs_generated.py"
+        language: "system"
+        pass_filenames: false
+        files: "^docs/"

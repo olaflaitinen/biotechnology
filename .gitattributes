@@ -1,0 +1,111 @@
+# =============================================================================
+#  .gitattributes
+# -----------------------------------------------------------------------------
+#  Line endings, diff behaviour, linguist classification and export rules.
+#
+#  WHY THIS MATTERS MORE THAN USUAL HERE
+#  This repository is a curated dataset. Two consequences follow:
+#
+#    1. LINE ENDINGS. Contributors are on Linux, macOS and Windows, and a
+#       record edited on Windows must not appear as a whole-file rewrite to a
+#       reviewer on Linux. Normalising to LF in the repository is the only way
+#       a factual correction shows as a one-line diff.
+#
+#    2. DIFF READABILITY. Reviewers of this project are frequently domain
+#       experts rather than programmers. Telling Git how to find hunk headers
+#       in Python makes a diff show which record is being changed, which is the
+#       difference between a reviewable patch and a wall of context.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+#  Default: let Git detect text and normalise to LF in the repository.
+# -----------------------------------------------------------------------------
+* text=auto eol=lf
+
+# -----------------------------------------------------------------------------
+#  Source and data. Explicit rather than relying on detection, because these
+#  are the files that matter.
+# -----------------------------------------------------------------------------
+*.py       text eol=lf diff=python
+*.pyi      text eol=lf diff=python
+*.md       text eol=lf
+*.txt      text eol=lf
+*.rst      text eol=lf
+*.toml     text eol=lf
+*.cfg      text eol=lf
+*.ini      text eol=lf
+*.yaml     text eol=lf
+*.yml      text eol=lf
+*.json     text eol=lf
+*.csv      text eol=lf
+*.cff      text eol=lf
+Makefile   text eol=lf
+LICENCE    text eol=lf
+
+# -----------------------------------------------------------------------------
+#  Windows-only files that genuinely need CRLF.
+# -----------------------------------------------------------------------------
+*.bat      text eol=crlf
+*.cmd      text eol=crlf
+*.ps1      text eol=crlf
+
+# -----------------------------------------------------------------------------
+#  Binary. Never diffed, never line-ending-converted.
+# -----------------------------------------------------------------------------
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.gif      binary
+*.ico      binary
+*.pdf      binary
+*.zip      binary
+*.gz       binary
+*.whl      binary
+*.woff     binary
+*.woff2    binary
+
+# -----------------------------------------------------------------------------
+#  Linguist: how GitHub classifies and displays the repository.
+#
+#  The generated documentation is marked so that it does not dominate the
+#  language statistics, and the verbatim licence text is marked as vendored so
+#  that GitHub does not count several hundred lines of legal English as
+#  project prose.
+# -----------------------------------------------------------------------------
+docs/**            linguist-documentation
+LICENCE            linguist-vendored
+*.md               linguist-documentation
+
+# The branch data is the substance of the project, not boilerplate. Mark it
+# explicitly as detectable so it counts toward the language statistics; without
+# this, a directory of literal-heavy modules is sometimes misclassified.
+src/biotechnology/branches/**  linguist-detectable=true
+src/biotechnology/branches/**  linguist-language=Python
+
+# -----------------------------------------------------------------------------
+#  export-ignore: files excluded from `git archive` and therefore from the
+#  source tarball GitHub generates for a release tag. Development scaffolding
+#  does not belong in a citable archive.
+# -----------------------------------------------------------------------------
+.github/           export-ignore
+.gitattributes     export-ignore
+.gitignore         export-ignore
+.pre-commit-config.yaml  export-ignore
+tox.ini            export-ignore
+
+# -----------------------------------------------------------------------------
+#  merge=union for append-only lists.
+#  AUTHORS.md and the Unreleased section of CHANGELOG.md are appended to by
+#  many contributors at once; a union merge keeps both sides instead of
+#  producing a conflict on every concurrent pull request.
+# -----------------------------------------------------------------------------
+AUTHORS.md         merge=union
+
+# -----------------------------------------------------------------------------
+#  Language hints for GitHub syntax highlighting where the extension is
+#  ambiguous.
+# -----------------------------------------------------------------------------
+*.cff              linguist-language=YAML
+Makefile           linguist-language=Makefile

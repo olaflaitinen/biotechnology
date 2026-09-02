@@ -1,0 +1,309 @@
+# =============================================================================
+#  pyproject.toml
+# -----------------------------------------------------------------------------
+#  Single source of truth for packaging, tooling configuration and test
+#  settings. PEP 517/518/621 compliant.
+#
+#  DESIGN PRINCIPLES FOR THIS FILE
+#    1. ZERO RUNTIME DEPENDENCIES. This is a hard constraint, not a
+#       preference. The library is intended to be importable inside teaching
+#       environments, air-gapped analysis pipelines and regulatory review
+#       tooling where installing a dependency tree is either slow or
+#       prohibited. Every capability is implemented against the standard
+#       library. If a feature cannot be built that way, it belongs in an
+#       optional extra or in a separate package.
+#    2. WIDE PYTHON SUPPORT. 3.9 through 3.14. The oldest supported version
+#       is chosen because it is still the system Python on long-term-support
+#       Linux distributions used in laboratories.
+#    3. ALL TOOL CONFIGURATION LIVES HERE. No setup.cfg, no .flake8, no
+#       pytest.ini, no mypy.ini scattered across the tree. One file to read.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+#  Copyright (c) 2026 Gustav Olaf Yunus Laitinen-Fredriksson Lundstrom-Imanov
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+#  Build system
+# -----------------------------------------------------------------------------
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+
+# -----------------------------------------------------------------------------
+#  Project metadata (PEP 621)
+# -----------------------------------------------------------------------------
+[project]
+name = "biotechnology"
+version = "0.1.0"
+description = "A machine-readable, dual-register taxonomy of the ten colour-coded branches of biotechnology, with metrics, formulas, history, governance and cross-references."
+readme = "README.md"
+requires-python = ">=3.9"
+
+# EUPL-1.2 is an OSI-approved copyleft licence, and the only one drafted and
+# published by the European Commission in all official EU languages. It is
+# chosen deliberately for a work produced at a European public institution.
+license = { text = "EUPL-1.2" }
+
+authors = [
+    { name = "Gustav Olaf Yunus Laitinen-Fredriksson Lundstrom-Imanov", email = "yunus.imanov@metropolia.fi" },
+]
+maintainers = [
+    { name = "Gustav Olaf Yunus Laitinen-Fredriksson Lundstrom-Imanov", email = "yunus.imanov@metropolia.fi" },
+]
+
+keywords = [
+    "biotechnology",
+    "taxonomy",
+    "bioinformatics",
+    "life-sciences",
+    "science-communication",
+    "plain-language",
+    "biosafety",
+    "biosecurity",
+    "bioethics",
+    "sustainable-development-goals",
+    "education",
+    "open-data",
+    "research-software",
+]
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Legal Industry",
+    "License :: OSI Approved :: European Union Public Licence 1.2 (EUPL 1.2)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Medical Science Apps.",
+    "Topic :: Education",
+    "Topic :: Sociology :: History",
+    "Typing :: Typed",
+]
+
+# The hard constraint. Do not add anything to this list.
+dependencies = []
+
+
+# -----------------------------------------------------------------------------
+#  Optional extras
+#  `dev` installs everything needed to run `make all`. The others are
+#  deliberately narrow so that a user who only wants documentation tooling does
+#  not also install a type checker.
+# -----------------------------------------------------------------------------
+[project.optional-dependencies]
+test = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+]
+lint = [
+    "ruff>=0.5",
+    "black>=24.1",
+    "mypy>=1.8",
+]
+docs = [
+    "mkdocs>=1.6",
+    "mkdocs-material>=9.5",
+]
+build = [
+    "build>=1.0",
+    "twine>=5.0",
+    "cffconvert>=2.0",
+    "cyclonedx-bom>=4.0",
+]
+# Security tooling. Separated from `lint` so that a contributor running the
+# security suite locally does not also have to install the documentation
+# toolchain, and so that the security surface of the project is legible as a
+# list rather than buried among formatters.
+security = [
+    "bandit[toml]>=1.7",
+    "pip-audit>=2.7",
+    "zizmor>=0.5",
+]
+dev = [
+    "biotechnology[test,lint,docs,build,security]",
+    "pre-commit>=3.6",
+]
+
+
+[project.urls]
+Homepage = "https://github.com/olaflaitinen/biotechnology"
+Repository = "https://github.com/olaflaitinen/biotechnology"
+Documentation = "https://github.com/olaflaitinen/biotechnology/tree/main/docs"
+Issues = "https://github.com/olaflaitinen/biotechnology/issues"
+Changelog = "https://github.com/olaflaitinen/biotechnology/blob/main/CHANGELOG.md"
+"Licence text" = "https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12"
+
+
+[project.scripts]
+biotechnology = "biotechnology.cli:main"
+
+
+# -----------------------------------------------------------------------------
+#  Packaging layout
+#  src-layout is used so that tests always import the installed package rather
+#  than the working directory, which is the only reliable way to catch a
+#  missing file in the distribution before a user does.
+# -----------------------------------------------------------------------------
+[tool.setuptools]
+package-dir = { "" = "src" }
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+biotechnology = ["py.typed"]
+
+
+# =============================================================================
+#  Tooling configuration
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+#  pytest
+# -----------------------------------------------------------------------------
+[tool.pytest.ini_options]
+minversion = "7.4"
+testpaths = ["tests"]
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "-ra",
+]
+markers = [
+    "integrity: cross-reference and schema validation over the whole taxonomy",
+    "slow: tests that walk every record; excluded from the fast pre-commit run",
+    "editorial: checks on writing style rather than on code correctness",
+]
+filterwarnings = ["error"]
+
+
+# -----------------------------------------------------------------------------
+#  coverage
+#  Data modules are excluded from the coverage target: they are literals, and
+#  measuring "coverage" of a data table produces a misleading number. Their
+#  correctness is enforced by the integrity suite instead.
+# -----------------------------------------------------------------------------
+[tool.coverage.run]
+source = ["biotechnology"]
+branch = true
+omit = ["*/branches/*/*/*.py", "*/refs/*", "*/glossary/*"]
+
+[tool.coverage.report]
+precision = 1
+show_missing = true
+exclude_lines = [
+    "pragma: no cover",
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+]
+
+
+# -----------------------------------------------------------------------------
+#  ruff
+# -----------------------------------------------------------------------------
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "UP",   # pyupgrade
+    "N",    # pep8-naming
+    "D",    # pydocstyle
+    "RUF",  # ruff-specific
+]
+ignore = [
+    "D203",  # conflicts with D211
+    "D213",  # conflicts with D212
+    "E501",  # long lines in prose data are handled by black, not flagged here
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Data modules are literals with module-level comments rather than docstrings
+# on every name; requiring pydocstyle compliance there produces noise, not
+# quality.
+"src/biotechnology/branches/**" = ["D100", "D103", "E501"]
+"src/biotechnology/refs/**" = ["D100", "E501"]
+"src/biotechnology/glossary/**" = ["D100", "E501"]
+"tests/**" = ["D100", "D101", "D102", "D103"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.ruff.lint.isort]
+known-first-party = ["biotechnology"]
+
+
+# -----------------------------------------------------------------------------
+#  black
+# -----------------------------------------------------------------------------
+[tool.black]
+line-length = 88
+target-version = ["py39"]
+
+
+# -----------------------------------------------------------------------------
+#  mypy
+#  Strict, because the whole point of the data model is that a malformed
+#  record is caught mechanically rather than by a reader noticing.
+# -----------------------------------------------------------------------------
+[tool.mypy]
+python_version = "3.9"
+files = ["src/biotechnology"]
+strict = true
+warn_unreachable = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+pretty = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+
+
+# -----------------------------------------------------------------------------
+#  bandit
+#
+#  Bandit is pointed at this file by both .pre-commit-config.yaml and
+#  .github/workflows/security-audit.yml, so the local run and the CI run cannot
+#  diverge.
+#
+#  Nothing is skipped. The usual reason a project excludes a Bandit check is
+#  that it genuinely needs subprocess, or assert, or a temporary file, and it
+#  would rather silence the finding than justify it every time. This package
+#  needs none of those, so there is nothing to silence, and an empty `skips`
+#  list is itself a security statement: see SECURITY.md section 1.2 and
+#  THREAT_MODEL.md section 2.
+#
+#  Tests are excluded because pytest rewrites `assert`, which Bandit reports as
+#  B101 on every single test function. That is noise, not signal, and it would
+#  train a reader to skim the report.
+# -----------------------------------------------------------------------------
+[tool.bandit]
+exclude_dirs = ["tests", "docs", "build", "dist", ".tox", ".venv"]
+skips = []
+
+[tool.bandit.assert_used]
+skips = ["*/test_*.py", "*/conftest.py"]

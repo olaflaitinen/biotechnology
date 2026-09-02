@@ -1,0 +1,208 @@
+# =============================================================================
+#  mkdocs.yml
+# -----------------------------------------------------------------------------
+#  Documentation site configuration.
+#
+#  IMPORTANT: docs/ IS GENERATED
+#  Everything under docs/ except the hand-written pages listed explicitly in
+#  the nav section below is produced by tools/generate_docs.py from the source
+#  of truth in src/biotechnology/. Editing a generated page by hand loses the
+#  change on the next "make docs", and a pre-commit hook says so.
+#
+#  The generator reads the same objects the library exposes, so the
+#  documentation cannot describe a field that does not exist.
+#
+#  BUILD
+#      make docs          regenerate docs/ from src/
+#      make docs-serve    regenerate, then serve at http://127.0.0.1:8000
+#      mkdocs build --strict
+#
+#  --strict is used everywhere: a broken internal link fails the build. That is
+#  deliberate, because the whole point of validating cross-references in the
+#  data is that the rendered output never shows a dead link.
+#
+#  A SECURITY NOTE ON EXTERNAL ASSETS
+#  This site loads NO third-party JavaScript or fonts from a content delivery
+#  network. MathJax is vendored into docs/javascripts/ by the documentation
+#  generator and served from the same origin. A documentation site that pulls a
+#  script from an uncontrolled origin gives that origin the ability to execute
+#  code in every reader's browser, and for a reference work consulted by policy
+#  and clinical staff that is not an acceptable trade for a smaller repository.
+#  See THREAT_MODEL.md, threat T-07.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+site_name: "biotechnology"
+site_description: >-
+  A machine-readable, dual-register taxonomy of the ten colour-coded branches
+  of biotechnology. Ten branches, eighty-five subtypes, every record written
+  twice, once for specialists and once for everybody else.
+site_author: "Gustav Olaf Yunus Laitinen-Fredriksson Lundstrom-Imanov"
+site_url: "https://olaflaitinen.github.io/biotechnology/"
+
+repo_name: "olaflaitinen/biotechnology"
+repo_url: "https://github.com/olaflaitinen/biotechnology"
+edit_uri: "edit/main/docs/"
+
+copyright: >-
+  Copyright 2026 Gustav Olaf Yunus Laitinen-Fredriksson Lundstrom-Imanov.
+  Licensed under the EUPL-1.2.
+
+docs_dir: "docs"
+site_dir: "site"
+
+# A broken internal link must fail the build, not degrade the site quietly.
+strict: true
+
+# -----------------------------------------------------------------------------
+#  Theme
+#
+#  The palette follows the branch colours where it can, so that a reader moving
+#  between the site and a generated figure sees the same red for red
+#  biotechnology.
+# -----------------------------------------------------------------------------
+theme:
+  name: "material"
+  language: "en"
+  icon:
+    repo: "fontawesome/brands/github"
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: "default"
+      primary: "teal"
+      accent: "deep orange"
+      toggle:
+        icon: "material/weather-night"
+        name: "Switch to dark mode"
+    - media: "(prefers-color-scheme: dark)"
+      scheme: "slate"
+      primary: "teal"
+      accent: "deep orange"
+      toggle:
+        icon: "material/weather-sunny"
+        name: "Switch to light mode"
+  features:
+    - "navigation.tabs"
+    - "navigation.sections"
+    - "navigation.top"
+    - "navigation.indexes"
+    - "navigation.footer"
+    - "search.suggest"
+    - "search.highlight"
+    - "search.share"
+    - "content.code.copy"
+    - "content.action.edit"
+    - "toc.follow"
+
+# -----------------------------------------------------------------------------
+#  Markdown extensions
+#
+#  arithmatex is enabled because NOTATION.md and every formula page carry
+#  LaTeX renderings of the relationships alongside their ASCII forms.
+# -----------------------------------------------------------------------------
+markdown_extensions:
+  - "abbr"
+  - "admonition"
+  - "attr_list"
+  - "def_list"
+  - "footnotes"
+  - "md_in_html"
+  - "tables"
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.arithmatex:
+      generic: true
+  - "pymdownx.details"
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - "pymdownx.inlinehilite"
+  - "pymdownx.snippets"
+  - "pymdownx.superfences"
+  - pymdownx.tabbed:
+      alternate_style: true
+
+# -----------------------------------------------------------------------------
+#  Scripts. Same-origin only. See the security note in the header.
+#  Both files are written into docs/javascripts/ by tools/generate_docs.py.
+# -----------------------------------------------------------------------------
+extra_javascript:
+  - "javascripts/mathjax-config.js"
+  - "javascripts/tex-mml-chtml.js"
+
+plugins:
+  - search:
+      lang: "en"
+
+# -----------------------------------------------------------------------------
+#  Navigation
+#
+#  Entries marked GENERATED are produced by tools/generate_docs.py. The
+#  generator writes the branch and formula index pages and one page per subtype
+#  and per formula, then rewrites the corresponding nav sections.
+# -----------------------------------------------------------------------------
+nav:
+  - Home: "index.md"
+
+  - Guide:
+      - Getting started: "guide/getting-started.md"
+      - Navigating the taxonomy: "guide/navigating.md"
+      - Reading a record: "guide/reading-a-record.md"
+      - Searching and filtering: "guide/searching.md"
+      - Using the formulas: "guide/formulas.md"
+      - Exporting: "guide/exporting.md"
+      - Command line: "guide/cli.md"
+
+  # GENERATED below this line
+  - Branches:
+      - Overview: "branches/index.md"
+      - Red: "branches/red/index.md"
+      - Green: "branches/green/index.md"
+      - White: "branches/white/index.md"
+      - Blue: "branches/blue/index.md"
+      - Yellow: "branches/yellow/index.md"
+      - Grey: "branches/grey/index.md"
+      - Brown: "branches/brown/index.md"
+      - Gold: "branches/gold/index.md"
+      - Dark: "branches/dark/index.md"
+      - Purple: "branches/purple/index.md"
+
+  - Formulas:
+      - Overview: "formulas/index.md"
+
+  - Registries:
+      - Organisms: "registries/organisms.md"
+      - Techniques: "registries/techniques.md"
+      - Glossary: "registries/glossary.md"
+      - Bibliography: "registries/bibliography.md"
+      - Sustainable Development Goals: "registries/sdg.md"
+      - Controlled vocabularies: "registries/vocabularies.md"
+
+  - Reference:
+      - Data model: "reference/data-model.md"
+      - Notation: "reference/notation.md"
+      - API: "reference/api.md"
+
+  - Project:
+      - Architecture: "project/architecture.md"
+      - Style guide: "project/style-guide.md"
+      - Contributing: "project/contributing.md"
+      - Governance: "project/governance.md"
+      - Security policy: "project/security.md"
+      - Threat model: "project/threat-model.md"
+      - Code of conduct: "project/code-of-conduct.md"
+      - Roadmap: "project/roadmap.md"
+      - FAQ: "project/faq.md"
+      - Changelog: "project/changelog.md"
+      - Licence: "project/licence.md"
+
+extra:
+  social:
+    - icon: "fontawesome/brands/github"
+      link: "https://github.com/olaflaitinen/biotechnology"
+      name: "Source on GitHub"
+    - icon: "fontawesome/brands/python"
+      link: "https://pypi.org/project/biotechnology/"
+      name: "Package on PyPI"
+  generator: false

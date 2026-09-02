@@ -1,0 +1,155 @@
+# =============================================================================
+#  .editorconfig
+# -----------------------------------------------------------------------------
+#  Editor settings that apply regardless of which editor a contributor uses.
+#  https://editorconfig.org - supported natively by VS Code, PyCharm, Vim,
+#  Emacs, Sublime, Zed and others, or through a plugin.
+#
+#  WHY THIS FILE EXISTS IN A PROJECT THAT ALREADY RUNS BLACK
+#  Black formats Python. It does not format Markdown, YAML, TOML, Makefiles or
+#  the eighty-five facet files' comment blocks while you are typing them. This
+#  file makes an editor produce conforming text in the first place, so that a
+#  contributor who has never installed the development extras still submits a
+#  clean diff.
+#
+#  The rules below are chosen to match what black and ruff would enforce, so
+#  the two can never disagree.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+# Stop searching for .editorconfig files above this directory.
+root = true
+
+
+# -----------------------------------------------------------------------------
+#  Defaults for every file
+#
+#  LF endings match .gitattributes. UTF-8 without a byte order mark, because a
+#  BOM breaks shebang lines and confuses several of the tools in the dev
+#  extras. A final newline on every file, and no trailing whitespace, so that
+#  the pre-commit hygiene hooks have nothing to fix.
+# -----------------------------------------------------------------------------
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+max_line_length = 88
+
+
+# -----------------------------------------------------------------------------
+#  Python
+#
+#  88 columns is black's default and is configured identically in
+#  pyproject.toml. It is chosen over 79 because the facet files contain long
+#  descriptive strings and long regulation titles that read badly when wrapped
+#  aggressively, and over 100+ because two files side by side on a laptop is a
+#  normal review posture.
+# -----------------------------------------------------------------------------
+[*.py]
+indent_size = 4
+max_line_length = 88
+
+[*.pyi]
+indent_size = 4
+max_line_length = 88
+
+
+# -----------------------------------------------------------------------------
+#  Markdown
+#
+#  Trailing whitespace is NOT trimmed: two trailing spaces are a hard line
+#  break in Markdown, and trimming them silently changes rendered output. The
+#  pre-commit trailing-whitespace hook is configured with the same exception.
+#
+#  No max_line_length, because prose is wrapped semantically in this project -
+#  one clause per line where it aids review - rather than at a column.
+# -----------------------------------------------------------------------------
+[*.md]
+indent_size = 2
+trim_trailing_whitespace = false
+max_line_length = off
+
+
+# -----------------------------------------------------------------------------
+#  YAML
+#
+#  Two spaces, and tabs are invalid in YAML entirely, so this is not a
+#  preference but a correctness setting.
+# -----------------------------------------------------------------------------
+[*.{yml,yaml}]
+indent_size = 2
+max_line_length = off
+
+[*.cff]
+indent_size = 2
+max_line_length = off
+
+
+# -----------------------------------------------------------------------------
+#  TOML and INI
+# -----------------------------------------------------------------------------
+[*.toml]
+indent_size = 4
+max_line_length = off
+
+[*.{ini,cfg}]
+indent_size = 4
+max_line_length = off
+
+
+# -----------------------------------------------------------------------------
+#  Makefiles
+#
+#  Recipe lines MUST begin with a literal tab. This is not a style choice;
+#  spaces produce "missing separator" and nothing else.
+# -----------------------------------------------------------------------------
+[Makefile]
+indent_style = tab
+indent_size = 4
+max_line_length = off
+
+[*.mk]
+indent_style = tab
+indent_size = 4
+
+
+# -----------------------------------------------------------------------------
+#  Shell scripts
+# -----------------------------------------------------------------------------
+[*.{sh,bash}]
+indent_size = 2
+max_line_length = off
+
+
+# -----------------------------------------------------------------------------
+#  JSON and data exports
+#
+#  Generated artefacts. Two-space indentation matches json.dumps(indent=2),
+#  which is what the exporter emits, so a hand edit and a regeneration produce
+#  the same file.
+# -----------------------------------------------------------------------------
+[*.json]
+indent_size = 2
+max_line_length = off
+
+[*.csv]
+trim_trailing_whitespace = false
+max_line_length = off
+
+
+# -----------------------------------------------------------------------------
+#  The licence text
+#
+#  Reproduced verbatim from the European Commission publication. Nothing may
+#  touch it: no trimming, no final-newline insertion, no re-wrapping. Modifying
+#  the reproduced text of a licence is both wrong and, arguably, a breach of
+#  the terms under which it may be redistributed.
+# -----------------------------------------------------------------------------
+[LICENCE]
+trim_trailing_whitespace = false
+insert_final_newline = false
+max_line_length = off

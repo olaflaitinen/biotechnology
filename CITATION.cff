@@ -1,0 +1,158 @@
+# =============================================================================
+#  CITATION.cff
+# -----------------------------------------------------------------------------
+#  Citation File Format 1.2.0.
+#  https://citation-file-format.github.io/
+#
+#  WHY THIS FILE EXISTS
+#  Academic and policy work that uses this library needs to cite it, and the
+#  people doing that work should not have to reconstruct a citation by hand
+#  from a README. This file is machine-readable: GitHub renders a formatted
+#  citation from it in the repository sidebar, Zenodo consumes it when minting
+#  a DOI, and reference managers such as Zotero import it directly.
+#
+#  HOW TO VALIDATE IT
+#      pip install cffconvert
+#      cffconvert --validate
+#      cffconvert -f bibtex
+#      cffconvert -f apalike
+#
+#  MAINTENANCE RULE
+#  The `version` and `date-released` keys below must match the current release.
+#  The release workflow checks this and refuses to publish if they have drifted
+#  from pyproject.toml.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+cff-version: 1.2.0
+message: >-
+  If you use this library in a publication, a curriculum or a policy document,
+  please cite it as below.
+
+title: >-
+  biotechnology: a machine-readable, dual-register taxonomy of the
+  colour-coded branches of biotechnology
+
+abstract: >-
+  Biotechnology is conventionally divided into ten colour-coded branches: red
+  for medicine, green for agriculture, white for industry, blue for marine,
+  yellow for food, grey for environment, brown for arid lands, gold for
+  bioinformatics, dark for biosecurity and purple for law and ethics. That
+  scheme is taught widely and used in policy documents, but has never existed
+  as structured, queryable, citable data. This library provides it: ten
+  branches and eighty-five subtypes, each described twice, once in a technical
+  register for specialists and once in plain language for the parliamentary
+  committees, procurement officers, journalists and students who make or shape
+  decisions about the field. Each record additionally carries measurable
+  metrics with units and evidence grades, links to computable formula modules,
+  a dated history including its failures, its governance position in controlled
+  vocabularies, applicable regulations and standards, and typed
+  cross-references to the rest of the taxonomy. The package has no runtime
+  dependencies, is fully typed, and validates every cross-reference on every
+  commit.
+
+type: software
+
+authors:
+  - given-names: Gustav Olaf Yunus
+    family-names: Laitinen-Fredriksson Lundstrom-Imanov
+    email: yunus.imanov@metropolia.fi
+    affiliation: >-
+      School of Information and Communication Technology, Metropolia
+      University of Applied Sciences, Karaportti 2, 02610 Espoo, Finland
+    country: FI
+
+repository-code: https://github.com/olaflaitinen/biotechnology
+url: https://github.com/olaflaitinen/biotechnology
+repository-artifact: https://pypi.org/project/biotechnology/
+
+version: 0.1.0
+date-released: 2026-09-02
+
+license: EUPL-1.2
+license-url: https://joinup.ec.europa.eu/collection/eupl/eupl-text-eupl-12
+
+keywords:
+  - biotechnology
+  - taxonomy
+  - bioinformatics
+  - science communication
+  - plain language
+  - red biotechnology
+  - green biotechnology
+  - white biotechnology
+  - blue biotechnology
+  - yellow biotechnology
+  - grey biotechnology
+  - brown biotechnology
+  - gold biotechnology
+  - dark biotechnology
+  - purple biotechnology
+  - biosafety
+  - biosecurity
+  - bioethics
+  - sustainable development goals
+  - research software
+  - open data
+  - Python
+
+# ---------------------------------------------------------------------------
+#  Works that shaped the design of this library. These are not the scientific
+#  references for its content, which live in BIBLIOGRAPHY.md and in
+#  src/biotechnology/refs/, but the methodological sources for how research
+#  software and research data ought to be built and described.
+# ---------------------------------------------------------------------------
+references:
+  - type: article
+    title: >-
+      The FAIR Guiding Principles for scientific data management and
+      stewardship
+    authors:
+      - family-names: Wilkinson
+        given-names: Mark D.
+    year: 2016
+    journal: Scientific Data
+    volume: 3
+    doi: 10.1038/sdata.2016.18
+    notes: >-
+      The findable, accessible, interoperable and reusable principles that the
+      export formats, stable identifiers and cross-reference validation in
+      this library are designed to satisfy.
+
+  - type: report
+    title: Transforming our world, the 2030 Agenda for Sustainable Development
+    authors:
+      - name: United Nations General Assembly
+    year: 2015
+    notes: >-
+      Source of the seventeen Sustainable Development Goals referenced by the
+      sdgs field of every subtype record.
+
+  - type: generic
+    title: Citation File Format
+    authors:
+      - family-names: Druskat
+        given-names: Stephan
+    year: 2021
+    doi: 10.5281/zenodo.1003149
+    notes: The specification this file conforms to.
+
+# ---------------------------------------------------------------------------
+#  Preferred citation. Kept identical in substance to the BibTeX block in
+#  README.md. If one changes, change both.
+# ---------------------------------------------------------------------------
+preferred-citation:
+  type: software
+  title: >-
+    biotechnology: a machine-readable taxonomy of the colour-coded branches
+    of biotechnology
+  authors:
+    - given-names: Gustav Olaf Yunus
+      family-names: Laitinen-Fredriksson Lundstrom-Imanov
+      email: yunus.imanov@metropolia.fi
+      affiliation: Metropolia University of Applied Sciences
+  year: 2026
+  version: 0.1.0
+  license: EUPL-1.2
+  url: https://github.com/olaflaitinen/biotechnology

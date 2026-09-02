@@ -1,0 +1,111 @@
+# =============================================================================
+#  .well-known/security.txt
+# -----------------------------------------------------------------------------
+#  Machine-readable security contact information, per RFC 9116.
+#  https://www.rfc-editor.org/rfc/rfc9116
+#
+#  WHY A REPOSITORY CARRIES THIS FILE
+#  RFC 9116 defines security.txt for web hosts, served from
+#  https://<domain>/.well-known/security.txt. This project publishes a
+#  documentation site at https://olaflaitinen.github.io/biotechnology/, and the
+#  documentation build copies this file into the site root so that it is served
+#  from the conventional path.
+#
+#  It is also kept in the repository, at the conventional path, because
+#  automated tooling that scans source repositories rather than live hosts
+#  looks here, and because a reader of the source should be able to find the
+#  reporting channel without leaving the tree.
+#
+#  KEEP THIS FILE IN SYNC WITH SECURITY.md. Where the two differ, SECURITY.md
+#  governs, because it is the document a human reads.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+#  Contact. Ordered by preference.
+#
+#  GitHub private vulnerability reporting is preferred because it keeps the
+#  discussion attached to the project and does not depend on a single mailbox
+#  being read.
+# -----------------------------------------------------------------------------
+Contact: https://github.com/olaflaitinen/biotechnology/security/advisories/new
+Contact: mailto:yunus.imanov@metropolia.fi
+
+# -----------------------------------------------------------------------------
+#  Expiry.
+#
+#  RFC 9116 requires this field and requires it to be less than one year in the
+#  future. A stale security.txt is worse than none, because it advertises a
+#  channel that may no longer be watched. This date is reviewed at every minor
+#  release along with THREAT_MODEL.md.
+# -----------------------------------------------------------------------------
+Expires: 2027-09-01T00:00:00.000Z
+
+# -----------------------------------------------------------------------------
+#  Full policy.
+#
+#  Read this before reporting. It states what to include, what response times
+#  to expect, and the safe-harbour terms.
+# -----------------------------------------------------------------------------
+Policy: https://github.com/olaflaitinen/biotechnology/blob/main/SECURITY.md
+
+# -----------------------------------------------------------------------------
+#  Threat model.
+#
+#  Not a field defined by RFC 9116, so it is given as an additional Policy
+#  reference. It states what this project believes its risks are, what it does
+#  about each, and, importantly, what it accepts rather than mitigates.
+# -----------------------------------------------------------------------------
+Policy: https://github.com/olaflaitinen/biotechnology/blob/main/THREAT_MODEL.md
+
+# -----------------------------------------------------------------------------
+#  Acknowledgements.
+#
+#  Everyone who has reported a valid issue is credited here unless they asked
+#  not to be.
+# -----------------------------------------------------------------------------
+Acknowledgments: https://github.com/olaflaitinen/biotechnology/blob/main/AUTHORS.md
+
+# -----------------------------------------------------------------------------
+#  Preferred languages for a report.
+#
+#  English first. Finnish, Swedish and Turkish are also read fluently. A report
+#  in another language will still be acted on; it will simply take longer.
+# -----------------------------------------------------------------------------
+Preferred-Languages: en, fi, sv, tr
+
+# -----------------------------------------------------------------------------
+#  Canonical location.
+#
+#  A copy of this file found anywhere other than these URLs should be treated
+#  as untrusted.
+# -----------------------------------------------------------------------------
+Canonical: https://olaflaitinen.github.io/biotechnology/.well-known/security.txt
+Canonical: https://github.com/olaflaitinen/biotechnology/blob/main/.well-known/security.txt
+
+# -----------------------------------------------------------------------------
+#  Hiring.
+#
+#  Omitted deliberately. This is an unfunded academic project and there is no
+#  position to advertise. Saying so is more useful than an empty field.
+# -----------------------------------------------------------------------------
+
+# =============================================================================
+#  NOTE FOR RESEARCHERS
+#
+#  There is no bug bounty. This is an unfunded academic project maintained by
+#  one person at a university of applied sciences. That is stated plainly so
+#  that nobody spends effort expecting a payment.
+#
+#  Safe harbour terms are in SECURITY.md section 1.5. Good-faith research
+#  within them is considered authorised.
+#
+#  TWO REPORTING CHANNELS, NOT ONE
+#  This project also has a DUAL-USE CONTENT policy, which is not a software
+#  concern and is easy to miss. If you believe any text in this repository
+#  functions as operational instructions for causing harm, report it privately
+#  to the address above rather than opening a public issue that quotes it. See
+#  SECURITY.md section 2.4. Such reports are treated with the same priority as
+#  a vulnerability.
+# =============================================================================

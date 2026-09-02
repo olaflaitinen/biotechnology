@@ -1,0 +1,97 @@
+# =============================================================================
+#  .readthedocs.yaml
+# -----------------------------------------------------------------------------
+#  Read the Docs build configuration, version 2.
+#  https://docs.readthedocs.io/en/stable/config-file/v2.html
+#
+#  WHY BOTH READ THE DOCS AND GITHUB PAGES
+#  GitHub Pages serves the site built by .github/workflows/docs.yml from the
+#  default branch, which is what most readers will land on. Read the Docs adds
+#  two things that matter for a citable reference work:
+#
+#    1. VERSIONED DOCUMENTATION. A reader who cites version 0.1.0 can still
+#       read the documentation for 0.1.0 after 0.4 is released. For a work
+#       whose regulatory citations decay with time, being able to see what the
+#       library said at a given data freeze is not a nicety.
+#    2. PULL REQUEST PREVIEWS. A reviewer can read the rendered consequence of
+#       a data change before merging it, which is exactly the review this
+#       project needs most.
+#
+#  IMPORTANT: docs/ IS GENERATED
+#  The build below regenerates docs/ from src/ before invoking MkDocs, rather
+#  than trusting the committed copy. If a contributor edits a record and
+#  forgets to run "make docs", the Read the Docs preview still shows the truth.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+version: 2
+
+# -----------------------------------------------------------------------------
+#  Build environment
+#
+#  Python 3.12 is used rather than the oldest supported version: the docs
+#  toolchain has no reason to be constrained by the 3.9 floor that exists for
+#  laboratory system interpreters. See tox.ini for why 3.9 is supported at all.
+# -----------------------------------------------------------------------------
+build:
+  os: "ubuntu-24.04"
+  tools:
+    python: "3.12"
+  jobs:
+    post_checkout:
+      - "git fetch --unshallow || true"
+    pre_build:
+      - "python tools/generate_docs.py --output docs"
+
+# -----------------------------------------------------------------------------
+#  MkDocs
+#
+#  fail_on_warning mirrors "mkdocs build --strict" used in the Makefile and in
+#  continuous integration. A broken internal link fails the build; it does not
+#  degrade the site quietly.
+# -----------------------------------------------------------------------------
+mkdocs:
+  configuration: "mkdocs.yml"
+  fail_on_warning: true
+
+# -----------------------------------------------------------------------------
+#  Python environment
+#
+#  The package itself is installed because the documentation generator imports
+#  it. The docs extra brings MkDocs and the Material theme. Nothing else is
+#  installed: the library has no runtime dependencies, which keeps this build
+#  fast and reproducible.
+# -----------------------------------------------------------------------------
+python:
+  install:
+    - method: "pip"
+      path: "."
+      extra_requirements:
+        - "docs"
+
+# -----------------------------------------------------------------------------
+#  Downloadable formats
+#
+#  PDF and ePub are enabled deliberately. A significant part of the intended
+#  audience, meaning policy staff, teachers and students in places with
+#  intermittent connectivity, reads offline, and the plain-language register of
+#  this library is precisely the material those readers need.
+# -----------------------------------------------------------------------------
+formats:
+  - "pdf"
+  - "epub"
+
+# -----------------------------------------------------------------------------
+#  Search ranking
+#
+#  Subtype and formula pages are what people are looking for. Project
+#  meta-documentation is ranked below them so that a search for "gene therapy"
+#  does not surface the contribution guide first.
+# -----------------------------------------------------------------------------
+search:
+  ranking:
+    "branches/*": 5
+    "formulas/*": 4
+    "registries/*": 2
+    "project/*": -2
