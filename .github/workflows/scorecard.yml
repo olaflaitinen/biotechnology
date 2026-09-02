@@ -1,0 +1,97 @@
+# =============================================================================
+#  .github/workflows/scorecard.yml
+# -----------------------------------------------------------------------------
+#  OpenSSF Scorecard.
+#
+#  WHAT IT IS
+#  An automated assessment of a repository against a published set of
+#  supply-chain security practices: branch protection, code review, pinned
+#  dependencies, token permissions, signed releases, static analysis,
+#  vulnerability handling, published security policy, and several more. It is
+#  produced by the Open Source Security Foundation and its checks and weights
+#  are public, so the result is auditable rather than a vendor opinion.
+#
+#  WHY A REFERENCE LIBRARY RUNS IT
+#  This package is intended to be imported by universities, hospitals,
+#  regulators and public administrations. Several of those organisations run
+#  automated supply-chain assessments before permitting a dependency, and an
+#  absent Scorecard is treated the same as a bad one. Publishing the result,
+#  including when it is unflattering, is more useful than not being assessed.
+#
+#  IT IS ALSO USED HONESTLY
+#  Scorecard is a floor, not a certificate. A high score means the mechanical
+#  practices are in place; it says nothing about whether the ninety-odd facts
+#  in a subtype record are correct, which is the risk this project actually
+#  carries. THREAT_MODEL.md says so explicitly in its scope section.
+#
+#  RESULTS
+#  Findings are uploaded as SARIF to the Security tab, and published to the
+#  OpenSSF public dataset so that a downstream consumer can query them without
+#  asking us.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "OpenSSF Scorecard"
+
+on:
+  branch_protection_rule:
+  schedule:
+    # Weekly. Scorecard checks repository configuration, which changes rarely,
+    # and the analysis is not free.
+    - cron: "45 3 * * 6"
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  analysis:
+    name: "Scorecard analysis"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 20
+
+    permissions:
+      # Needed to upload the SARIF result to the Security tab.
+      security-events: "write"
+      # Needed to publish the result to the OpenSSF public dataset, which uses
+      # OIDC rather than a token.
+      id-token: "write"
+      # Needed by the branch-protection check.
+      contents: "read"
+      actions: "read"
+
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Run Scorecard"
+        uses: "ossf/scorecard-action@v2"
+        with:
+          results_file: "scorecard-results.sarif"
+          results_format: "sarif"
+          # publish_results puts the score into the OpenSSF public dataset, so
+          # that anyone evaluating this package can look it up independently
+          # rather than trusting a badge we render ourselves.
+          publish_results: true
+
+      # -----------------------------------------------------------------------
+      #  Keep the raw result as an artefact as well as uploading it. The SARIF
+      #  in the Security tab is retained by GitHub for a limited period; a
+      #  maintainer comparing this quarter with last quarter needs the file.
+      # -----------------------------------------------------------------------
+      - name: "Upload artefact"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "scorecard-results"
+          path: "scorecard-results.sarif"
+          retention-days: 90
+
+      - name: "Upload to the Security tab"
+        uses: "github/codeql-action/upload-sarif@v3"
+        with:
+          sarif_file: "scorecard-results.sarif"
+          category: "scorecard"

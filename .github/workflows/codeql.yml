@@ -1,0 +1,119 @@
+# =============================================================================
+#  .github/workflows/codeql.yml
+# -----------------------------------------------------------------------------
+#  CodeQL semantic analysis.
+#
+#  IS THIS NECESSARY FOR A DEPENDENCY-FREE DATA LIBRARY?
+#  The attack surface here is genuinely small, and SECURITY.md says so: no
+#  network access, no filesystem writes except an explicit export path, no
+#  eval, exec, pickle or subprocess anywhere in src/, and no deserialisation of
+#  untrusted input. CodeQL will find very little.
+#
+#  It runs anyway, for three reasons.
+#
+#    1. THE CLAIM IN SECURITY.md SHOULD BE CHECKED, NOT ASSERTED. A future
+#       contribution that introduces subprocess or pickle should trip an
+#       automated alarm rather than rely on a reviewer remembering the policy.
+#       security-audit.yml greps for the exact constructs; CodeQL catches the
+#       ones reached by a less obvious route.
+#    2. THE REALISTIC RISK IS INPUT HANDLING. The path parser and the search
+#       ranker take arbitrary user strings. Pathological input causing
+#       catastrophic backtracking in a regular expression is exactly the class
+#       of finding CodeQL is good at, and it is the one class of denial of
+#       service this package can actually suffer.
+#    3. THE TOOLING RUNS TOO. tools/ generates documentation and reads the
+#       filesystem, which is a larger surface than the package itself.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "CodeQL"
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    # Weekly, because the query packs improve even when the code does not.
+    - cron: "30 4 * * 2"
+  workflow_dispatch:
+
+concurrency:
+  group: "codeql-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  analyse:
+    name: "Analyse ${{ matrix.language }}"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 30
+
+    permissions:
+      # Required to upload results to the Security tab.
+      security-events: "write"
+      # Required for private repositories; harmless for public ones.
+      actions: "read"
+      contents: "read"
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Only Python. There is no compiled code, no JavaScript and no Go in
+        # this repository, and adding languages that do not exist produces
+        # empty databases and misleading green ticks.
+        language: ["python"]
+
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      # -----------------------------------------------------------------------
+      #  Set up the interpreter so that the CodeQL extractor resolves imports.
+      #  Without the package installed, every intra-package import is
+      #  unresolved and the call graph is useless.
+      # -----------------------------------------------------------------------
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - name: "Install the package"
+        run: "python -m pip install -e ."
+
+      # -----------------------------------------------------------------------
+      #  security-and-quality is used rather than the default security suite.
+      #  The extra quality queries catch unused imports, unreachable code and
+      #  inconsistent return paths, which in a hand-curated dataset are usually
+      #  the visible symptom of a copy-paste error in a facet file rather than
+      #  a style complaint.
+      # -----------------------------------------------------------------------
+      - name: "Initialise CodeQL"
+        uses: "github/codeql-action/init@v3"
+        with:
+          languages: "${{ matrix.language }}"
+          queries: "security-and-quality"
+          config: |
+            paths:
+              - src
+              - tools
+              - tests
+            paths-ignore:
+              # Generated output. Analysing it reports the generator's
+              # decisions as if they were authored code.
+              - docs
+
+      - name: "Autobuild"
+        uses: "github/codeql-action/autobuild@v3"
+
+      - name: "Perform analysis"
+        uses: "github/codeql-action/analyze@v3"
+        with:
+          category: "/language:${{ matrix.language }}"
+          upload: "always"

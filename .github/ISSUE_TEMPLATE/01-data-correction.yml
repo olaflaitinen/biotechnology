@@ -1,0 +1,1685 @@
+# =============================================================================
+#  .github/ISSUE_TEMPLATE/01-data-correction.yml
+# -----------------------------------------------------------------------------
+#  The most important template in this repository.
+#
+#  Factual corrections are the top priority in CONTRIBUTING.md, and the people
+#  best placed to make them, meaning clinicians, agronomists, regulatory
+#  affairs professionals and lawyers, are frequently not programmers and will
+#  never open a pull request.
+#
+#  WHY IT IS THIS LONG
+#  A half-specified correction costs more than no correction: it starts a
+#  conversation that takes five exchanges to reach the point this form reaches
+#  in one. Every question below is one a reviewer would otherwise have to ask.
+#
+#  ONLY SIX FIELDS ARE REQUIRED. Everything else is optional and skipping it is
+#  expected, normal, and carries no penalty whatsoever. The form is sectioned
+#  and numbered so that a reader can jump to the parts that apply and ignore
+#  eleven sections that do not.
+#
+#  Nothing here asks for a code snippet or a stack trace, because none of those
+#  are relevant to whether a dose bound is wrong.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "Data correction"
+description: "Something in the taxonomy is factually wrong, out of date, overstated, unbalanced or missing"
+title: "data: "
+labels: ["data-correction", "needs-triage"]
+
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        **Thank you.** Corrections are the single most valuable contribution
+        this project can receive.
+
+        You do **not** need to be a programmer, and you do not need to open a
+        pull request. Fill in what you know and a maintainer will make the
+        change and credit you in `AUTHORS.md`.
+
+        ### Only six fields are required
+
+        Sections 1, 2 and 4 contain them. Sections 3 and 5 to 11 are entirely
+        optional. Most reports fill in perhaps fifteen fields, and that is a
+        complete report.
+
+        If you would rather make the change yourself it is a one-file edit.
+        See [CONTRIBUTING.md](https://github.com/olaflaitinen/biotechnology/blob/main/CONTRIBUTING.md)
+        section 3.
+
+  # ###########################################################################
+  #  SECTION 1: IDENTIFYING THE RECORD
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 1. Identifying the record
+
+  - type: "input"
+    id: "record"
+    attributes:
+      label: "1.1 Which record?"
+      description: >-
+        The dotted path of the branch or subtype. If you are not sure of the
+        exact key, describe it in your own words and we will find it.
+      placeholder: "red.gene_therapy"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "branch"
+    attributes:
+      label: "1.2 Which colour branch?"
+      options:
+        - "red, medicine, health care and pharmaceuticals"
+        - "green, agriculture, livestock and crop production"
+        - "white, industrial processes, biofuels and biomaterials"
+        - "blue, marine and aquatic resources"
+        - "yellow, food production, fermentation and nutrition"
+        - "grey, environment, waste and ecological balance"
+        - "brown, arid zones, deserts and degraded land"
+        - "gold, bioinformatics, computation and nanobiotechnology"
+        - "dark, biosecurity, biosafety and misuse risk"
+        - "purple, law, ethics, patents and intellectual property"
+        - "It spans several branches"
+        - "It is not in a branch, it is a registry entry"
+        - "I am not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "record_kind"
+    attributes:
+      label: "1.3 What kind of record is it?"
+      options:
+        - "A subtype record"
+        - "A branch-level profile"
+        - "A glossary term"
+        - "A bibliography reference"
+        - "A formula module"
+        - "An organism registry entry"
+        - "A technique registry entry"
+        - "A Sustainable Development Goal entry"
+        - "A controlled-vocabulary member definition"
+        - "I am not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "facet"
+    attributes:
+      label: "1.4 Which facet file?"
+      description: >-
+        Each subtype is split into six files. If you are unsure, choose the
+        last option. Identifying the right file is our job, not yours.
+      options:
+        - "narrative.py, the prose: summary, description, plain language, analogy, why it matters"
+        - "practice.py, applications, technologies, organisms, techniques, challenges"
+        - "metrics.py, a number, symbol, unit, range, evidence grade or formula link"
+        - "history.py, a date or a historical event"
+        - "governance.py, maturity, risk tier, scale, domain, regulations, standards"
+        - "linkage.py, an SDG, glossary term, citation or cross-reference"
+        - "__init__.py, the key, name or aliases"
+        - "Not a facet file, it is a registry entry"
+        - "More than one facet"
+        - "I am not sure"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "field"
+    attributes:
+      label: "1.5 Which field?"
+      options:
+        - "SUMMARY"
+        - "DESCRIPTION"
+        - "PLAIN_LANGUAGE"
+        - "ANALOGY"
+        - "WHY_IT_MATTERS"
+        - "APPLICATIONS"
+        - "TECHNOLOGIES"
+        - "ORGANISMS"
+        - "TECHNIQUES"
+        - "CHALLENGES"
+        - "METRICS, the name of a metric"
+        - "METRICS, a symbol"
+        - "METRICS, a unit"
+        - "METRICS, a typical range"
+        - "METRICS, an evidence grade"
+        - "METRICS, a note"
+        - "METRICS, a formula link"
+        - "FORMULAS"
+        - "MILESTONES, a year"
+        - "MILESTONES, an event description"
+        - "MILESTONES, a note"
+        - "MATURITY"
+        - "RISK_TIER"
+        - "SCALE"
+        - "DOMAINS"
+        - "REGULATORY_STATUS"
+        - "REGULATIONS"
+        - "STANDARDS"
+        - "SDGS"
+        - "GLOSSARY"
+        - "REFERENCES"
+        - "RELATED"
+        - "KEY"
+        - "NAME"
+        - "ALIASES"
+        - "ORIGIN_NOTE, branch level"
+        - "KEY_QUESTIONS, branch level"
+        - "Something else, or I am not sure"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "sub_element"
+    attributes:
+      label: "1.6 Which specific item within that field?"
+      description: "For a list or a metric, name the entry."
+      placeholder: "the Vector genome dose metric, or: the 1999 milestone"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "line_reference"
+    attributes:
+      label: "1.7 Line number, if you were reading the source"
+      placeholder: "metrics.py line 74"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "surface"
+    attributes:
+      label: "1.8 Where were you reading it?"
+      options:
+        - "The documentation website"
+        - "The GitHub repository source"
+        - "In Python, reading a field directly"
+        - "The command line, biotechnology show"
+        - "An exported JSON or CSV file"
+        - "The PDF or ePub download"
+        - "A generated reference page"
+        - "Somewhere else quoted it"
+        - "I do not remember"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "version"
+    attributes:
+      label: "1.9 Which version of the library?"
+      description: >-
+        Run `python -c "import biotechnology; print(biotechnology.__version__)"`,
+        or leave blank if you were reading the website.
+      placeholder: "0.1.0"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "freeze_aware"
+    attributes:
+      label: "1.10 Have you checked the data freeze date for that version?"
+      description: >-
+        Every release records in CHANGELOG.md the date on which its factual and
+        regulatory claims were last verified. A citation that was correct at the
+        freeze date and has since been superseded is still worth reporting; it
+        is simply a different kind of correction.
+      options:
+        - "Yes, and the record was already wrong at the freeze date"
+        - "Yes, and the change happened after the freeze date"
+        - "No, I have not checked"
+        - "Not applicable, this is not a time-sensitive claim"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 2: THE ERROR ITSELF
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 2. The error itself
+
+  - type: "textarea"
+    id: "current"
+    attributes:
+      label: "2.1 What does it say now?"
+      description: "Copy the current text or value exactly, so we can find it."
+      render: "text"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "corrected"
+    attributes:
+      label: "2.2 What should it say?"
+      description: >-
+        Your proposed replacement. Exact wording is welcome but not required.
+        A clear description of the correct position is enough.
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "kind"
+    attributes:
+      label: "2.3 What kind of correction is this?"
+      options:
+        - "Factually wrong, the statement is simply incorrect"
+        - "Out of date, it was correct but has been superseded"
+        - "Overstated, the evidence does not support the claim as written"
+        - "Understated, the evidence supports a stronger claim"
+        - "Missing, something important is absent"
+        - "Misleading, technically true but gives the wrong impression"
+        - "Unbalanced, it presents only benefits or only harms"
+        - "Jurisdictional, correct for one country but presented as universal"
+        - "Wrong unit"
+        - "Wrong order of magnitude"
+        - "Wrong attribution, credited to the wrong person or group"
+        - "Wrong date"
+        - "Superseded terminology, the field no longer uses this word"
+        - "Broken or wrong cross-reference"
+        - "Duplicate of, or contradictory with, another record"
+        - "Wrong classification in a controlled vocabulary"
+        - "Ambiguous, it could be read two ways"
+        - "Something else"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "error_class"
+    attributes:
+      label: "2.4 Is this a factual, editorial or classification error?"
+      description: >-
+        These are decided differently. A factual error is settled by a citation.
+        An editorial one is settled by the style guide. A classification one is
+        a judgement, and goes to discussion.
+      options:
+        - "Factual, a verifiable claim is wrong"
+        - "Editorial, the writing misleads even though the facts are right"
+        - "Classification, the record is filed or labelled wrongly"
+        - "Structural, the information is in the wrong field"
+        - "A mixture, described below"
+        - "I am not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "severity"
+    attributes:
+      label: "2.5 How much does it matter?"
+      description: "Your honest assessment. This affects triage order only."
+      options:
+        - "Low, a detail, a date, the spelling of a name"
+        - "Medium, a reader would take away a slightly wrong picture"
+        - "High, a reader would take away a substantially wrong picture"
+        - "Critical, a number or claim someone might act on"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "confidence"
+    attributes:
+      label: "2.6 How confident are you?"
+      description: >-
+        There is no penalty for uncertainty. A well-flagged maybe is more useful
+        than a confident guess.
+      options:
+        - "Certain, I have the primary source in front of me"
+        - "Very confident, this is settled in my field"
+        - "Fairly confident, but a specialist should check"
+        - "Uncertain, this looked wrong and I am flagging it for review"
+        - "I am asking a question rather than asserting a correction"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "age"
+    attributes:
+      label: "2.7 How long has it been wrong, as far as you can tell?"
+      options:
+        - "I do not know"
+        - "It has always been wrong"
+        - "It became wrong within the last year"
+        - "It became wrong one to three years ago"
+        - "It became wrong more than three years ago"
+        - "It was correct until a specific event, named below"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "universality"
+    attributes:
+      label: "2.8 Is it wrong in all contexts, or only in some?"
+      options:
+        - "Wrong in all contexts"
+        - "Wrong only in certain jurisdictions"
+        - "Wrong only for certain organisms or systems"
+        - "Wrong only at certain scales"
+        - "Wrong only in a clinical or regulated setting"
+        - "Wrong only outside a laboratory setting"
+        - "Correct on average but wrong at the extremes"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "plain_affected"
+    attributes:
+      label: "2.9 Does the plain-language version share the error?"
+      description: >-
+        Every record is written twice. A correction to the technical register
+        often needs a matching correction to the public one, and the second is
+        easy to forget.
+      options:
+        - "Yes, both are wrong in the same way"
+        - "Yes, but differently"
+        - "No, only the technical version is wrong"
+        - "No, only the plain-language version is wrong"
+        - "There is no plain-language version of this field"
+        - "I have not checked"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "internal_consistency"
+    attributes:
+      label: "2.10 Does the error contradict another field in the same record?"
+      options:
+        - "No"
+        - "Yes, it contradicts a metric"
+        - "Yes, it contradicts a milestone"
+        - "Yes, it contradicts the governance classification"
+        - "Yes, it contradicts a challenge"
+        - "Yes, it contradicts the plain-language paragraph"
+        - "Yes, more than one of the above"
+        - "I have not checked"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "contested"
+    attributes:
+      label: "2.11 Is the corrected position contested?"
+      description: >-
+        The project reports what is established, reports what is disputed, and
+        says who disputes it. If your correction is on one side of a live
+        disagreement, saying so does not weaken it.
+      options:
+        - "No, this is settled"
+        - "Mostly settled, with a minority view"
+        - "Genuinely contested between reputable sources"
+        - "Contested along national or regulatory lines"
+        - "Contested between disciplines"
+        - "Contested for political rather than scientific reasons"
+        - "Contested between industry and academic sources"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "harm_potential"
+    attributes:
+      label: "2.12 Could a reader be harmed by acting on the current text?"
+      description: >-
+        Metrics in this library are orientation figures and must never set a
+        dose, a limit or a safety threshold. NOTICE.md section 6 says so. Even
+        so, if a wrong figure could plausibly mislead someone into a bad
+        decision, that raises the priority.
+      options:
+        - "No, it is descriptive"
+        - "Unlikely, but it could mislead a student"
+        - "Possibly, it could mislead a policy or procurement decision"
+        - "Possibly, it could mislead a laboratory planning decision"
+        - "Yes, it touches a safety-relevant quantity"
+        - "I do not know"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 3: THE NATURE OF THE CLAIM
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 3. The nature of the claim
+
+        Skip this section entirely unless you are correcting a number, a
+        classification or a piece of terminology.
+
+  - type: "dropdown"
+    id: "claim_type"
+    attributes:
+      label: "3.1 What kind of claim is it?"
+      options:
+        - "Not applicable"
+        - "A numeric value or range"
+        - "A unit"
+        - "A date"
+        - "A name of a person, organism or organisation"
+        - "A legal or regulatory statement"
+        - "A causal claim, X causes Y"
+        - "A definitional claim, X means Y"
+        - "A comparative claim, X is larger or faster than Y"
+        - "An existence claim, X has been done"
+        - "A prevalence or frequency claim"
+        - "An attribution of priority, X was first"
+        - "A classification, X belongs in category Y"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "evidence_now"
+    attributes:
+      label: "3.2 What evidence grade does the record currently carry?"
+      options:
+        - "Not applicable, or I do not know"
+        - "consensus, textbook material the field agrees on"
+        - "reviewed, supported by peer-reviewed literature or an official report"
+        - "reported, stated in one credible source, not widely replicated"
+        - "indicative, order of magnitude only"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "evidence_proposed"
+    attributes:
+      label: "3.3 What evidence grade should it carry?"
+      options:
+        - "Not applicable"
+        - "consensus"
+        - "reviewed"
+        - "reported"
+        - "indicative"
+        - "The claim should be removed rather than regraded"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "unit_change"
+    attributes:
+      label: "3.4 Does the unit need to change?"
+      options:
+        - "No"
+        - "Yes, it is the wrong unit entirely"
+        - "Yes, it is the right dimension but the wrong prefix"
+        - "Yes, it should be written out rather than abbreviated"
+        - "Yes, it uses a non-ASCII character"
+        - "Yes, it should be dimensionless"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "magnitude"
+    attributes:
+      label: "3.5 Is this an order-of-magnitude error?"
+      options:
+        - "No, the value is close but wrong"
+        - "Yes, by a factor of about ten"
+        - "Yes, by a factor of about a hundred"
+        - "Yes, by more than a thousand"
+        - "The exponent sign is wrong"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "range_conditional"
+    attributes:
+      label: "3.6 Is the correct range conditional on something?"
+      description: >-
+        Almost every real range in biology is. This is why `typical` is stored
+        as a string rather than as a numeric pair, and why the `note` field
+        exists.
+      options:
+        - "Not applicable"
+        - "No, it is unconditional"
+        - "Yes, on route of administration"
+        - "Yes, on organism or cell type"
+        - "Yes, on scale or vessel size"
+        - "Yes, on temperature or other process conditions"
+        - "Yes, on the measurement method"
+        - "Yes, on jurisdiction"
+        - "Yes, on something else described below"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "note_needed"
+    attributes:
+      label: "3.7 Does a caveat note need adding or changing?"
+      options:
+        - "No"
+        - "Yes, a note should be added"
+        - "Yes, the existing note is wrong"
+        - "Yes, the existing note is right but incomplete"
+        - "The note should be removed"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "symbol_change"
+    attributes:
+      label: "3.8 Does the symbol need changing?"
+      options:
+        - "No"
+        - "Yes, the field uses a different symbol"
+        - "Yes, the current symbol is ambiguous with another quantity"
+        - "Yes, it contains a non-ASCII character"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "terminology"
+    attributes:
+      label: "3.9 Is the terminology current?"
+      options:
+        - "Yes, it is current"
+        - "No, the field has moved to a different term"
+        - "No, the term is now considered pejorative or outdated"
+        - "No, the term now means something else"
+        - "The term is correct but a synonym should be added as an alias"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "attribution"
+    attributes:
+      label: "3.10 Is the attribution correct?"
+      description: >-
+        Editorial rule 8 requires that a simultaneous discovery is not credited
+        to one group. Several entries in this library are exactly that case.
+      options:
+        - "Yes"
+        - "No, the wrong person or group is credited"
+        - "No, it was simultaneous and only one group is named"
+        - "No, the credited work came later than another"
+        - "No, the credit is disputed and the record does not say so"
+        - "Not applicable"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 4: EVIDENCE
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 4. Evidence
+
+        This is the section that decides the outcome. Corrections in this
+        project are settled by citation, not by seniority. See
+        `CODE_OF_CONDUCT.md`, "Argue from sources, not from authority". A
+        contributor with no credentials who brings a primary source is right.
+
+  - type: "dropdown"
+    id: "evidence_type"
+    attributes:
+      label: "4.1 What kind of source is it?"
+      options:
+        - "Peer-reviewed primary research article"
+        - "Peer-reviewed review article"
+        - "Systematic review or meta-analysis"
+        - "Clinical practice guideline"
+        - "Consensus statement from a learned society"
+        - "Textbook or standard reference work"
+        - "Regulation, directive or statute"
+        - "Court judgment"
+        - "Regulatory agency guidance"
+        - "Regulatory assessment report for a specific product"
+        - "Technical standard: ISO, CEN, ASTM or pharmacopoeial"
+        - "Official statistics or a government report"
+        - "Intergovernmental body report: WHO, FAO, OECD, WOAH, UN"
+        - "Product label, summary of product characteristics or package insert"
+        - "Clinical trial registry entry"
+        - "Patent"
+        - "Preprint"
+        - "Conference proceeding or abstract"
+        - "Thesis or dissertation"
+        - "Manufacturer or industry documentation"
+        - "Database or registry entry"
+        - "News reporting"
+        - "Personal professional experience, no document"
+        - "Other"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "source"
+    attributes:
+      label: "4.2 The source itself"
+      description: >-
+        A DOI, an official document identifier, a case number, a standard
+        number, or a link to a primary source. More than one is welcome.
+      placeholder: |
+        DOI: 10.1056/NEJMra1706910
+        or
+        Regulation (EU) 2019/6, Article 8, as amended by (EU) 2024/xxx
+        or
+        CJEU Case C-528/16, judgment of 25 July 2018, paragraph 54
+    validations:
+      required: true
+
+  - type: "input"
+    id: "doi"
+    attributes:
+      label: "4.3 DOI, if there is one"
+      placeholder: "10.1038/nature15818"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "secondary_source"
+    attributes:
+      label: "4.4 A second, independent source"
+      description: >-
+        Optional, and it materially speeds up verification. Two independent
+        sources agreeing is the difference between a same-day merge and a
+        week of correspondence.
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "source_access"
+    attributes:
+      label: "4.5 Can a maintainer read that source without paying?"
+      description: >-
+        This affects how quickly the correction can be verified, not whether it
+        is accepted.
+      options:
+        - "Open access or freely published"
+        - "Free but requires registration"
+        - "Free abstract, paywalled full text"
+        - "Paywalled journal article"
+        - "Standard that must be purchased: ISO, CEN, ASTM"
+        - "Behind an institutional subscription"
+        - "Available only in print"
+        - "Not publicly available at all"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "source_quote"
+    attributes:
+      label: "4.6 The relevant sentence from the source"
+      description: >-
+        Especially valuable if the source is not freely readable. A short
+        quotation only, sufficient to verify the point. Do not paste large
+        extracts of copyrighted material.
+      render: "text"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "source_locator"
+    attributes:
+      label: "4.7 Where in the source?"
+      placeholder: "page 358, table 2, or: Article 8(3), or: section 5.14"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "source_date"
+    attributes:
+      label: "4.8 As of what date is your source current?"
+      description: >-
+        Especially important for regulations. A directive correct in 2023 may
+        have been amended since.
+      placeholder: "2026-07-14, or: consolidated text as at 1 January 2026"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "primary_secondary"
+    attributes:
+      label: "4.9 Is your source primary or secondary?"
+      options:
+        - "Primary, it reports the original work or is the legal text itself"
+        - "Secondary, it describes or summarises primary work"
+        - "Tertiary, a textbook or encyclopaedia"
+        - "A mixture"
+        - "I am not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "peer_reviewed"
+    attributes:
+      label: "4.10 Was it peer reviewed?"
+      options:
+        - "Yes, in a journal with external peer review"
+        - "Yes, by a regulatory or standards body"
+        - "No, it is a preprint"
+        - "No, it is agency or institutional documentation"
+        - "No, it is a legal text, which is not peer reviewed by nature"
+        - "Not applicable"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "consensus_or_single"
+    attributes:
+      label: "4.11 Does the source represent consensus or a single result?"
+      options:
+        - "Consensus, this is the accepted position"
+        - "Strong support, several independent groups agree"
+        - "A single well-regarded study"
+        - "A single study that has not been replicated"
+        - "An emerging position that is gaining acceptance"
+        - "A minority position that I am arguing for"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "evidence_strength"
+    attributes:
+      label: "4.12 How strong is the underlying evidence?"
+      options:
+        - "Not applicable, this is a legal or definitional claim"
+        - "Very strong, large studies or long regulatory record"
+        - "Strong"
+        - "Moderate"
+        - "Weak, small or preliminary"
+        - "Anecdotal"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "conflicting"
+    attributes:
+      label: "4.13 Do credible sources conflict on this point?"
+      options:
+        - "No"
+        - "Yes, and I have cited the conflicting source below"
+        - "Yes, but I believe the conflicting source is outdated"
+        - "Yes, and the disagreement is genuine and unresolved"
+        - "Yes, along jurisdictional lines"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "conflicting_source"
+    attributes:
+      label: "4.14 The conflicting source, if there is one"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "record_both"
+    attributes:
+      label: "4.15 Would you accept the record noting both positions?"
+      description: >-
+        Where sources genuinely conflict the project's practice is to say so and
+        cite both, rather than pick a winner.
+      options:
+        - "Yes, that would be the right outcome"
+        - "Yes, but with my position given more weight"
+        - "No, the other position is simply wrong"
+        - "Not applicable, there is no conflict"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 5: VERIFICATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 5. Verification
+
+        Optional throughout. These questions help a maintainer check your
+        correction quickly rather than slowly.
+
+  - type: "dropdown"
+    id: "verifiable"
+    attributes:
+      label: "5.1 Can a maintainer verify this without specialist access?"
+      options:
+        - "Yes, everything needed is freely available online"
+        - "Yes, but it needs a careful read of a long document"
+        - "Partly, the key source is paywalled"
+        - "No, it needs a purchased standard"
+        - "No, it needs domain expertise to interpret"
+        - "No, it rests on my professional experience"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "open_equivalent"
+    attributes:
+      label: "5.2 Is there an open-access equivalent source?"
+      placeholder: "A preprint, an author manuscript, an agency summary"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "registry_entry"
+    attributes:
+      label: "5.3 Is there a database or registry entry that confirms it?"
+      placeholder: "EudraCT number, ClinicalTrials.gov ID, EUR-Lex CELEX number"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "corrected_elsewhere"
+    attributes:
+      label: "5.4 Has this been corrected in a comparable resource?"
+      options:
+        - "I do not know"
+        - "No"
+        - "Yes, in a textbook"
+        - "Yes, in a regulatory database"
+        - "Yes, in another open dataset"
+        - "Yes, and that resource has the same error"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "multi_source"
+    attributes:
+      label: "5.5 Did you check more than one source?"
+      options:
+        - "Yes, several agree"
+        - "Yes, two agree"
+        - "No, one source only"
+        - "No, I am reporting from memory or experience"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "how_verified"
+    attributes:
+      label: "5.6 How did you establish the correct value?"
+      options:
+        - "Read the primary source"
+        - "Read the legal or standards text"
+        - "Consulted a colleague or specialist"
+        - "It is part of my routine professional knowledge"
+        - "Calculated it from other published values"
+        - "Measured it myself"
+        - "Read a secondary summary"
+        - "I have not verified it, I am flagging a suspicion"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "contactable"
+    attributes:
+      label: "5.7 May we ask you follow-up questions on this issue?"
+      options:
+        - "Yes"
+        - "Yes, but I may be slow to reply"
+        - "Yes, but by email rather than in public"
+        - "No, please proceed without me"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "quote_reasoning"
+    attributes:
+      label: "5.8 May we quote your reasoning in the commit message?"
+      options:
+        - "Yes, with attribution"
+        - "Yes, without attribution"
+        - "Please ask me first"
+        - "No"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 6: SCOPE
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 6. Scope
+
+  - type: "dropdown"
+    id: "jurisdiction"
+    attributes:
+      label: "6.1 Which jurisdiction does this correction apply to?"
+      description: >-
+        The governance facets currently lean European. That is a stated bias,
+        not a hidden one, and additions covering other jurisdictions are the
+        most welcome kind of contribution.
+      options:
+        - "Universal, not jurisdiction-specific"
+        - "European Union"
+        - "United Kingdom"
+        - "United States"
+        - "Canada"
+        - "Japan"
+        - "South Korea"
+        - "China"
+        - "India"
+        - "Brazil"
+        - "Argentina"
+        - "Australia or New Zealand"
+        - "African Union or an African national regulator"
+        - "Gulf Cooperation Council state"
+        - "Other Latin America"
+        - "Southeast Asia"
+        - "Central Asia or the Caucasus"
+        - "Another single country"
+        - "International treaty or convention"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "time_bounded"
+    attributes:
+      label: "6.2 Is the correct value time-bounded?"
+      options:
+        - "No, it is stable"
+        - "Yes, it changes with each regulatory revision"
+        - "Yes, it changes annually"
+        - "Yes, it is a moving technological frontier"
+        - "Yes, it is an epidemiological figure that shifts"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "affects_others"
+    attributes:
+      label: "6.3 Does the same problem appear in other records?"
+      options:
+        - "No, only this one"
+        - "Yes, and I have listed them below"
+        - "Yes, probably, but I have not checked"
+        - "Likely across a whole branch"
+        - "Likely across the whole taxonomy"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "other_records"
+    attributes:
+      label: "6.4 Which other records?"
+      placeholder: "red.cell_therapy, green.agricultural_genome_editing"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "branch_level"
+    attributes:
+      label: "6.5 Does the branch-level profile also need changing?"
+      options:
+        - "No"
+        - "Yes, the branch description"
+        - "Yes, the branch history"
+        - "Yes, the branch key questions"
+        - "I have not checked"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "affects_glossary"
+    attributes:
+      label: "6.6 Does a glossary term need adding or changing?"
+      options:
+        - "No"
+        - "Yes, a term needs adding"
+        - "Yes, a definition is wrong"
+        - "Yes, the plain-language definition is unclear"
+        - "I have not checked"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "affects_bibliography"
+    attributes:
+      label: "6.7 Does the bibliography need changing?"
+      options:
+        - "No"
+        - "Yes, a reference needs adding"
+        - "Yes, a reference is cited wrongly"
+        - "Yes, a reference has been retracted"
+        - "Yes, a reference should be replaced with a better one"
+        - "I have not checked"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "affects_formula"
+    attributes:
+      label: "6.8 Does a formula module need changing?"
+      options:
+        - "No"
+        - "Yes, the relationship is wrong"
+        - "Yes, the domain of validity is wrong"
+        - "Yes, an assumption is unstated"
+        - "Yes, the unit contract is wrong"
+        - "Yes, a formula link points at the wrong module"
+        - "I have not checked"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "affects_vocabulary"
+    attributes:
+      label: "6.9 Does a controlled-vocabulary value need changing?"
+      options:
+        - "No"
+        - "Yes, MATURITY"
+        - "Yes, RISK_TIER"
+        - "Yes, SCALE"
+        - "Yes, DOMAINS"
+        - "Yes, REGULATORY_STATUS"
+        - "Yes, an evidence grade"
+        - "Yes, more than one"
+        - "I have not checked"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "affects_sdg"
+    attributes:
+      label: "6.10 Does an SDG claim need changing?"
+      description: >-
+        Editorial rule 12: each SDG must survive the question, what would a
+        hostile auditor say?
+      options:
+        - "No"
+        - "Yes, an SDG should be added"
+        - "Yes, an SDG should be removed as unjustified"
+        - "Yes, the record claims to advance a goal it only engages"
+        - "I have not checked"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "affects_related"
+    attributes:
+      label: "6.11 Do cross-references need changing?"
+      options:
+        - "No"
+        - "Yes, a cross-reference should be added"
+        - "Yes, a cross-reference is wrong"
+        - "Yes, a cross-reference points at a record that no longer fits"
+        - "I have not checked"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "affects_organisms"
+    attributes:
+      label: "6.12 Do the organism or technique lists need changing?"
+      options:
+        - "No"
+        - "Yes, an organism is wrong or missing"
+        - "Yes, a technique is wrong or missing"
+        - "Yes, a species name is outdated"
+        - "I have not checked"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 7: CONSEQUENCES
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 7. Consequences of accepting the correction
+
+  - type: "checkboxes"
+    id: "knock_on"
+    attributes:
+      label: "7.1 Tick everything accepting this would also require"
+      description: "If you are not sure, tick nothing. Working this out is our job."
+      options:
+        - label: "Changing an evidence grade on a metric"
+        - label: "Changing a unit or an order of magnitude"
+        - label: "Adding or removing a cross-reference in RELATED"
+        - label: "Adding or removing a citation in the bibliography"
+        - label: "Adding or removing a glossary term"
+        - label: "Changing the plain-language paragraph as well as the technical one"
+        - label: "Changing the analogy, because it no longer holds"
+        - label: "Changing a controlled-vocabulary value such as MATURITY"
+        - label: "Adding or removing an SDG"
+        - label: "Adding a new formula module"
+        - label: "Adding a milestone"
+        - label: "Adding a challenge"
+        - label: "Splitting or merging a subtype"
+        - label: "Renaming a key, which is a breaking change"
+        - label: "Updating the branch-level profile"
+        - label: "Nothing beyond the field itself"
+
+  - type: "dropdown"
+    id: "breaking"
+    attributes:
+      label: "7.2 Would this rename or remove a public identifier?"
+      description: >-
+        Subtype keys, branch keys, formula keys, glossary keys and citation keys
+        are public API. External work cites these strings. See GOVERNANCE.md
+        section 3.6.
+      options:
+        - "No"
+        - "Yes, a subtype key"
+        - "Yes, a glossary key"
+        - "Yes, a citation key"
+        - "Yes, a formula key"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "needs_new_record"
+    attributes:
+      label: "7.3 Does the correction imply a new record is needed?"
+      options:
+        - "No"
+        - "Yes, a new subtype"
+        - "Yes, a new glossary term"
+        - "Yes, a new formula"
+        - "Yes, a new bibliography entry"
+        - "Yes, a new organism or technique entry"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "split_merge"
+    attributes:
+      label: "7.4 Does it imply splitting or merging existing records?"
+      options:
+        - "No"
+        - "Yes, one record should become two"
+        - "Yes, two records should become one"
+        - "Yes, a record should move to another branch"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "urgency"
+    attributes:
+      label: "7.5 How urgent is publishing the correction?"
+      options:
+        - "Not urgent, next release is fine"
+        - "Moderately, it would be good within a few weeks"
+        - "Urgent, the current text is actively misleading"
+        - "Very urgent, someone could act on it"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "release_needed"
+    attributes:
+      label: "7.6 Should a release be cut for it?"
+      options:
+        - "No, fold it into the next release"
+        - "Yes, a patch release would be appropriate"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "changelog"
+    attributes:
+      label: "7.7 Should this appear in the changelog?"
+      options:
+        - "Yes, it is a substantive correction"
+        - "No, it is a typo"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "freeze_note"
+    attributes:
+      label: "7.8 Does the data freeze date need a note?"
+      description: >-
+        If the correction reflects a change in the world rather than an error in
+        our reading, the freeze date is the honest place to record that.
+      options:
+        - "No, this was always wrong"
+        - "Yes, the world changed after the freeze date"
+        - "I have no view"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 8: EDITORIAL CONSEQUENCES
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 8. Editorial consequences
+
+        These test the correction against the fourteen rules in
+        `STYLE_GUIDE.md`. Skip if the correction is a bare number or date.
+
+  - type: "dropdown"
+    id: "rule3_balance"
+    attributes:
+      label: "8.1 Does the correction preserve the cost-and-benefit balance?"
+      description: >-
+        Editorial rule 3: a why-it-matters paragraph must state the price, the
+        controversy or the access problem alongside the achievement.
+      options:
+        - "Yes, balance is preserved"
+        - "It improves the balance"
+        - "It removes a stated downside, and a replacement is needed"
+        - "It removes a stated benefit, and a replacement is needed"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "readability"
+    attributes:
+      label: "8.2 Does the correction keep the plain-language paragraph readable?"
+      options:
+        - "Yes"
+        - "It makes it clearer"
+        - "It makes it longer but still clear"
+        - "It makes it harder, and a rewrite is needed"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "jargon"
+    attributes:
+      label: "8.3 Does the proposed wording introduce jargon?"
+      description: >-
+        Editorial rule 1: no word in PLAIN_LANGUAGE that would need a glossary
+        in a general newspaper.
+      options:
+        - "No"
+        - "Yes, but only in the technical register, which is fine"
+        - "Yes, in the plain-language register, and it needs explaining"
+        - "Yes, and I have suggested a plain alternative below"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "analogy_validity"
+    attributes:
+      label: "8.4 Does the correction affect the analogy?"
+      options:
+        - "No"
+        - "Yes, the analogy no longer holds"
+        - "Yes, the analogy now misleads"
+        - "The analogy could be improved, though it is not wrong"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "milestone_needed"
+    attributes:
+      label: "8.5 Does a milestone need adding?"
+      description: >-
+        Editorial rule 8: a timeline of unbroken triumph is a marketing
+        document. Setbacks belong in the record.
+      options:
+        - "No"
+        - "Yes, an achievement"
+        - "Yes, a setback, which rule 8 specifically asks for"
+        - "Yes, a regulatory event"
+        - "An existing milestone is misdated"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "challenge_needed"
+    attributes:
+      label: "8.6 Does a challenge need adding?"
+      description: >-
+        Editorial rule 7: at least four challenges, at least one of them
+        non-technical.
+      options:
+        - "No"
+        - "Yes, a technical challenge"
+        - "Yes, a cost or access challenge"
+        - "Yes, a regulatory challenge"
+        - "Yes, a public acceptance challenge"
+        - "Yes, a capacity or geography challenge"
+        - "An existing challenge is no longer true"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "application_reality"
+    attributes:
+      label: "8.7 Does an application need removing as not real?"
+      description: >-
+        Editorial rule 6: an application must name something a reader could go
+        and look up.
+      options:
+        - "No"
+        - "Yes, one listed application never happened"
+        - "Yes, one was discontinued or withdrawn"
+        - "Yes, one is aspirational rather than deployed"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "spelling"
+    attributes:
+      label: "8.8 Does the proposed wording follow the house conventions?"
+      description: >-
+        British spelling, ASCII punctuation only, no em dashes, numbers as words
+        up to ten. See STYLE_GUIDE.md section 3. We will fix this if not.
+      options:
+        - "Yes"
+        - "I am not sure, please adjust it"
+        - "Not applicable"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 9: ABOUT YOU
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 9. About you
+
+        All optional. It helps triage and it helps us credit you correctly.
+        "Prefer not to say" is always an acceptable answer and never counts
+        against a report.
+
+  - type: "dropdown"
+    id: "expertise"
+    attributes:
+      label: "9.1 What is your relationship to this subject?"
+      options:
+        - "Prefer not to say"
+        - "I work in this exact field"
+        - "I work in an adjacent field"
+        - "I am a researcher in another discipline"
+        - "I am a clinician"
+        - "I am a veterinary professional"
+        - "I work in regulatory affairs or quality"
+        - "I am a lawyer or policy professional"
+        - "I am a patent attorney or agent"
+        - "I am a teacher or lecturer"
+        - "I am a student"
+        - "I am a librarian or information professional"
+        - "I am a journalist or communicator"
+        - "I am a patient, carer or advocate"
+        - "I am a farmer, grower or producer"
+        - "I am a software developer"
+        - "I am an interested member of the public"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "experience"
+    attributes:
+      label: "9.2 Roughly how long have you worked in the area?"
+      options:
+        - "Prefer not to say"
+        - "Not applicable"
+        - "Less than a year"
+        - "One to three years"
+        - "Three to ten years"
+        - "Ten to twenty years"
+        - "More than twenty years"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "conflict"
+    attributes:
+      label: "9.3 Do you have any interest to declare?"
+      description: >-
+        Declaring one does not disqualify a correction, because corrections are
+        settled by the source. It simply lets a reviewer weigh the framing.
+      options:
+        - "None"
+        - "I am an author of the cited source"
+        - "I am a co-author or colleague of an author"
+        - "I work for an organisation named in the record"
+        - "I work for a competitor of an organisation named in the record"
+        - "I hold a patent or commercial interest in the subject"
+        - "I receive funding related to the subject"
+        - "I am a member of an advocacy organisation on this subject"
+        - "I hold a public position on this subject"
+        - "Prefer not to say"
+        - "Other, described below"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "conflict_detail"
+    attributes:
+      label: "9.4 Detail of any declared interest"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "affiliation"
+    attributes:
+      label: "9.5 Institutional affiliation, if you would like it recorded"
+      placeholder: "Metropolia University of Applied Sciences"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "credit"
+    attributes:
+      label: "9.6 How would you like to be credited in AUTHORS.md?"
+      options:
+        - "By my GitHub handle"
+        - "By my full name, given below"
+        - "By name and affiliation, given below"
+        - "Anonymously, as an anonymous contributor"
+        - "Not at all"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "credit_name"
+    attributes:
+      label: "9.7 The name to credit, if not your handle"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "first_language"
+    attributes:
+      label: "9.8 Is English your first language?"
+      description: >-
+        Asked because the library is English only and we want to know when the
+        English itself is a barrier. It has no bearing on the correction.
+      options:
+        - "Prefer not to say"
+        - "Yes"
+        - "No, but I read English comfortably"
+        - "No, and I found the English here difficult"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "how_found"
+    attributes:
+      label: "9.9 How did you come across this?"
+      options:
+        - "Reading the documentation site"
+        - "Reading the source on GitHub"
+        - "Using the library in code"
+        - "Using the command line tool"
+        - "Preparing teaching material"
+        - "Preparing a publication or a report"
+        - "Preparing a policy or regulatory document"
+        - "Fact-checking something else"
+        - "Systematically reviewing a branch"
+        - "Someone else pointed it out to me"
+        - "A search engine brought me here"
+        - "Other"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "first_time"
+    attributes:
+      label: "9.10 Is this your first contribution to this project?"
+      options:
+        - "Yes"
+        - "No, I have contributed before"
+        - "Prefer not to say"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 10: PROCESS
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 10. Process
+
+  - type: "dropdown"
+    id: "willing_pr"
+    attributes:
+      label: "10.1 Would you like to make the change yourself?"
+      description: "There is no expectation either way. It is a one-file edit."
+      options:
+        - "No, please make it for me"
+        - "Yes, I will open a pull request"
+        - "Yes, if someone shows me where the file is"
+        - "I would rather someone else did it but I will review it"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "willing_editor"
+    attributes:
+      label: "10.2 Would you consider becoming a domain or jurisdictional editor?"
+      description: >-
+        GOVERNANCE.md section 6 describes domain editors as the intended growth
+        path for this project. There is no commitment implied by answering.
+      options:
+        - "No"
+        - "Maybe, ask me again"
+        - "Yes, for this branch"
+        - "Yes, for this jurisdiction"
+        - "Yes, for the plain-language register"
+        - "Tell me more first"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "willing_review"
+    attributes:
+      label: "10.3 Would you review related records for the same problem?"
+      options:
+        - "No"
+        - "Yes, a handful"
+        - "Yes, a whole branch"
+        - "Yes, the whole taxonomy for this class of error"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "timeline"
+    attributes:
+      label: "10.4 Do you need this fixed by a particular time?"
+      description: >-
+        An honest answer helps. This is an unfunded academic project with one
+        maintainer, and a deadline is information rather than pressure.
+      options:
+        - "No"
+        - "Within a few months would be useful"
+        - "I have a deadline this year"
+        - "I have a deadline within weeks"
+        - "I need it now and will work around it in the meantime"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "notify"
+    attributes:
+      label: "10.5 How would you like to hear the outcome?"
+      options:
+        - "A comment on this issue is fine"
+        - "Please tag me explicitly"
+        - "Email me"
+        - "I do not need to be told"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "context"
+    attributes:
+      label: "10.6 Anything else?"
+      description: >-
+        Your name if you asked to be credited that way, the detail of a declared
+        interest, related problems, or anything that did not fit above.
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 11: CONFIRMATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 11. Confirmation
+
+  - type: "checkboxes"
+    id: "confirm"
+    attributes:
+      label: "11.1 Before you submit"
+      options:
+        - label: >-
+            I have given a source that a maintainer can check independently, or
+            I have explained why no document exists.
+          required: true
+        - label: >-
+            I understand that corrections are settled by citation, and that a
+            maintainer may come back with a different source.
+          required: true
+        - label: >-
+            I have searched existing issues and this is not a duplicate.
+          required: true
+        - label: >-
+            This report contains no operational information about causing harm.
+            If it did, I would have emailed yunus.imanov@metropolia.fi privately
+            instead. See SECURITY.md section 2.
+          required: true
+        - label: >-
+            I understand that this library is a reference work and not medical,
+            veterinary, legal or regulatory advice, and that my correction does
+            not change that.
+          required: true
+        - label: >-
+            I agree that my contribution is licensed under the EUPL-1.2.
+          required: true
+        - label: >-
+            I have read and agree to follow the Code of Conduct.
+          required: true

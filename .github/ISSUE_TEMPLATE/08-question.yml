@@ -1,0 +1,947 @@
+# =============================================================================
+#  .github/ISSUE_TEMPLATE/08-question.yml
+# -----------------------------------------------------------------------------
+#  Questions, and disagreements that are not yet corrections.
+#
+#  WHY A PROJECT WITH A GOOD FAQ STILL NEEDS THIS
+#  Two reasons.
+#
+#    1. A question is a documentation bug that has not been diagnosed yet. If
+#       somebody had to ask, either the answer is not written down or it is not
+#       findable, and both are fixable. Every question answered here should end
+#       with either a link or a commit.
+#    2. Disagreement about a boundary is not a correction. "I think algal
+#       biotechnology belongs in white, not blue" is not a factual error; it is
+#       a judgement about how the field is carved up, and it deserves a
+#       different conversation from a wrong dose bound. Section 4 exists for
+#       exactly that, and such disagreements are welcome rather than tolerated.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "Question or disagreement"
+description: "Ask something, or disagree with a boundary, a classification or an editorial judgement"
+title: "q: "
+labels: ["question", "needs-triage"]
+
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        Questions are welcome. If you had to ask, the answer is either not
+        written down or not findable, and both are worth fixing.
+
+        Before you write, these may already answer it:
+
+        - [FAQ.md](https://github.com/olaflaitinen/biotechnology/blob/main/FAQ.md), why ten colours, where each came from, why the dark branch exists
+        - [ARCHITECTURE.md](https://github.com/olaflaitinen/biotechnology/blob/main/ARCHITECTURE.md), how the repository is laid out and why
+        - [DATA_MODEL.md](https://github.com/olaflaitinen/biotechnology/blob/main/DATA_MODEL.md), every field of every record
+        - [STYLE_GUIDE.md](https://github.com/olaflaitinen/biotechnology/blob/main/STYLE_GUIDE.md), the fourteen editorial rules
+        - [NOTATION.md](https://github.com/olaflaitinen/biotechnology/blob/main/NOTATION.md), symbols, units, formula contract
+        - [GOVERNANCE.md](https://github.com/olaflaitinen/biotechnology/blob/main/GOVERNANCE.md), who decides what
+        - [THREAT_MODEL.md](https://github.com/olaflaitinen/biotechnology/blob/main/THREAT_MODEL.md), the risks and what is accepted
+        - [ROADMAP.md](https://github.com/olaflaitinen/biotechnology/blob/main/ROADMAP.md), what is planned and what is ruled out
+
+        If one of them nearly answered it but not quite, say so. That is more
+        useful than the question itself.
+
+  # ###########################################################################
+  #  SECTION 1: THE QUESTION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 1. The question
+
+  - type: "dropdown"
+    id: "kind"
+    attributes:
+      label: "1.1 What are you asking about?"
+      options:
+        - "How to do something with the library"
+        - "Whether the library can do something at all"
+        - "What a field or a value means"
+        - "How to interpret a metric or a range"
+        - "How to interpret an evidence grade"
+        - "Why a record is classified the way it is"
+        - "Why a subtype is in one branch rather than another"
+        - "Why the taxonomy is carved up this way"
+        - "Why a boundary is drawn where it is"
+        - "Why an editorial rule exists"
+        - "Why a design decision was made"
+        - "Where a piece of information comes from"
+        - "How current the data is"
+        - "How to cite the project"
+        - "Licence and reuse"
+        - "Whether I may use it commercially"
+        - "How to contribute"
+        - "Whether something is in scope"
+        - "The dual-use policy and the dark branch"
+        - "Security or supply-chain assurance"
+        - "Accessibility or translation plans"
+        - "A disagreement rather than a question, see section 4"
+        - "Something else"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "question"
+    attributes:
+      label: "1.2 Your question"
+      description: "In as much or as little detail as you like."
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "context"
+    attributes:
+      label: "1.3 What are you trying to achieve?"
+      description: >-
+        Optional, but it very often changes the answer. The best answer to "how
+        do I filter by X" is sometimes "you want Y instead", and that only
+        becomes visible when we know the goal.
+    validations:
+      required: false
+
+  - type: "input"
+    id: "record"
+    attributes:
+      label: "1.4 Which record or page is this about, if any?"
+      placeholder: "blue.algal_biotechnology"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "urgency"
+    attributes:
+      label: "1.5 Is anything waiting on the answer?"
+      options:
+        - "No, I am curious"
+        - "A piece of work, with no deadline"
+        - "A piece of work, with a deadline"
+        - "A decision about whether to adopt the library"
+        - "A publication or report"
+        - "Teaching material"
+        - "A compliance or procurement review"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 2: WHAT YOU ALREADY TRIED
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 2. What you already tried
+
+  - type: "checkboxes"
+    id: "checked"
+    attributes:
+      label: "2.1 Which of these did you check?"
+      description: >-
+        No judgement attached. If you checked one and it did not help, that is a
+        documentation finding.
+      options:
+        - label: "FAQ.md"
+        - label: "README.md"
+        - label: "ARCHITECTURE.md"
+        - label: "DATA_MODEL.md"
+        - label: "STYLE_GUIDE.md"
+        - label: "NOTATION.md"
+        - label: "GOVERNANCE.md"
+        - label: "SECURITY.md"
+        - label: "THREAT_MODEL.md"
+        - label: "NOTICE.md"
+        - label: "ROADMAP.md"
+        - label: "CONTRIBUTING.md"
+        - label: "GLOSSARY.md"
+        - label: "BIBLIOGRAPHY.md"
+        - label: "The documentation website"
+        - label: "The site search"
+        - label: "The docstrings, with help()"
+        - label: "The command line help"
+        - label: "Existing issues"
+        - label: "Closed issues"
+        - label: "The source code"
+        - label: "None of these yet"
+
+  - type: "dropdown"
+    id: "nearly"
+    attributes:
+      label: "2.2 Did any of them nearly answer it?"
+      options:
+        - "No, I found nothing relevant"
+        - "Yes, but it was ambiguous"
+        - "Yes, but it was in a place I would not have thought to look"
+        - "Yes, but it assumed knowledge I do not have"
+        - "Yes, but it contradicted something else"
+        - "Yes, but it was out of date"
+        - "Yes, but only partly"
+        - "I did not look, I am asking first"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "nearly_where"
+    attributes:
+      label: "2.3 If something nearly answered it, where was it?"
+      placeholder: "DATA_MODEL.md section 5.2"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "search_terms"
+    attributes:
+      label: "2.4 Did the site search find anything?"
+      options:
+        - "I did not search"
+        - "Yes, and it was the right page"
+        - "Yes, but the right page was far down the results"
+        - "It returned results but none were relevant"
+        - "It returned nothing"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "search_words"
+    attributes:
+      label: "2.5 What words did you search for?"
+      description: >-
+        One of the most actionable things in this form. If a reasonable search
+        term finds nothing, that is a fixable gap in the vocabulary.
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 3: WHERE THE ANSWER SHOULD LIVE
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 3. Where the answer should live
+
+        Every question answered here should end with either a link or a commit.
+        Your view on which is genuinely useful.
+
+  - type: "dropdown"
+    id: "answer_location"
+    attributes:
+      label: "3.1 Where would you have expected to find the answer?"
+      options:
+        - "The FAQ"
+        - "The README"
+        - "The data model reference"
+        - "The notation reference"
+        - "The architecture document"
+        - "The style guide"
+        - "The governance document"
+        - "The security policy"
+        - "A guide page on the site"
+        - "The glossary"
+        - "A docstring"
+        - "The command line help"
+        - "On the record itself"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "answer_form"
+    attributes:
+      label: "3.2 What form should the answer take?"
+      options:
+        - "A sentence"
+        - "A paragraph"
+        - "A worked example"
+        - "A table"
+        - "A diagram"
+        - "A link to an existing document"
+        - "A new document"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "generalises"
+    attributes:
+      label: "3.3 Would others ask the same question?"
+      options:
+        - "Almost certainly"
+        - "Probably"
+        - "Possibly"
+        - "Unlikely, my situation is unusual"
+        - "I do not know"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 4: DISAGREEMENT
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 4. Disagreement
+
+        Skip unless you are disagreeing rather than asking.
+
+        Disagreement about where a boundary falls is not a correction and is not
+        unwelcome. The colour scheme is a convention rather than a standard, its
+        boundaries overlap, and several assignments are arguable. FAQ.md says so.
+        Saying which one you think is wrong, and why, is a contribution.
+
+  - type: "dropdown"
+    id: "disagreement_type"
+    attributes:
+      label: "4.1 What do you disagree with?"
+      options:
+        - "Not applicable, I am only asking a question"
+        - "A subtype is in the wrong branch"
+        - "Two subtypes should be one"
+        - "One subtype should be two"
+        - "A subtype should not exist at all"
+        - "A subtype is missing"
+        - "A boundary between two records is drawn in the wrong place"
+        - "A controlled-vocabulary value is wrong, such as MATURITY"
+        - "A controlled vocabulary is missing a member"
+        - "An evidence grade is too high"
+        - "An evidence grade is too low"
+        - "An editorial rule produces a bad outcome here"
+        - "An editorial rule should not exist"
+        - "The taxonomy omits something structurally important"
+        - "The colour scheme itself is the wrong frame"
+        - "A cross-reference is missing or misleading"
+        - "The framing of a record is unbalanced"
+        - "A design decision in the architecture"
+        - "A governance decision"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "disagreement_case"
+    attributes:
+      label: "4.2 Your argument"
+      description: >-
+        What would a reader gain if it were changed, and what would they lose?
+        The second half is the persuasive one.
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "disagreement_strength"
+    attributes:
+      label: "4.3 How strongly do you hold this?"
+      description: >-
+        Genuinely useful for triage, and there is no wrong answer. A flagged
+        hunch is welcome.
+      options:
+        - "Not applicable"
+        - "A passing observation"
+        - "I think it is worth discussing"
+        - "I think the current choice is defensible but suboptimal"
+        - "I think the current choice is clearly wrong"
+        - "I think the current choice misleads readers"
+        - "I think the current choice is indefensible"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "convention"
+    attributes:
+      label: "4.4 Does the wider field agree with you?"
+      description: >-
+        The project records the conventional assignment even when the maintainer
+        finds it awkward, because the value of a taxonomy is that it matches
+        what people are taught. A change that departs from convention needs a
+        stronger case than one that restores it.
+      options:
+        - "Not applicable"
+        - "Yes, the convention is what I am describing and the record departs from it"
+        - "The field is split, and the record picked the less common option"
+        - "The field is split, and either choice is defensible"
+        - "The convention differs between disciplines"
+        - "The convention differs between countries"
+        - "No, I am arguing against the convention on the merits"
+        - "I do not know what the convention is"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "disagreement_evidence"
+    attributes:
+      label: "4.5 Any sources that support your view?"
+      description: >-
+        Optional for a judgement question, decisive for a factual one. Curricula
+        and textbook contents pages are good evidence for how a field carves
+        itself up.
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "disagreement_scope"
+    attributes:
+      label: "4.6 How much would change if you were right?"
+      options:
+        - "Not applicable"
+        - "One field"
+        - "One record"
+        - "Several records"
+        - "A whole branch"
+        - "The structure of the taxonomy"
+        - "An editorial rule, so every record"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "disagreement_outcome"
+    attributes:
+      label: "4.7 What outcome would satisfy you?"
+      options:
+        - "Not applicable"
+        - "A change"
+        - "A written explanation of why it is as it is"
+        - "A note in the record acknowledging the alternative view"
+        - "A cross-reference instead of a change"
+        - "A FAQ entry"
+        - "Just to have registered the view"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 5: ABOUT YOU
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 5. About you
+
+  - type: "dropdown"
+    id: "using_for"
+    attributes:
+      label: "5.1 What are you using the library for?"
+      description: "Optional. It shapes how the answer is written."
+      options:
+        - "Prefer not to say"
+        - "Just curious"
+        - "Teaching or coursework"
+        - "Studying"
+        - "Research"
+        - "Journalism or communication"
+        - "Policy or regulatory work"
+        - "Clinical or veterinary practice"
+        - "Agriculture or food production"
+        - "Software development on top of it"
+        - "Evaluating whether to adopt it"
+        - "Library or archive cataloguing"
+        - "Standards or committee work"
+        - "Something else"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "background"
+    attributes:
+      label: "5.2 Roughly what is your background?"
+      options:
+        - "Prefer not to say"
+        - "No scientific background"
+        - "School level or general interest"
+        - "Student"
+        - "Working scientist in this field"
+        - "Working scientist in another field"
+        - "Software developer"
+        - "Clinician or veterinary professional"
+        - "Regulatory, legal or policy professional"
+        - "Teacher or lecturer"
+        - "Librarian or information professional"
+        - "Journalist or communicator"
+        - "Farmer, grower or producer"
+        - "Interested member of the public"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "familiarity"
+    attributes:
+      label: "5.3 How familiar are you with this library?"
+      options:
+        - "This is my first look"
+        - "I have read some of it"
+        - "I use it occasionally"
+        - "I use it regularly"
+        - "I have contributed to it"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "outcome"
+    attributes:
+      label: "5.4 What outcome would satisfy you?"
+      options:
+        - "Just an answer here in the issue"
+        - "An answer, and the FAQ updated so nobody else has to ask"
+        - "An answer, and the relevant document made clearer"
+        - "An answer, and a new guide page"
+        - "A change to the taxonomy"
+        - "A discussion, with no particular outcome expected"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "willing_docs"
+    attributes:
+      label: "5.5 Would you write the answer up once you have it?"
+      description: >-
+        A frequent and excellent outcome: the person who asked is the person
+        best placed to write the paragraph that would have helped them.
+      options:
+        - "No"
+        - "Maybe"
+        - "Yes, a FAQ entry"
+        - "Yes, a guide page"
+        - "Yes, I will improve whichever document should have had it"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "credit"
+    attributes:
+      label: "5.6 How would you like to be credited if this leads to a change?"
+      options:
+        - "By my GitHub handle"
+        - "By my full name, given below"
+        - "Anonymously"
+        - "Not at all"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "anything_else"
+    attributes:
+      label: "5.7 Anything else?"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 6: WHERE ELSE YOU LOOKED
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 6. Where else you looked
+
+  - type: "dropdown"
+    id: "asked_elsewhere"
+    attributes:
+      label: "6.1 Did you ask anywhere else first?"
+      options:
+        - "No"
+        - "A colleague"
+        - "A mailing list or forum"
+        - "A chat channel"
+        - "A search engine"
+        - "An AI assistant"
+        - "Another project's documentation"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "asked_where"
+    attributes:
+      label: "6.2 Where, if anywhere?"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "answer_elsewhere"
+    attributes:
+      label: "6.3 Did you get an answer there?"
+      options:
+        - "Not applicable"
+        - "Yes, and it was right"
+        - "Yes, but I want to confirm it"
+        - "Yes, and it turned out to be wrong"
+        - "No"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "answer_consistent"
+    attributes:
+      label: "6.4 Was that answer consistent with this project's documentation?"
+      description: >-
+        A confident wrong answer circulating elsewhere is itself a finding, and
+        usually means something here is ambiguous.
+      options:
+        - "Not applicable"
+        - "Yes"
+        - "No, and I think the other source is wrong"
+        - "No, and I think this project is wrong"
+        - "I could not tell"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 7: HOW YOU USE THE TAXONOMY
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 7. How you use the taxonomy
+
+        Entirely optional, and a genuine survey rather than a formality. This
+        project has one maintainer and almost no visibility into how it is
+        actually read, so a handful of answers here shapes the roadmap more than
+        any single feature request.
+
+  - type: "dropdown"
+    id: "scheme_useful"
+    attributes:
+      label: "7.1 Do you find the colour scheme useful?"
+      options:
+        - "Yes, it is how I already think about the field"
+        - "Yes, though I had to learn it"
+        - "Neutral, I ignore the colours and use the search"
+        - "No, the boundaries confuse me"
+        - "No, I think it is the wrong frame entirely"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "knew_scheme"
+    attributes:
+      label: "7.2 Did you know the colour scheme before finding this project?"
+      options:
+        - "Yes, I was taught it"
+        - "Yes, from policy or industry documents"
+        - "I had heard of red and green only"
+        - "No, this was the first time"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "hardest_branch"
+    attributes:
+      label: "7.3 Which branch is hardest to place things in?"
+      options:
+        - "None, they are clear enough"
+        - "red and green overlap for veterinary work"
+        - "white and yellow overlap for enzymes"
+        - "white and grey overlap for waste processing"
+        - "blue overlaps with everything aquatic"
+        - "gold overlaps with everything computational"
+        - "brown and green overlap for dryland farming"
+        - "dark and purple overlap for governance"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "registers_help"
+    attributes:
+      label: "7.4 Does writing every record twice help you?"
+      options:
+        - "Yes, I use both registers"
+        - "Yes, I use the plain one and skip the technical one"
+        - "Yes, I use the technical one and skip the plain one"
+        - "It is useful for other people, not for me"
+        - "No, it makes the records longer than they need to be"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "register_first"
+    attributes:
+      label: "7.5 Which register do you read first?"
+      options:
+        - "The one-line summary"
+        - "The plain-language paragraph"
+        - "The technical description"
+        - "The analogy"
+        - "Whichever appears first on the page"
+        - "I jump straight to the applications or the metrics"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "use_metrics"
+    attributes:
+      label: "7.6 Do you use the metrics?"
+      options:
+        - "Regularly"
+        - "Occasionally"
+        - "I read them but do not rely on them"
+        - "Never"
+        - "I did not know they were there"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "use_formulas"
+    attributes:
+      label: "7.7 Do you use the formula modules?"
+      options:
+        - "Regularly"
+        - "Occasionally"
+        - "I have looked at them"
+        - "Never"
+        - "I did not know they were there"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "use_related"
+    attributes:
+      label: "7.8 Do you follow the cross-references?"
+      options:
+        - "Yes, they are how I navigate"
+        - "Sometimes"
+        - "Rarely"
+        - "Never"
+        - "I did not know they were there"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "use_cli"
+    attributes:
+      label: "7.9 Do you use the command line tool?"
+      options:
+        - "Yes, regularly"
+        - "Occasionally"
+        - "I tried it once"
+        - "No, I use the Python API"
+        - "No, I only read the website"
+        - "I did not know there was one"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "use_exports"
+    attributes:
+      label: "7.10 Do you use the export formats?"
+      options:
+        - "JSON"
+        - "CSV"
+        - "Markdown"
+        - "DOT or graph output"
+        - "More than one"
+        - "None"
+        - "I did not know they existed"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "use_history"
+    attributes:
+      label: "7.11 Do you read the milestone histories?"
+      options:
+        - "Yes, they are one of the most useful parts"
+        - "Sometimes"
+        - "Rarely"
+        - "Never"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "use_evidence"
+    attributes:
+      label: "7.12 Do you check the evidence grades on metrics?"
+      description: >-
+        Every claim carries one so that a cautious reader can filter to settled
+        material. It only works if anybody notices it.
+      options:
+        - "Yes, always"
+        - "Sometimes"
+        - "No"
+        - "I did not know they were there"
+        - "I do not know what they mean"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "use_freeze"
+    attributes:
+      label: "7.13 Do you check the data freeze date?"
+      description: >-
+        It tells you how old a regulatory citation is. It is recorded for every
+        release in CHANGELOG.md.
+      options:
+        - "Yes"
+        - "No"
+        - "I did not know it existed"
+        - "I do not need to for my use"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "want_versioned"
+    attributes:
+      label: "7.14 Would versioned documentation matter to you?"
+      options:
+        - "Yes, I cite specific versions"
+        - "Possibly"
+        - "No, I always want the current version"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "want_translation"
+    attributes:
+      label: "7.15 Would translation matter to you?"
+      options:
+        - "Yes, for me personally"
+        - "Yes, for people I work with or teach"
+        - "Possibly"
+        - "No"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "want_offline"
+    attributes:
+      label: "7.16 Would an offline copy matter to you?"
+      options:
+        - "Yes, I often work without reliable connectivity"
+        - "Yes, for printing or distributing"
+        - "Possibly"
+        - "No"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "cite_project"
+    attributes:
+      label: "7.17 Have you cited, or would you cite, this project?"
+      options:
+        - "I have already cited it"
+        - "I intend to"
+        - "Possibly"
+        - "No"
+        - "I did not know how"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "found_project"
+    attributes:
+      label: "7.18 How did you find the project?"
+      options:
+        - "A search engine"
+        - "PyPI"
+        - "GitHub"
+        - "A colleague"
+        - "A course or reading list"
+        - "A publication"
+        - "Social media"
+        - "An AI assistant recommended it"
+        - "I do not remember"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "most_valuable"
+    attributes:
+      label: "7.19 Which part is most valuable to you?"
+      options:
+        - "The plain-language explanations"
+        - "The technical descriptions"
+        - "The metrics"
+        - "The formulas"
+        - "The histories"
+        - "The regulations and standards"
+        - "The cross-reference graph"
+        - "The controlled vocabularies and filters"
+        - "That it is machine-readable at all"
+        - "That it has no dependencies"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "least_valuable"
+    attributes:
+      label: "7.20 Which part do you never use?"
+      options:
+        - "Prefer not to say"
+        - "The analogies"
+        - "The histories"
+        - "The metrics"
+        - "The formulas"
+        - "The regulations and standards"
+        - "The SDG links"
+        - "The command line"
+        - "The exports"
+        - "I use all of it"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "more_useful"
+    attributes:
+      label: "7.21 What would make the project more useful to you?"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "surprised"
+    attributes:
+      label: "7.22 Was anything surprising, good or bad?"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "recommend"
+    attributes:
+      label: "7.23 Would you recommend it to a colleague?"
+      options:
+        - "Yes"
+        - "Yes, with reservations described above"
+        - "Not yet"
+        - "No"
+        - "Too early to say"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "survey_ok"
+    attributes:
+      label: "7.24 May we quote your answers, anonymously, in a roadmap discussion?"
+      options:
+        - "Yes"
+        - "Yes, with attribution"
+        - "No"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 8: CONFIRMATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 8. Confirmation
+
+  - type: "checkboxes"
+    id: "confirm"
+    attributes:
+      label: "8.1 Before you submit"
+      options:
+        - label: "I have searched existing issues and this is not a duplicate."
+          required: true
+        - label: >-
+            This question does not ask for operational information about causing
+            harm. See SECURITY.md section 2.
+          required: true
+        - label: >-
+            I understand that a disagreement about a boundary is welcome and
+            will get written reasons either way.
+          required: true
+        - label: "I have read and agree to follow the Code of Conduct."
+          required: true

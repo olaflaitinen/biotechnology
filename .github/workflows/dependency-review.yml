@@ -1,0 +1,97 @@
+# =============================================================================
+#  .github/workflows/dependency-review.yml
+# -----------------------------------------------------------------------------
+#  Block a pull request that introduces a vulnerable or incompatibly licensed
+#  dependency, before it is merged rather than after.
+#
+#  WHY THIS MATTERS IN A PROJECT WITH NO DEPENDENCIES
+#  Precisely because it has none. "Zero runtime dependencies" is a hard
+#  constraint in pyproject.toml and in GOVERNANCE.md section 3.3, and a
+#  constraint that is only checked by a human reading a diff is a constraint
+#  that will be broken. Two mechanisms guard it:
+#
+#    * tools/check_no_dependencies.py asserts the list is literally empty, and
+#      runs in CI, in the security audit and as a pre-commit hook.
+#    * this workflow, which additionally evaluates anything added to the
+#      DEVELOPMENT extras against vulnerability and licence policy.
+#
+#  THE LICENCE DIMENSION
+#  This project is distributed under the EUPL-1.2, a copyleft licence with a
+#  defined compatibility list in its Appendix. A development-time tool under an
+#  incompatible licence is usually harmless, because it is neither linked nor
+#  redistributed. A tool whose licence forbids the use we make of it is not.
+#  The deny list below is deliberately conservative for that reason, and a
+#  refusal is a conversation, not a verdict: see the failure message.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "Dependency review"
+
+on:
+  pull_request:
+    branches: ["main"]
+
+permissions: {}
+
+jobs:
+  review:
+    name: "Review dependency changes"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 10
+
+    permissions:
+      contents: "read"
+      # Lets the action leave a summary comment on the pull request explaining
+      # exactly what was added and why it was refused.
+      pull-requests: "write"
+
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Dependency review"
+        uses: "actions/dependency-review-action@v4"
+        with:
+          # Any known vulnerability at all, at any severity. A development tool
+          # with a low-severity advisory is not urgent, but it is also not
+          # something to merge without noticing.
+          fail-on-severity: "low"
+
+          # Licences that are refused outright. Network-copyleft and
+          # source-available licences are excluded because a contributor
+          # reaching for one has almost certainly not considered what it means
+          # for a tool that runs in every contributor environment.
+          deny-licenses: >-
+            AGPL-1.0-only,
+            AGPL-1.0-or-later,
+            AGPL-3.0-only,
+            AGPL-3.0-or-later,
+            SSPL-1.0,
+            BUSL-1.1,
+            Elastic-2.0,
+            CC-BY-NC-4.0,
+            CC-BY-NC-SA-4.0,
+            JSON,
+            Commons-Clause
+
+          comment-summary-in-pr: "on-failure"
+          warn-only: false
+
+      - name: "Re-assert the runtime dependency constraint"
+        run: |
+          python tools/check_no_dependencies.py
+          echo "Runtime dependency list is still empty."
+
+      - name: "Explain a refusal"
+        if: "failure()"
+        run: |
+          echo "::notice::A dependency change was refused. If this is a"
+          echo "::notice::development-time tool with a genuine need, open an"
+          echo "::notice::issue against GOVERNANCE.md section 3.3 rather than"
+          echo "::notice::working around this check. If it is a RUNTIME"
+          echo "::notice::dependency, it will not be accepted: build the"
+          echo "::notice::feature against the standard library, put it behind"
+          echo "::notice::an optional extra, or ship it as a separate package."

@@ -1,0 +1,365 @@
+# =============================================================================
+#  .github/workflows/ci.yml
+# -----------------------------------------------------------------------------
+#  Continuous integration.
+#
+#  DESIGN PRINCIPLE
+#  Every job below invokes a Makefile target or a tools/ script and nothing
+#  else. That is the contract: if "make all" passes on a contributor laptop,
+#  this pipeline passes. A CI file that reimplements the commands drifts from
+#  the Makefile within weeks and then nobody can reproduce a failure locally.
+#
+#  SECURITY POSTURE (see THREAT_MODEL.md, threats T-01 and T-02)
+#    * Top-level permissions are empty. Every job grants itself the minimum it
+#      needs and nothing more.
+#    * checkout runs with persist-credentials: false, so the GITHUB_TOKEN is
+#      not left in .git/config where any later step could read it.
+#    * No job uses pull_request_target, so a fork pull request never runs with
+#      write permissions or access to secrets.
+#    * No secrets are referenced anywhere in this file. There are none to
+#      reference: publication uses trusted publishing, not a token.
+#    * Every action reference is governed by .github/action-pins.yml and
+#      checked by tools/check_action_pinning.py.
+#
+#  JOB ORDER
+#  Ordered by how fast they fail and how cheap they are to run. Linting and the
+#  taxonomy integrity suite finish in seconds and catch the overwhelming
+#  majority of problems, so they gate the expensive matrix.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "CI"
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    # Weekly, against the current Python releases. A dependency-free package
+    # can still break when the interpreter changes, and finding that out on a
+    # Monday is better than finding it out from a user.
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+# Cancel superseded runs on the same branch. A contributor pushing three times
+# in five minutes should not queue three full matrices.
+concurrency:
+  group: "${{ github.workflow }}-${{ github.ref }}"
+  cancel-in-progress: true
+
+# Deny by default. Each job re-grants only what it needs.
+permissions: {}
+
+env:
+  PYTHONUNBUFFERED: "1"
+  PYTHONDONTWRITEBYTECODE: "1"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+  PIP_NO_PYTHON_VERSION_WARNING: "1"
+  FORCE_COLOR: "1"
+
+jobs:
+  # ===========================================================================
+  #  1. Fast gate. Seconds, not minutes. Everything else depends on this.
+  # ===========================================================================
+  lint:
+    name: "Lint and type check"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 10
+    permissions:
+      contents: "read"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - name: "Install"
+        run: "python -m pip install -e '.[lint]'"
+
+      - name: "Ruff and black"
+        run: "make lint"
+
+      - name: "Mypy"
+        run: "make typecheck"
+
+  # ===========================================================================
+  #  2. Repository policy.
+  #
+  #  The invariants this project promises in its own documentation, checked
+  #  mechanically rather than asserted. Each script prints a one-line
+  #  explanation and a file reference when it fails, so a contributor can act
+  #  on it without opening a dashboard.
+  # ===========================================================================
+  policy:
+    name: "Repository policy"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 10
+    permissions:
+      contents: "read"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+
+      - name: "Runtime dependency list is still empty"
+        run: "python tools/check_no_dependencies.py"
+
+      - name: "No em dashes or en dashes anywhere"
+        run: "python tools/check_dashes.py"
+
+      - name: "Every GitHub Action reference is governed by the pin file"
+        run: "python tools/check_action_pinning.py --strict"
+
+      - name: "Licence headers present on every source file"
+        run: "python tools/check_licence_headers.py"
+
+  # ===========================================================================
+  #  3. Taxonomy integrity.
+  #
+  #  This is the job that matters most for this repository. It resolves every
+  #  cross-reference, checks the facet contract on all eighty-five subtype
+  #  packages, enforces the editorial minimums, and screens the dual-use
+  #  policy. A dead link fails the build here rather than rendering as a broken
+  #  link in the published documentation.
+  # ===========================================================================
+  integrity:
+    name: "Taxonomy integrity"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 15
+    needs: ["lint"]
+    permissions:
+      contents: "read"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - name: "Install"
+        run: "python -m pip install -e '.[test]'"
+
+      - name: "Validate the taxonomy"
+        run: "python -m biotechnology validate --strict"
+
+      - name: "Facet contract"
+        run: "python tools/check_facets.py"
+
+      - name: "Cross-references resolve"
+        run: "python tools/check_references.py"
+
+      - name: "ASCII discipline in metric symbols and units"
+        run: "python tools/check_ascii.py"
+
+      - name: "Dark branch stays defensive"
+        run: "python tools/check_defensive.py"
+
+      - name: "Integrity, facet and editorial test modules"
+        run: "python -m pytest tests/test_integrity.py tests/test_facets.py tests/test_editorial.py -q"
+
+  # ===========================================================================
+  #  4. The test matrix.
+  #
+  #  Linux across the whole supported range, plus the two ends of the range on
+  #  Windows and macOS. A dependency-free pure-Python package rarely breaks
+  #  per-platform, but "rarely" is why the ends are checked elsewhere: those
+  #  are where a path separator or a default encoding assumption shows up.
+  # ===========================================================================
+  test:
+    name: "Test ${{ matrix.python-version }} on ${{ matrix.os }}"
+    runs-on: "${{ matrix.os }}"
+    timeout-minutes: 20
+    needs: ["lint"]
+    permissions:
+      contents: "read"
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        include:
+          - os: "windows-latest"
+            python-version: "3.9"
+          - os: "windows-latest"
+            python-version: "3.13"
+          - os: "macos-latest"
+            python-version: "3.9"
+          - os: "macos-latest"
+            python-version: "3.13"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "${{ matrix.python-version }}"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - name: "Install"
+        run: "python -m pip install -e '.[test]'"
+
+      - name: "Run tests"
+        run: "python -m pytest tests --cov=biotechnology --cov-report=xml --cov-report=term-missing"
+
+      - name: "Upload coverage"
+        if: "matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "coverage-xml"
+          path: "coverage.xml"
+          retention-days: 14
+
+  # ===========================================================================
+  #  5. Documentation.
+  #
+  #  Regenerates docs/ from src/ and then checks that the committed copy is
+  #  identical. If a contributor changed a record and forgot "make docs", this
+  #  job says so with a diff rather than letting the published site drift.
+  # ===========================================================================
+  docs:
+    name: "Documentation is current"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 15
+    needs: ["integrity"]
+    permissions:
+      contents: "read"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - name: "Install"
+        run: "python -m pip install -e '.[docs]'"
+
+      - name: "Regenerate"
+        run: "python tools/generate_docs.py --output docs"
+
+      - name: "Fail if docs/ is out of date"
+        run: |
+          if ! git diff --quiet -- docs; then
+            echo "::error::docs/ is out of date. Run 'make docs' and commit the result."
+            git diff --stat -- docs
+            git diff -- docs | head -200
+            exit 1
+          fi
+
+      - name: "Build the site"
+        run: "python -m mkdocs build --strict"
+
+  # ===========================================================================
+  #  6. Packaging.
+  #
+  #  Builds the distribution on every run so that a packaging error is found on
+  #  the pull request that caused it, not on release day. The clean-environment
+  #  install is the step that catches a file present in the working tree but
+  #  missing from the wheel.
+  # ===========================================================================
+  package:
+    name: "Build and check distribution"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 15
+    needs: ["integrity", "test"]
+    permissions:
+      contents: "read"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - name: "Install build tooling"
+        run: "python -m pip install '.[build]'"
+
+      - name: "Build"
+        run: "python -m build"
+
+      - name: "Check metadata"
+        run: "python -m twine check --strict dist/*"
+
+      - name: "Validate CITATION.cff"
+        run: "cffconvert --validate"
+
+      - name: "Install the built wheel in a clean environment"
+        run: |
+          python -m venv /tmp/clean
+          /tmp/clean/bin/python -m pip install --no-index --no-deps dist/*.whl
+          /tmp/clean/bin/python -c "import biotechnology as bt; print(bt.__version__, len(bt.branches()), len(bt.subtypes()))"
+          /tmp/clean/bin/biotechnology stats
+
+      - name: "Confirm the installed package pulled in no dependencies"
+        run: |
+          INSTALLED=$(/tmp/clean/bin/python -m pip list --format=freeze | grep -v "^biotechnology==" | grep -v "^pip==" | grep -v "^setuptools==" | grep -v "^wheel==" || true)
+          if [ -n "$INSTALLED" ]; then
+            echo "::error::The wheel pulled in dependencies: $INSTALLED"
+            exit 1
+          fi
+          echo "Clean install has no third-party dependencies."
+
+      - name: "Upload distribution"
+        uses: "actions/upload-artifact@v4"
+        with:
+          name: "distribution"
+          path: "dist/"
+          retention-days: 14
+
+  # ===========================================================================
+  #  7. Aggregate status.
+  #
+  #  A single required check for branch protection, so that adding a matrix
+  #  entry does not mean editing the protection rules.
+  # ===========================================================================
+  ci-success:
+    name: "CI"
+    if: "always()"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 5
+    needs: ["lint", "policy", "integrity", "test", "docs", "package"]
+    permissions: {}
+    steps:
+      - name: "Report"
+        run: |
+          if [ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" = "true" ]; then
+            echo "::error::One or more CI jobs failed."
+            exit 1
+          fi
+          echo "All CI jobs passed."

@@ -1,0 +1,196 @@
+# =============================================================================
+#  .github/workflows/docs.yml
+# -----------------------------------------------------------------------------
+#  Build and publish the documentation site to GitHub Pages.
+#
+#  WHY THIS IS SEPARATE FROM ci.yml
+#  CI checks that docs/ is CURRENT, meaning that a contributor who changed a
+#  record also ran "make docs". This workflow PUBLISHES. Keeping them apart
+#  means a documentation deployment failure never blocks a pull request, and
+#  the pages: write permission is held by one small job rather than by the main
+#  pipeline.
+#
+#  THE IMPORTANT PROPERTY
+#  The site is regenerated from src/ here rather than served from the committed
+#  copy of docs/. The generator imports the package and walks the same objects
+#  the library exposes, so the published documentation cannot describe a field
+#  that does not exist.
+#
+#  SECURITY NOTE
+#  The deploy job runs only on a push to main, never on a pull request, and
+#  never from a fork. A documentation site is a code execution context in every
+#  reader's browser; a fork must not be able to write to it.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "Documentation"
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "src/**"
+      - "docs/**"
+      - "tools/generate_docs.py"
+      - "mkdocs.yml"
+      - "*.md"
+      - ".github/workflows/docs.yml"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "src/**"
+      - "docs/**"
+      - "tools/generate_docs.py"
+      - "mkdocs.yml"
+      - "*.md"
+  schedule:
+    # Monthly, for the external link check only. Regulator websites reorganise
+    # on their own timetable and silently break dozens of citations at once.
+    - cron: "0 7 1 * *"
+  workflow_dispatch:
+
+permissions: {}
+
+# One deployment at a time, and do not cancel a deployment in progress. A
+# half-published site is worse than a slightly stale one.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # ===========================================================================
+  #  1. Build. Runs on every pull request too, so a broken link is caught by
+  #     the contributor rather than by a reader.
+  # ===========================================================================
+  build:
+    name: "Build site"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 20
+    permissions:
+      contents: "read"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          # Full history so that the last-updated stamps on generated pages
+          # reflect when a record actually changed.
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: "pyproject.toml"
+
+      - name: "Install"
+        run: "python -m pip install -e '.[docs]'"
+
+      - name: "Regenerate documentation from the source of truth"
+        run: "python tools/generate_docs.py --output docs"
+
+      # -----------------------------------------------------------------------
+      #  Copy the hand-written root documents into the site tree.
+      #
+      #  They live at the repository root because that is where GitHub and
+      #  contributors look for them, and they are mirrored into docs/project/
+      #  so that the published site can link to them. The mapping is done by a
+      #  script rather than inline shell so that it is testable and so that a
+      #  missing source file fails loudly instead of producing an empty page.
+      # -----------------------------------------------------------------------
+      - name: "Mirror root documents into the site"
+        run: "python tools/mirror_root_docs.py --output docs"
+
+      # -----------------------------------------------------------------------
+      #  --strict turns a broken internal link into a build failure. That is
+      #  deliberate: the whole point of validating cross-references in the data
+      #  is that the rendered output never shows a dead link.
+      # -----------------------------------------------------------------------
+      - name: "Build with MkDocs"
+        run: "python -m mkdocs build --strict"
+
+      - name: "Confirm the site loads no third-party origin"
+        run: "python tools/check_site_origins.py --site site"
+
+      - name: "Report site size"
+        run: |
+          {
+            echo "### Documentation build"
+            echo ""
+            echo "- pages: $(find site -name '*.html' | wc -l)"
+            echo "- size: $(du -sh site | cut -f1)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: "Upload Pages artefact"
+        if: "github.event_name == 'push' && github.ref == 'refs/heads/main'"
+        uses: "actions/upload-pages-artifact@v3"
+        with:
+          path: "site/"
+
+  # ===========================================================================
+  #  2. Deploy. Main branch only, never from a fork.
+  # ===========================================================================
+  deploy:
+    name: "Deploy to GitHub Pages"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 10
+    needs: ["build"]
+    if: "github.event_name == 'push' && github.ref == 'refs/heads/main'"
+    permissions:
+      pages: "write"
+      id-token: "write"
+    environment:
+      name: "github-pages"
+      url: "${{ steps.deployment.outputs.page_url }}"
+    steps:
+      - name: "Deploy"
+        id: "deployment"
+        uses: "actions/deploy-pages@v4"
+
+  # ===========================================================================
+  #  3. External link check.
+  #
+  #  MkDocs --strict catches broken INTERNAL links. This job checks EXTERNAL
+  #  ones, which rot on a different timescale entirely.
+  #
+  #  It never blocks a merge. External link rot is a maintenance signal, not a
+  #  contributor error, and failing somebody's pull request because a
+  #  government reorganised a website would be unjust.
+  # ===========================================================================
+  external-links:
+    name: "External link check"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 15
+    continue-on-error: true
+    if: "github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'"
+    permissions:
+      contents: "read"
+      issues: "write"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Check links in the root documents"
+        id: "lychee"
+        uses: "lycheeverse/lychee-action@v1"
+        with:
+          args: >-
+            --no-progress
+            --accept 200,206,429
+            --exclude-path LICENCE
+            --max-concurrency 8
+            *.md
+          output: "lychee-report.md"
+          fail: false
+
+      - name: "Open or update a maintenance issue if links are dead"
+        if: "steps.lychee.outputs.exit_code != 0"
+        uses: "peter-evans/create-issue-from-file@v5"
+        with:
+          title: "Link rot detected in the root documents"
+          content-filepath: "lychee-report.md"
+          labels: "documentation,maintenance"

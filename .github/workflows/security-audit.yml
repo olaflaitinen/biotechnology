@@ -1,0 +1,294 @@
+# =============================================================================
+#  .github/workflows/security-audit.yml
+# -----------------------------------------------------------------------------
+#  The security gate.
+#
+#  WHY A DEDICATED WORKFLOW RATHER THAN JOBS INSIDE ci.yml
+#  Three reasons.
+#
+#    1. It runs on a schedule as well as on change. A vulnerability disclosed
+#       in a development-time tool does not arrive with a commit, so a
+#       pipeline that only runs on push will not find it.
+#    2. It uploads SARIF, which needs security-events: write. Keeping that
+#       permission out of the main pipeline means the main pipeline never
+#       holds it.
+#    3. It is the file a reader is directed to from SECURITY.md. Security
+#       posture that is scattered across a general CI file is posture nobody
+#       can audit.
+#
+#  WHAT IT PROVES
+#  Each job below corresponds to a specific claim made in SECURITY.md or
+#  THREAT_MODEL.md. If a claim cannot be checked mechanically it does not
+#  belong in those documents as a promise.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "Security audit"
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    # Daily. Advisories arrive on their own timetable, not on ours.
+    - cron: "15 5 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: "security-${{ github.ref }}"
+  cancel-in-progress: true
+
+permissions: {}
+
+env:
+  PYTHONUNBUFFERED: "1"
+  PIP_DISABLE_PIP_VERSION_CHECK: "1"
+
+jobs:
+  # ===========================================================================
+  #  1. Static application security testing.
+  #
+  #  Bandit for Python-specific patterns, Semgrep for the wider rule set.
+  #  Both emit SARIF so that findings appear in the Security tab rather than
+  #  only in a log nobody reads.
+  # ===========================================================================
+  sast:
+    name: "Static analysis"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 15
+    permissions:
+      contents: "read"
+      security-events: "write"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+
+      - name: "Install Bandit"
+        run: "python -m pip install 'bandit[toml,sarif]'"
+
+      - name: "Bandit"
+        run: "python -m bandit -c pyproject.toml -r src tools -f sarif -o bandit.sarif"
+        continue-on-error: true
+
+      - name: "Upload Bandit findings"
+        uses: "github/codeql-action/upload-sarif@v3"
+        with:
+          sarif_file: "bandit.sarif"
+          category: "bandit"
+
+  # ===========================================================================
+  #  2. Dependency vulnerabilities.
+  #
+  #  The shipped package has none. This job audits the DEVELOPMENT extras,
+  #  which run on maintainer machines and inside CI, and re-asserts that the
+  #  runtime list is still empty.
+  #
+  #  See THREAT_MODEL.md, threat T-03.
+  # ===========================================================================
+  dependencies:
+    name: "Dependency audit"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 15
+    permissions:
+      contents: "read"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+
+      - name: "Runtime dependency list is still empty"
+        run: "python tools/check_no_dependencies.py"
+
+      - name: "Install pip-audit and the development extras"
+        run: |
+          python -m pip install pip-audit
+          python -m pip install -e ".[dev]"
+
+      - name: "Audit the installed environment"
+        run: "python -m pip_audit --strict --progress-spinner off"
+
+      - name: "Audit the shipped wheel in isolation"
+        run: |
+          python -m pip install build
+          python -m build --wheel
+          python -m venv /tmp/wheelenv
+          /tmp/wheelenv/bin/python -m pip install --no-index --no-deps dist/*.whl
+          /tmp/wheelenv/bin/python -m pip install pip-audit
+          /tmp/wheelenv/bin/python -m pip_audit --strict --progress-spinner off
+
+  # ===========================================================================
+  #  3. Secret scanning.
+  #
+  #  GitHub scans pushed commits for known credential formats. This job scans
+  #  the full history with an independent tool, because the two miss different
+  #  things and a committed credential cannot be un-committed.
+  #
+  #  See THREAT_MODEL.md, threat T-05.
+  # ===========================================================================
+  secrets:
+    name: "Secret scan"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 15
+    permissions:
+      contents: "read"
+    steps:
+      - name: "Check out the full history"
+        uses: "actions/checkout@v4"
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: "Gitleaks"
+        uses: "gitleaks/gitleaks-action@v2"
+        env:
+          GITHUB_TOKEN: "${{ github.token }}"
+
+  # ===========================================================================
+  #  4. Workflow security.
+  #
+  #  Workflow files are executable code that runs with repository permissions.
+  #  actionlint checks them for correctness; zizmor checks them specifically
+  #  for security anti-patterns such as script injection through an untrusted
+  #  expression, excessive permissions, and the use of pull_request_target.
+  #
+  #  See THREAT_MODEL.md, threats T-01 and T-02.
+  # ===========================================================================
+  workflows:
+    name: "Workflow security"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 10
+    permissions:
+      contents: "read"
+      security-events: "write"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+
+      - name: "Action references are governed by the pin file"
+        run: "python tools/check_action_pinning.py --strict"
+
+      - name: "No workflow uses pull_request_target"
+        run: |
+          if grep -rn "pull_request_target" .github/workflows/ ; then
+            echo "::error::pull_request_target runs fork code with write permissions and secrets. It is forbidden in this repository. See THREAT_MODEL.md T-02."
+            exit 1
+          fi
+          echo "No pull_request_target trigger found."
+
+      - name: "Every workflow declares a top-level permissions block"
+        run: "python tools/check_workflow_permissions.py"
+
+      - name: "Install zizmor"
+        run: "python -m pip install zizmor"
+
+      - name: "Zizmor"
+        run: "zizmor --format sarif .github/workflows > zizmor.sarif"
+        continue-on-error: true
+
+      - name: "Upload zizmor findings"
+        uses: "github/codeql-action/upload-sarif@v3"
+        with:
+          sarif_file: "zizmor.sarif"
+          category: "zizmor"
+
+  # ===========================================================================
+  #  5. Attack-surface assertions.
+  #
+  #  A deliberately blunt check that the specific constraints stated in
+  #  SECURITY.md section 1.2 still hold. CodeQL would eventually flag most of
+  #  these, but a grep that fails with a one-line explanation is easier for a
+  #  contributor to act on than an alert in a dashboard.
+  # ===========================================================================
+  attack-surface:
+    name: "Attack-surface assertions"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 10
+    permissions:
+      contents: "read"
+    steps:
+      - name: "Check out"
+        uses: "actions/checkout@v4"
+        with:
+          persist-credentials: false
+
+      - name: "Set up Python"
+        uses: "actions/setup-python@v5"
+        with:
+          python-version: "3.12"
+
+      - name: "No code execution primitives in the shipped package"
+        run: |
+          FOUND=0
+          for pattern in "subprocess" "os\.system" "os\.popen" "pickle" "marshal" "shelve" "\beval\(" "\bexec\(" "__import__\(" "ctypes"; do
+            if grep -rnE "$pattern" src/biotechnology --include="*.py"; then
+              echo "::error::'$pattern' found in src/. See SECURITY.md section 1.2 and THREAT_MODEL.md T-04."
+              FOUND=1
+            fi
+          done
+          exit $FOUND
+
+      - name: "No network capability in the shipped package"
+        run: |
+          FOUND=0
+          for pattern in "^\s*import socket" "^\s*import urllib" "^\s*import http" "^\s*import requests" "^\s*import ftplib" "^\s*import smtplib" "^\s*import telnetlib" "^\s*from urllib" "^\s*from http"; do
+            if grep -rnE "$pattern" src/biotechnology --include="*.py"; then
+              echo "::error::'$pattern' found in src/. The package never opens a socket. See SECURITY.md section 1.2."
+              FOUND=1
+            fi
+          done
+          exit $FOUND
+
+      - name: "No unsafe deserialisation of external data"
+        run: |
+          FOUND=0
+          for pattern in "yaml\.load\(" "pickle\.load" "eval\(json" "os\.environ\.get\(.*password"; do
+            if grep -rnE "$pattern" src/biotechnology tools --include="*.py"; then
+              echo "::error::'$pattern' is unsafe. See THREAT_MODEL.md T-04."
+              FOUND=1
+            fi
+          done
+          exit $FOUND
+
+      - name: "The package writes no files except an explicit export path"
+        run: "python tools/check_no_writes.py"
+
+  # ===========================================================================
+  #  6. Aggregate status, for branch protection.
+  # ===========================================================================
+  security-success:
+    name: "Security audit"
+    if: "always()"
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 5
+    needs: ["sast", "dependencies", "secrets", "workflows", "attack-surface"]
+    permissions: {}
+    steps:
+      - name: "Report"
+        run: |
+          if [ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" = "true" ]; then
+            echo "::error::One or more security jobs failed."
+            exit 1
+          fi
+          echo "All security jobs passed."

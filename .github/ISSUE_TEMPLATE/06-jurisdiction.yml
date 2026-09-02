@@ -1,0 +1,916 @@
+# =============================================================================
+#  .github/ISSUE_TEMPLATE/06-jurisdiction.yml
+# -----------------------------------------------------------------------------
+#  Regulatory and standards coverage for a jurisdiction other than the
+#  European Union.
+#
+#  WHY THIS HAS ITS OWN TEMPLATE
+#  It is the single most valuable improvement available to this project, and it
+#  is named as such in ROADMAP.md and CONTRIBUTING.md section 1.2.
+#
+#  The governance facets currently cite European instruments most completely,
+#  United States instruments where they are the global reference point, and
+#  everything else sparsely. That is a stated bias, written down in NOTICE.md,
+#  not a hidden one. It exists because the maintainer can cite European law
+#  accurately and cannot cite most other law accurately, and guessing would be
+#  worse than admitting the gap.
+#
+#  A pull request that adds two lines to one REGULATIONS tuple is a complete,
+#  mergeable contribution. This form exists so that somebody who knows their own
+#  regulator can hand over that knowledge without learning Python.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "Jurisdictional coverage"
+description: "Add or correct regulations and standards for a country, region or treaty body"
+title: "juris: "
+labels: ["jurisdiction", "data-correction", "help wanted", "needs-triage"]
+
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        **This is the most valuable contribution this project can receive**, and
+        it is named as such in
+        [ROADMAP.md](https://github.com/olaflaitinen/biotechnology/blob/main/ROADMAP.md).
+
+        You do not need to be a programmer. If you know how your own regulator
+        treats a class of product, you know something this library does not, and
+        a two-line addition is a complete contribution.
+
+        Coverage of jurisdictions outside Europe is currently thin. That is a
+        stated limitation, not an oversight.
+
+  # ###########################################################################
+  #  SECTION 1: WHICH JURISDICTION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 1. Which jurisdiction
+
+  - type: "dropdown"
+    id: "region"
+    attributes:
+      label: "1.1 Region"
+      options:
+        - "North America"
+        - "Latin America and the Caribbean"
+        - "European Union"
+        - "Europe outside the European Union"
+        - "Middle East and North Africa"
+        - "Sub-Saharan Africa"
+        - "South Asia"
+        - "East Asia"
+        - "Southeast Asia"
+        - "Oceania"
+        - "Central Asia and the Caucasus"
+        - "Russia and neighbouring states"
+        - "International, a treaty or convention"
+        - "International, an intergovernmental body"
+        - "Regional bloc spanning several of the above"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "country"
+    attributes:
+      label: "1.2 Country, bloc or body"
+      placeholder: "Japan, or: African Medicines Agency, or: Mercosur"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "authority"
+    attributes:
+      label: "1.3 Which authority issues or enforces this?"
+      placeholder: "Pharmaceuticals and Medical Devices Agency (PMDA)"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "authority_type"
+    attributes:
+      label: "1.4 What kind of authority is it?"
+      options:
+        - "A medicines regulator"
+        - "A food safety authority"
+        - "An agriculture or plant health authority"
+        - "An animal health or veterinary authority"
+        - "An environmental protection agency"
+        - "A chemicals or biocides authority"
+        - "A biosafety committee or authority"
+        - "A patent or intellectual property office"
+        - "A standards body"
+        - "A ministry with direct competence"
+        - "A court"
+        - "A customs or trade authority"
+        - "An intergovernmental body"
+        - "A professional or industry self-regulator"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "federal"
+    attributes:
+      label: "1.5 Is competence split within the country?"
+      description: >-
+        In several federal systems more than one agency claims a piece of the
+        same product, which is itself worth recording.
+      options:
+        - "No, one authority covers it"
+        - "Yes, between federal and state or provincial level"
+        - "Yes, between several federal agencies"
+        - "Yes, and the split is disputed"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "language"
+    attributes:
+      label: "1.6 In what language is the authoritative text?"
+      description: >-
+        If the authoritative text is not in English, please say so and give the
+        official identifier. An unofficial English translation is useful but
+        must be labelled as one.
+      options:
+        - "English is the authoritative language"
+        - "English is one of several authoritative languages"
+        - "Not English, but an official English translation exists"
+        - "Not English, only unofficial translations exist"
+        - "Not English, no translation exists"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "language_name"
+    attributes:
+      label: "1.7 Which language, if not English?"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "harmonised"
+    attributes:
+      label: "1.8 Does this jurisdiction follow an international framework?"
+      options:
+        - "No, it is entirely national"
+        - "It applies ICH guidelines"
+        - "It applies Codex Alimentarius standards"
+        - "It applies WOAH standards"
+        - "It applies the Cartagena Protocol"
+        - "It applies UPOV"
+        - "It recognises another regulator's approvals"
+        - "It participates in a mutual recognition agreement"
+        - "I do not know"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 2: WHICH RECORDS
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 2. Which records this affects
+
+  - type: "dropdown"
+    id: "scope"
+    attributes:
+      label: "2.1 How much of the taxonomy does this affect?"
+      options:
+        - "One subtype"
+        - "Several subtypes in one branch"
+        - "A whole branch"
+        - "Several branches"
+        - "The whole taxonomy"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "records"
+    attributes:
+      label: "2.2 Which records?"
+      description: "Dotted paths, or a description if you do not know the keys."
+      placeholder: |
+        red.gene_therapy
+        red.cell_therapy
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "branch"
+    attributes:
+      label: "2.3 Which branch, primarily?"
+      options:
+        - "red, medicine"
+        - "green, agriculture"
+        - "white, industry"
+        - "blue, marine"
+        - "yellow, food"
+        - "grey, environment"
+        - "brown, arid land"
+        - "gold, computing and data"
+        - "dark, biosecurity"
+        - "purple, law and ethics"
+        - "Several"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "facet_field"
+    attributes:
+      label: "2.4 Which field?"
+      description: >-
+        A REGULATION is law: breaking it is an offence and a named authority
+        enforces it. A STANDARD is a technical consensus document with no
+        independent legal force, though a regulation may incorporate it by
+        reference. Editorial rule 10 keeps them in separate tuples.
+      options:
+        - "REGULATIONS, an instrument with legal force"
+        - "STANDARDS, a technical consensus document"
+        - "REGULATORY_STATUS, how the product class is treated"
+        - "RISK_TIER, how much oversight it attracts"
+        - "MATURITY, because deployment differs here"
+        - "CHALLENGES, because the regulatory position is itself a challenge"
+        - "More than one of these"
+        - "I am not sure"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "action"
+    attributes:
+      label: "2.5 What action are you proposing?"
+      options:
+        - "Add an instrument that is missing"
+        - "Correct an instrument that is cited wrongly"
+        - "Replace an instrument that has been superseded"
+        - "Remove an instrument that has been repealed"
+        - "Move an entry from STANDARDS to REGULATIONS or the reverse"
+        - "Add a note explaining a divergence"
+        - "Change a controlled-vocabulary value for this jurisdiction"
+    validations:
+      required: true
+
+  # ###########################################################################
+  #  SECTION 3: THE INSTRUMENT
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 3. The instrument
+
+  - type: "dropdown"
+    id: "instrument_type"
+    attributes:
+      label: "3.1 What kind of instrument is it?"
+      options:
+        - "Primary legislation, an act or statute"
+        - "Secondary legislation, a regulation, order or rule"
+        - "A directive requiring national transposition"
+        - "A decree or executive order"
+        - "A ministerial or agency notification"
+        - "Binding agency guidance"
+        - "Non-binding agency guidance"
+        - "A court judgment"
+        - "A constitutional provision"
+        - "A technical standard: ISO, CEN, ASTM or national"
+        - "A pharmacopoeial monograph"
+        - "An international treaty or convention"
+        - "A protocol to a convention"
+        - "An intergovernmental recommendation"
+        - "A bilateral or regional trade agreement provision"
+        - "An industry code of practice"
+        - "A voluntary certification scheme"
+        - "A licence condition or permit template"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "citation"
+    attributes:
+      label: "3.2 The full citation, exactly as it should appear"
+      description: >-
+        Write it as you would want it printed. Include the official identifier,
+        the year, and the amending instrument if the text has been amended.
+      render: "text"
+      placeholder: |
+        Act on the Safety of Regenerative Medicine (Act No. 85 of 2013), Japan
+    validations:
+      required: true
+
+  - type: "input"
+    id: "official_number"
+    attributes:
+      label: "3.3 Official identifier or number"
+      placeholder: "Act No. 85 of 2013, or: CELEX 32019R0006"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "url"
+    attributes:
+      label: "3.4 Link to the official text"
+      description: >-
+        The regulator or legislature website, not a commentary or a law firm
+        summary. If none exists, say so.
+      placeholder: "https://..."
+    validations:
+      required: false
+
+  - type: "input"
+    id: "in_force"
+    attributes:
+      label: "3.5 In force since, and as amended when?"
+      placeholder: "In force 2014-11-25; as amended 2023-06-01"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "status"
+    attributes:
+      label: "3.6 Current status of the instrument"
+      options:
+        - "In force"
+        - "In force, with a transition period running"
+        - "Adopted but not yet in force"
+        - "Proposed or in consultation"
+        - "Amended, and I am citing the consolidated text"
+        - "Repealed and replaced, and I am giving the replacement"
+        - "Repealed with no replacement"
+        - "Suspended"
+        - "Under legal challenge"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "relevant_section"
+    attributes:
+      label: "3.7 Which article, section or annex is relevant?"
+      placeholder: "Article 8(3), Annex II, section 5.14"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "consolidated"
+    attributes:
+      label: "3.8 Are you citing a consolidated text?"
+      description: >-
+        A consolidated text incorporates amendments. Citing the original where a
+        consolidated version exists is one of the most common ways a legal
+        citation quietly becomes wrong.
+      options:
+        - "Yes, consolidated"
+        - "No, the original as adopted"
+        - "There have been no amendments"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "quote"
+    attributes:
+      label: "3.9 The relevant provision, quoted"
+      description: >-
+        A short quotation only. If the authoritative text is not in English,
+        give the original and, separately, your translation, marked as
+        unofficial.
+      render: "text"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 4: WHAT IT ACTUALLY DOES
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 4. What it actually does
+
+  - type: "dropdown"
+    id: "regulatory_status"
+    attributes:
+      label: "4.1 How does this jurisdiction treat the product class?"
+      description: >-
+        These are the members of the RegulatoryStatus vocabulary. See
+        DATA_MODEL.md section 5.6.
+      options:
+        - "Unregulated, no product-specific approval normally required"
+        - "Notified, the authorities must be told but no approval is needed"
+        - "Authorised, a formal licence is required before sale or release"
+        - "Prohibited, banned outright"
+        - "Unclear or in transition"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "approval_route"
+    attributes:
+      label: "4.2 What is the approval route, if there is one?"
+      options:
+        - "Not applicable"
+        - "A single national authorisation"
+        - "A centralised regional authorisation"
+        - "Mutual recognition of another jurisdiction's approval"
+        - "A notification with a waiting period"
+        - "Case-by-case ministerial decision"
+        - "Sector-specific committee approval"
+        - "Import licence only"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "timeline_typical"
+    attributes:
+      label: "4.3 Roughly how long does approval take?"
+      options:
+        - "Not applicable"
+        - "Weeks"
+        - "A few months"
+        - "Six months to a year"
+        - "One to three years"
+        - "More than three years"
+        - "Highly variable"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "divergence"
+    attributes:
+      label: "4.4 Does this jurisdiction reach a different answer from the European Union?"
+      description: >-
+        Divergence is the single most useful thing this library can record. A
+        genome-edited plant is a GMO in the European Union and a conventional
+        variety in Japan, Argentina and the United States. Same organism, three
+        answers.
+      options:
+        - "Yes, materially different in classification"
+        - "Yes, different in evidence requirements but the same classification"
+        - "Yes, different in timeline or cost but not in principle"
+        - "Yes, different in labelling or traceability"
+        - "Yes, different in who may apply"
+        - "No, substantially the same"
+        - "There is no European equivalent to compare with"
+        - "I do not know"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "divergence_detail"
+    attributes:
+      label: "4.5 If it diverges, how?"
+      description: >-
+        One or two sentences. This may end up quoted in the record, so write it
+        as you would want it read.
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "trade_effect"
+    attributes:
+      label: "4.6 Does the divergence affect trade?"
+      options:
+        - "No"
+        - "Yes, it blocks import from jurisdictions that permit it"
+        - "Yes, it blocks export to jurisdictions that do not"
+        - "Yes, it creates a labelling requirement at the border"
+        - "Yes, it creates a testing requirement at the border"
+        - "It is the subject of an active trade dispute"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "enforcement"
+    attributes:
+      label: "4.7 Is it actually enforced in practice?"
+      description: >-
+        A candid answer is valuable and will be recorded carefully rather than
+        bluntly. A law on the books that nobody enforces describes a different
+        reality from one that is enforced, and readers making decisions need to
+        know which they are looking at.
+      options:
+        - "Yes, actively and consistently"
+        - "Yes, but unevenly"
+        - "Rarely enforced"
+        - "Enforced only on import or export"
+        - "Enforced only after an incident"
+        - "Not enforced in practice"
+        - "Too new to say"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "penalties"
+    attributes:
+      label: "4.8 What happens if it is breached?"
+      options:
+        - "Not applicable"
+        - "Administrative fine"
+        - "Product withdrawal or recall"
+        - "Licence suspension or revocation"
+        - "Criminal liability"
+        - "Civil liability only"
+        - "No defined penalty"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "public_register"
+    attributes:
+      label: "4.9 Is there a public register of authorisations?"
+      description: >-
+        A public register is the best kind of source, because it lets a reader
+        verify a claim rather than trust it.
+      options:
+        - "Yes, and I have linked it"
+        - "Yes, but not online"
+        - "Partially, some decisions are published"
+        - "No"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "change_expected"
+    attributes:
+      label: "4.10 Is the position expected to change?"
+      options:
+        - "No, it is stable"
+        - "A reform is under consultation"
+        - "A reform has been announced"
+        - "A court case may change it"
+        - "It changes frequently"
+        - "I do not know"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 5: SOURCES AND VERIFICATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 5. Sources and verification
+
+  - type: "dropdown"
+    id: "source_kind"
+    attributes:
+      label: "5.1 What are you citing from?"
+      options:
+        - "The official text itself"
+        - "An official consolidated version"
+        - "An official English translation"
+        - "An unofficial translation"
+        - "An agency explanatory note"
+        - "A published legal commentary"
+        - "A law firm briefing"
+        - "An academic article about the regime"
+        - "My own professional practice"
+        - "A conversation with the authority"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "source_access"
+    attributes:
+      label: "5.2 Can a maintainer read the source without paying?"
+      options:
+        - "Yes, it is freely published online"
+        - "Yes, but only in the original language"
+        - "Free but requires registration"
+        - "Behind a paywall"
+        - "Must be purchased, as with an ISO standard"
+        - "Available only in print"
+        - "Not publicly available"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "verification_date"
+    attributes:
+      label: "5.3 On what date did you last check the source?"
+      placeholder: "2026-08-30"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "second_source"
+    attributes:
+      label: "5.4 Have you cross-checked against a second source?"
+      options:
+        - "Yes"
+        - "No"
+        - "Not needed, this is the official text"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "second_source_detail"
+    attributes:
+      label: "5.5 The second source, if there is one"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 6: ABOUT YOU
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 6. About you
+
+  - type: "dropdown"
+    id: "expertise"
+    attributes:
+      label: "6.1 What is your relationship to this jurisdiction?"
+      description: >-
+        Optional. It affects how much verification a maintainer does before
+        merging, not whether the contribution is welcome.
+      options:
+        - "Prefer not to say"
+        - "I practise regulatory affairs there"
+        - "I am a lawyer qualified there"
+        - "I work for the authority named above"
+        - "I formerly worked for that authority"
+        - "I work in industry subject to this instrument"
+        - "I am an academic who studies this system"
+        - "I am a consultant advising on this system"
+        - "I live there and follow the debate"
+        - "I have read the instrument carefully"
+        - "I read about it in a secondary source"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "language_ability"
+    attributes:
+      label: "6.2 Do you read the authoritative language?"
+      options:
+        - "Yes, fluently"
+        - "Yes, well enough for legal text"
+        - "Partially, with a dictionary"
+        - "No, I used a translation"
+        - "The authoritative text is in English"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "conflict"
+    attributes:
+      label: "6.3 Do you have any interest to declare?"
+      options:
+        - "None"
+        - "I advise clients on this instrument commercially"
+        - "I work for a company subject to it"
+        - "I work for a company campaigning to change it"
+        - "I work for or advise the authority"
+        - "I am party to a dispute about it"
+        - "Prefer not to say"
+        - "Other, described below"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "disclaimer"
+    attributes:
+      label: "6.4 Is this legal advice?"
+      description: >-
+        It is not, and the library says so in NOTICE.md section 6. This field
+        exists so that the point is acknowledged once by everyone involved.
+      options:
+        - "No, this is a factual citation, not advice"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "willing_pr"
+    attributes:
+      label: "6.5 Would you like to make the change yourself?"
+      options:
+        - "No, please make it for me"
+        - "Yes, I will open a pull request"
+        - "Yes, if someone shows me the file"
+        - "I would rather review someone else's version"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "ongoing"
+    attributes:
+      label: "6.6 Would you be willing to keep this jurisdiction current?"
+      description: >-
+        Entirely optional, and no commitment is implied. GOVERNANCE.md section 6
+        describes domain editors as the intended growth path for this project,
+        and jurisdictional editors are the most needed kind.
+      options:
+        - "No, this is a one-off contribution"
+        - "Maybe, ask me again"
+        - "Yes, I would review it once a year"
+        - "Yes, I would review it whenever the law changes"
+        - "Yes, I would like to be the editor for this jurisdiction"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "more_coverage"
+    attributes:
+      label: "6.7 Could you cover more than this one record?"
+      options:
+        - "No, just this one"
+        - "A few more in the same branch"
+        - "A whole branch"
+        - "The whole taxonomy for this jurisdiction"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "credit"
+    attributes:
+      label: "6.8 How would you like to be credited?"
+      options:
+        - "By my GitHub handle"
+        - "By my full name, given below"
+        - "By name and professional affiliation, given below"
+        - "Anonymously"
+        - "Not at all"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "anything_else"
+    attributes:
+      label: "6.9 Anything else?"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 7: PRACTICAL DETAIL
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 7. Practical detail
+
+        Optional. These are the questions a reader in another country actually
+        asks, and they are almost never answerable from the legal text alone.
+
+  - type: "dropdown"
+    id: "official_glossary"
+    attributes:
+      label: "7.1 Does the authority publish an official English glossary of its terms?"
+      description: >-
+        Valuable because a national term translated three different ways in
+        three different secondary sources is a common cause of quiet error.
+      options:
+        - "Yes, and I have linked it"
+        - "Yes, but not online"
+        - "No"
+        - "The authoritative language is English"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "machine_readable"
+    attributes:
+      label: "7.2 Are decisions or authorisations published in a machine-readable form?"
+      options:
+        - "Yes, as structured open data"
+        - "Yes, as a searchable web register"
+        - "Yes, but only as PDF documents"
+        - "Only in a periodical or gazette"
+        - "No"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "fees"
+    attributes:
+      label: "7.3 Are there fees, and roughly at what order of magnitude?"
+      description: >-
+        Cost is one of the main reasons a technology is available in one country
+        and not another, and it is almost never in the technical literature.
+      options:
+        - "No fee"
+        - "A nominal administrative fee"
+        - "Hundreds of euro or equivalent"
+        - "Thousands"
+        - "Tens of thousands"
+        - "Hundreds of thousands or more"
+        - "Fees are not published"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "exemptions"
+    attributes:
+      label: "7.4 Is there an exemption for academic, small or humanitarian applicants?"
+      options:
+        - "No"
+        - "Yes, for academic or non-commercial work"
+        - "Yes, for small or micro enterprises"
+        - "Yes, for orphan or humanitarian use"
+        - "Yes, for emergency use"
+        - "Yes, for contained research use"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "capacity"
+    attributes:
+      label: "7.5 Does the authority have the capacity to apply it?"
+      description: >-
+        A candid answer, recorded carefully. A framework that exists on paper
+        but has no reviewers describes a different reality from one that is
+        staffed, and a reader planning work needs to know which.
+      options:
+        - "Yes, it is well resourced"
+        - "Yes, but with long queues"
+        - "Partially, for some product classes only"
+        - "It relies on external expert panels"
+        - "It relies on another jurisdiction's assessment"
+        - "Capacity is a known constraint"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "followers"
+    attributes:
+      label: "7.6 Which other jurisdictions follow this one?"
+      description: >-
+        Several regulators explicitly recognise or copy another. Recording that
+        multiplies the value of a single contribution.
+      placeholder: "Several ASEAN members follow this framework"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "public_debate"
+    attributes:
+      label: "7.7 Is the position politically contested locally?"
+      description: >-
+        Reported as a fact about the debate, never as a position in it. The
+        project does not take sides; it records who disagrees.
+      options:
+        - "No, it is settled"
+        - "Yes, between industry and civil society"
+        - "Yes, between government departments"
+        - "Yes, along party political lines"
+        - "Yes, between national and regional government"
+        - "Yes, in the courts"
+        - "I do not know"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 8: CONFIRMATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 8. Confirmation
+
+  - type: "checkboxes"
+    id: "confirm"
+    attributes:
+      label: "8.1 Before you submit"
+      options:
+        - label: >-
+            I have cited the official text rather than a commentary about it, or
+            I have said that no official text is available online.
+          required: true
+        - label: >-
+            I have distinguished a regulation, which has legal force, from a
+            standard, which does not.
+          required: true
+        - label: >-
+            I have said whether I am citing a consolidated or an original text.
+          required: true
+        - label: >-
+            I understand this is a factual citation and not legal advice, and
+            that the library disclaims giving any.
+          required: true
+        - label: "I agree that my contribution is licensed under the EUPL-1.2."
+          required: true
+        - label: "I have read and agree to follow the Code of Conduct."
+          required: true

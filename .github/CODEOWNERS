@@ -1,0 +1,141 @@
+# =============================================================================
+#  .github/CODEOWNERS
+# -----------------------------------------------------------------------------
+#  Who is automatically requested for review on which paths.
+#
+#  CURRENT STATE
+#  This project has one maintainer, so every line below names the same person.
+#  Saying so plainly is more useful than pretending a review rota exists.
+#
+#  WHY THE FILE IS STRUCTURED AS IF IT DID
+#  Because GOVERNANCE.md section 6 says the intended growth path is DOMAIN
+#  EDITORS - one person responsible for the factual accuracy of each colour
+#  branch, with the maintainer responsible for the machinery and the editorial
+#  standard. When that happens, this file is where it becomes real, and the
+#  structure is already here waiting: replace one handle on one line and that
+#  branch has an editor.
+#
+#  If you would like to hold a branch, say so in an issue. It is an open
+#  invitation.
+#
+#  SYNTAX
+#  Later rules win. The most specific pattern that matches a file determines
+#  its owners, so the ordering below runs from general to specific.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+#  Default owner for everything not matched more specifically below.
+# -----------------------------------------------------------------------------
+*                                       @olaflaitinen
+
+
+# =============================================================================
+#  THE MACHINERY
+#  Changes here affect all eighty-five records at once, so they always need
+#  the maintainer regardless of who else reviews.
+# =============================================================================
+/src/biotechnology/core/                @olaflaitinen
+/src/biotechnology/cli/                 @olaflaitinen
+/src/biotechnology/__init__.py          @olaflaitinen
+/tools/                                 @olaflaitinen
+/tests/                                 @olaflaitinen
+
+
+# =============================================================================
+#  THE COLOUR BRANCHES
+#
+#  One line per branch, ready for a domain editor. The comment beside each
+#  names the expertise the editor of that branch would need, which is also a
+#  fair description of who this project is looking for.
+# =============================================================================
+
+# Medicine, health care, pharmaceuticals.
+# Editor sought: clinical or pharmaceutical science background.
+/src/biotechnology/branches/red/         @olaflaitinen
+
+# Agriculture, livestock, crop production.
+# Editor sought: agronomy, plant breeding or animal science.
+/src/biotechnology/branches/green/       @olaflaitinen
+
+# Industrial processes, biofuels, biomaterials.
+# Editor sought: bioprocess or chemical engineering.
+/src/biotechnology/branches/white/       @olaflaitinen
+
+# Marine and aquatic resources.
+# Editor sought: marine biology or aquaculture.
+/src/biotechnology/branches/blue/        @olaflaitinen
+
+# Food production, fermentation, nutrition.
+# Editor sought: food science or nutrition.
+/src/biotechnology/branches/yellow/      @olaflaitinen
+
+# Environment, waste, ecological balance.
+# Editor sought: environmental engineering or ecology.
+/src/biotechnology/branches/grey/        @olaflaitinen
+
+# Arid zones, deserts, degraded land.
+# Editor sought: dryland agriculture or soil science.
+/src/biotechnology/branches/brown/       @olaflaitinen
+
+# Bioinformatics, computation, nanobiotechnology.
+# Editor sought: computational biology.
+/src/biotechnology/branches/gold/        @olaflaitinen
+
+# Biosecurity, biosafety, misuse risk.
+# NOT delegated. Changes here are reviewed by the maintainer personally under
+# SECURITY.md section 2, which is explicitly exempt from consensus. This line
+# stays as it is even after domain editors exist.
+/src/biotechnology/branches/dark/        @olaflaitinen
+
+# Law, ethics, patents, intellectual property.
+# Editor sought: regulatory affairs, IP law or bioethics.
+/src/biotechnology/branches/purple/      @olaflaitinen
+
+
+# =============================================================================
+#  REGISTRIES
+#  Shared across every branch; a change here can invalidate cross-references
+#  anywhere in the taxonomy.
+# =============================================================================
+/src/biotechnology/formulas/            @olaflaitinen
+/src/biotechnology/organisms/           @olaflaitinen
+/src/biotechnology/techniques/          @olaflaitinen
+/src/biotechnology/glossary/            @olaflaitinen
+/src/biotechnology/refs/                @olaflaitinen
+/src/biotechnology/sdg/                 @olaflaitinen
+
+
+# =============================================================================
+#  GOVERNANCE, POLICY AND LICENCE
+#  Never delegated. These define what the project is.
+# =============================================================================
+/LICENCE                                @olaflaitinen
+/NOTICE.md                              @olaflaitinen
+/SECURITY.md                            @olaflaitinen
+/GOVERNANCE.md                          @olaflaitinen
+/CODE_OF_CONDUCT.md                     @olaflaitinen
+/STYLE_GUIDE.md                         @olaflaitinen
+/CITATION.cff                           @olaflaitinen
+
+
+# =============================================================================
+#  BUILD, RELEASE AND CI
+#  A workflow change runs code with repository permissions. Reviewed by the
+#  maintainer without exception.
+# =============================================================================
+/.github/                               @olaflaitinen
+/pyproject.toml                         @olaflaitinen
+/Makefile                               @olaflaitinen
+/tox.ini                                @olaflaitinen
+/.pre-commit-config.yaml                @olaflaitinen
+
+
+# =============================================================================
+#  GENERATED OUTPUT
+#  docs/ is produced by tools/generate_docs.py. A pull request that changes it
+#  without a corresponding change under src/ is almost always a hand edit that
+#  will be lost on the next `make docs`.
+# =============================================================================
+/docs/                                  @olaflaitinen

@@ -1,0 +1,300 @@
+# =============================================================================
+#  .github/action-pins.yml
+# -----------------------------------------------------------------------------
+#  The governed list of every GitHub Action this repository is permitted to
+#  call, why it is called, and what it is allowed to do.
+#
+#  WHY THIS FILE EXISTS
+#  A GitHub Action is executable code that runs inside this repository with the
+#  repository's own permissions. It is, by a wide margin, the largest real
+#  attack surface here, and THREAT_MODEL.md ranks it first for that reason.
+#
+#  A `uses:` line scattered across five workflow files is not reviewable. This
+#  file makes the whole set reviewable in one place: every action, the version
+#  it is pinned to, who publishes it, what permissions it is given, when it was
+#  last reviewed, and why it is needed at all.
+#
+#  HOW IT IS ENFORCED
+#  tools/check_action_pinning.py walks every workflow, extracts every `uses:`
+#  reference, and fails if any of them is absent from this file or disagrees
+#  with the version recorded here. It runs as a pre-commit hook, in CI and in
+#  the daily security audit.
+#
+#  PINNING POLICY
+#  The `ref` field is what appears in the workflow. The `sha` field records the
+#  full commit hash that ref resolved to at the recorded review date.
+#
+#  Running `make pin-actions` rewrites every workflow to use the SHA form with
+#  the human-readable ref as a trailing comment, which is the strongest form of
+#  pinning GitHub supports:
+#
+#      uses: actions/checkout@<40 hex characters>  # v4.1.7
+#
+#  That step requires network access to resolve tags, so it is a deliberate
+#  maintainer action rather than something a contributor is asked to do. Until
+#  a pin is resolved its `sha` reads `unresolved`, and the checker reports it
+#  as such rather than pretending the repository is more hardened than it is.
+#  An honest `unresolved` is worth more than an invented hash, which would
+#  break every workflow on the first run.
+#
+#  ADDING AN ACTION
+#  Add an entry here first, in the same pull request that adds the `uses:`
+#  line. The reviewer will ask the three questions the fields below record:
+#  who publishes it, what does it need permission to do, and is there a way to
+#  do this without it.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+policy:
+  # Every action reference in .github/workflows must appear in `actions` below.
+  require_governed: true
+  # Warn, rather than fail, while a pin is unresolved. Set to true once
+  # `make pin-actions` has been run against a network-connected environment.
+  require_resolved_sha: false
+  # Reviewed at every minor release, and whenever an entry is added.
+  review_interval_days: 90
+  last_full_review: "2026-09-02"
+
+actions:
+  # ===========================================================================
+  #  Published by GitHub itself.
+  #
+  #  Lower risk than third-party actions, but not zero risk: these are still
+  #  separate repositories with their own maintainers and their own release
+  #  processes. They are pinned on the same terms as everything else.
+  # ===========================================================================
+  - name: "actions/checkout"
+    ref: "v4"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["ci", "codeql", "docs", "release", "scorecard", "security-audit", "dependency-review"]
+    permissions_needed: ["contents: read"]
+    justification: "Obtain the source. Unavoidable."
+    hardening: "persist-credentials: false everywhere, so the token is not left in .git/config"
+    last_reviewed: "2026-09-02"
+
+  - name: "actions/setup-python"
+    ref: "v5"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["ci", "codeql", "docs", "release", "security-audit"]
+    permissions_needed: ["contents: read"]
+    justification: "Install a specific interpreter and cache pip downloads."
+    hardening: "cache-dependency-path pinned to pyproject.toml so the cache key is deterministic"
+    last_reviewed: "2026-09-02"
+
+  - name: "actions/upload-artifact"
+    ref: "v4"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["ci", "release", "scorecard"]
+    permissions_needed: ["contents: read"]
+    justification: "Carry the built distribution and coverage report between jobs."
+    last_reviewed: "2026-09-02"
+
+  - name: "actions/download-artifact"
+    ref: "v4"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["release"]
+    permissions_needed: ["contents: read"]
+    justification: "Retrieve the built distribution for attestation and publication."
+    last_reviewed: "2026-09-02"
+
+  - name: "actions/upload-pages-artifact"
+    ref: "v3"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["docs"]
+    permissions_needed: ["contents: read"]
+    justification: "Package the built documentation site for Pages."
+    last_reviewed: "2026-09-02"
+
+  - name: "actions/deploy-pages"
+    ref: "v4"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["docs"]
+    permissions_needed: ["pages: write", "id-token: write"]
+    justification: "Publish the documentation site."
+    hardening: "Runs only on push to main, never from a fork, in an isolated job that does nothing else"
+    last_reviewed: "2026-09-02"
+
+  - name: "actions/attest-build-provenance"
+    ref: "v1"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["release"]
+    permissions_needed: ["id-token: write", "attestations: write"]
+    justification: >-
+      Sign a statement binding each artefact to the commit, workflow and runner
+      that produced it, so a consumer can verify with gh attestation verify.
+      Directly mitigates THREAT_MODEL.md T-06.
+    last_reviewed: "2026-09-02"
+
+  - name: "actions/dependency-review-action"
+    ref: "v4"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["dependency-review"]
+    permissions_needed: ["contents: read", "pull-requests: write"]
+    justification: "Block a pull request that introduces a vulnerable or incompatibly licensed package."
+    last_reviewed: "2026-09-02"
+
+  - name: "github/codeql-action/init"
+    ref: "v3"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["codeql"]
+    permissions_needed: ["security-events: write", "actions: read", "contents: read"]
+    justification: "Semantic analysis. See codeql.yml for why it runs despite a small surface."
+    last_reviewed: "2026-09-02"
+
+  - name: "github/codeql-action/autobuild"
+    ref: "v3"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["codeql"]
+    permissions_needed: ["security-events: write", "contents: read"]
+    justification: "Build the CodeQL database."
+    last_reviewed: "2026-09-02"
+
+  - name: "github/codeql-action/analyze"
+    ref: "v3"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["codeql"]
+    permissions_needed: ["security-events: write", "contents: read"]
+    justification: "Run the queries and upload results."
+    last_reviewed: "2026-09-02"
+
+  - name: "github/codeql-action/upload-sarif"
+    ref: "v3"
+    sha: "unresolved"
+    publisher: "GitHub"
+    verified: true
+    used_in: ["security-audit", "scorecard"]
+    permissions_needed: ["security-events: write"]
+    justification: "Surface Bandit, zizmor and Scorecard findings in the Security tab rather than in a log nobody reads."
+    last_reviewed: "2026-09-02"
+
+  # ===========================================================================
+  #  Published by other organisations.
+  #
+  #  Each of these is a third party with write-equivalent reach into a job.
+  #  Each entry states who they are and why the action is worth that reach.
+  # ===========================================================================
+  - name: "pypa/gh-action-pypi-publish"
+    ref: "release/v1"
+    sha: "unresolved"
+    publisher: "Python Packaging Authority"
+    verified: true
+    used_in: ["release"]
+    permissions_needed: ["id-token: write"]
+    justification: >-
+      The reference implementation of PyPI trusted publishing. Using it is what
+      makes it possible to have no PyPI token at all, which is the single most
+      valuable supply-chain control this project has. See THREAT_MODEL.md T-06.
+    hardening: "Runs in the protected pypi environment, from a signed tag only"
+    last_reviewed: "2026-09-02"
+
+  - name: "ossf/scorecard-action"
+    ref: "v2"
+    sha: "unresolved"
+    publisher: "Open Source Security Foundation"
+    verified: true
+    used_in: ["scorecard"]
+    permissions_needed: ["security-events: write", "id-token: write", "contents: read", "actions: read"]
+    justification: >-
+      Publishes an independently auditable supply-chain assessment. Several
+      organisations that might adopt this library run such an assessment before
+      permitting a dependency, and an absent score is treated as a bad one.
+    last_reviewed: "2026-09-02"
+
+  - name: "gitleaks/gitleaks-action"
+    ref: "v2"
+    sha: "unresolved"
+    publisher: "Gitleaks"
+    verified: false
+    used_in: ["security-audit"]
+    permissions_needed: ["contents: read"]
+    justification: >-
+      Scans the full history for credentials. A committed credential cannot be
+      un-committed, so a second independent detector alongside GitHub secret
+      scanning is worth the third-party risk. See THREAT_MODEL.md T-05.
+    last_reviewed: "2026-09-02"
+
+  - name: "softprops/action-gh-release"
+    ref: "v2"
+    sha: "unresolved"
+    publisher: "softprops"
+    verified: false
+    used_in: ["release"]
+    permissions_needed: ["contents: write"]
+    justification: >-
+      Creates the GitHub release and attaches artefacts and the SBOM. This is
+      the highest-privilege third-party action in the repository. It is a
+      candidate for replacement with a direct gh CLI call, which would remove a
+      third party from a contents: write context entirely.
+    review_note: "Replace with `gh release create` before 1.0"
+    last_reviewed: "2026-09-02"
+
+  - name: "lycheeverse/lychee-action"
+    ref: "v1"
+    sha: "unresolved"
+    publisher: "lychee"
+    verified: false
+    used_in: ["docs"]
+    permissions_needed: ["contents: read"]
+    justification: "External link rot detection. Advisory only; never blocks a merge."
+    last_reviewed: "2026-09-02"
+
+  - name: "peter-evans/create-issue-from-file"
+    ref: "v5"
+    sha: "unresolved"
+    publisher: "peter-evans"
+    verified: false
+    used_in: ["docs"]
+    permissions_needed: ["issues: write"]
+    justification: "Open a maintenance issue when the monthly link check finds dead citations."
+    last_reviewed: "2026-09-02"
+
+# =============================================================================
+#  Actions considered and deliberately NOT used.
+#
+#  Recorded so that a reviewer can see that the absence was a decision rather
+#  than an oversight, and so that a future contributor proposing one finds the
+#  earlier reasoning instead of repeating the discussion.
+# =============================================================================
+rejected:
+  - name: "step-security/harden-runner"
+    reason: >-
+      Provides egress filtering and runner telemetry. Genuinely useful, and
+      reconsidered at each review. Not adopted yet because it sends run
+      metadata to a third-party service, and this project would rather have a
+      smaller trust set than a larger monitored one. The jobs here install from
+      PyPI and talk to nothing else, so the egress surface it would filter is
+      already minimal.
+
+  - name: "codecov/codecov-action"
+    reason: >-
+      Coverage is uploaded as a build artefact instead. A coverage service adds
+      a third party with repository read access, and a token, in exchange for a
+      badge. Not a trade this project wants.
+
+  - name: "Any action that posts to a chat service"
+    reason: >-
+      Would require a webhook secret. The project holds no secrets, and keeping
+      it that way is worth more than a notification.

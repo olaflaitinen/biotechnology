@@ -1,0 +1,954 @@
+# =============================================================================
+#  .github/ISSUE_TEMPLATE/05-new-content.yml
+# -----------------------------------------------------------------------------
+#  Proposals to add a record to the taxonomy or to one of its registries.
+#
+#  WHY THIS IS SEPARATE FROM A FEATURE REQUEST
+#  Adding a subtype is not a feature. It is an editorial decision about what
+#  the field contains and how it is carved up, and the questions that decide it
+#  are entirely different from the questions that decide an API change.
+#
+#  THE QUESTION THAT DECIDES MOST OF THESE
+#  Most proposed subtypes turn out to be cross-references in disguise: a real
+#  and important connection between two existing records rather than a new
+#  record. That is a good outcome, not a rejection, because it puts the
+#  information where a reader of either record will find it. Section 3 exists
+#  to test that honestly, in both directions.
+#
+#  A new formula, glossary term, organism, technique or reference is a much
+#  smaller decision and is usually accepted if it is correct and something
+#  cites it. Skip straight to the section that applies.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "New content"
+description: "Propose a new subtype, formula, organism, technique, glossary term or reference"
+title: "content: "
+labels: ["content", "needs-triage"]
+
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        Thank you for proposing this. New content is welcome and the taxonomy
+        is not complete.
+
+        **Two things worth knowing before you start.**
+
+        First, most proposed **subtypes** turn out to be cross-references
+        rather than new records. That is a good outcome, not a rejection: it
+        puts the information where readers of both existing records will find
+        it. Section 3 tests this in both directions.
+
+        Second, a new **formula**, **glossary term**, **organism**,
+        **technique** or **reference** is a much smaller decision and is
+        usually accepted if it is correct and something cites it. Sections 5 to
+        8 are per-type; skip the ones that do not apply.
+
+  # ###########################################################################
+  #  SECTION 1: WHAT YOU ARE PROPOSING
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 1. What you are proposing
+
+  - type: "dropdown"
+    id: "content_type"
+    attributes:
+      label: "1.1 What kind of record?"
+      options:
+        - "A new subtype inside an existing branch"
+        - "A new colour branch"
+        - "A new formula module"
+        - "A new glossary term"
+        - "A new organism entry"
+        - "A new technique entry"
+        - "A new bibliography reference"
+        - "A new metric on an existing subtype"
+        - "A new milestone on an existing subtype"
+        - "A new application on an existing subtype"
+        - "A new challenge on an existing subtype"
+        - "A new regulation or standard on an existing subtype"
+        - "A new cross-reference between existing subtypes"
+        - "Splitting one existing subtype into two"
+        - "Merging two existing subtypes into one"
+        - "Moving a subtype from one branch to another"
+        - "Renaming a subtype, which is a breaking change"
+        - "Retiring a subtype"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "proposed_name"
+    attributes:
+      label: "1.2 Proposed name"
+      placeholder: "Synthetic Biology, or: herd_immunity_threshold"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "proposed_key"
+    attributes:
+      label: "1.3 Proposed key"
+      description: >-
+        Lowercase, starting with a letter, containing only a to z, 0 to 9 and
+        underscores. This becomes part of a public identifier that external work
+        will cite, so it is worth a moment.
+      placeholder: "synthetic_biology"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "aliases"
+    attributes:
+      label: "1.4 Aliases people would search for"
+      description: "Lowercase, comma separated."
+      placeholder: "synbio, engineering biology"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "branch"
+    attributes:
+      label: "1.5 Which branch would it belong to?"
+      options:
+        - "red, medicine, health care and pharmaceuticals"
+        - "green, agriculture, livestock and crop production"
+        - "white, industrial processes, biofuels and biomaterials"
+        - "blue, marine and aquatic resources"
+        - "yellow, food production, fermentation and nutrition"
+        - "grey, environment, waste and ecological balance"
+        - "brown, arid zones, deserts and degraded land"
+        - "gold, bioinformatics, computation and nanobiotechnology"
+        - "dark, biosecurity, biosafety and misuse risk"
+        - "purple, law, ethics, patents and intellectual property"
+        - "It genuinely spans several, explained below"
+        - "Not applicable, this is not a subtype"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "position"
+    attributes:
+      label: "1.6 Where in the branch order should it sit?"
+      description: >-
+        Subtypes are listed in a narrative order, not alphabetically, because
+        the first thing most readers do is read the list top to bottom.
+      options:
+        - "I have no view"
+        - "First"
+        - "Near the beginning"
+        - "In the middle"
+        - "Near the end"
+        - "Last"
+        - "Immediately after a named record, given below"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "summary"
+    attributes:
+      label: "1.7 One technical sentence describing it"
+      description: >-
+        This would become the SUMMARY field. Under 200 characters. It has to
+        stand alone in a table with no surrounding context.
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "plain"
+    attributes:
+      label: "1.8 The same thing in plain language"
+      description: >-
+        No unexplained jargon. If a fourteen-year-old could not read it aloud
+        and paraphrase it, rewrite it. This is required for every record in the
+        library and it is the field reviewers spend the most time on.
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "analogy"
+    attributes:
+      label: "1.9 An everyday analogy"
+      description: >-
+        Editorial rule 2: it must be checkable and must show its own limits.
+        Drawn from ordinary life, not from another technical field.
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "why_matters"
+    attributes:
+      label: "1.10 Why it matters, with the cost as well as the benefit"
+      description: >-
+        Editorial rule 3. A record that lists only upside is advertising, and
+        review will send it back.
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 2: MATURITY AND GOVERNANCE
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 2. Where it sits in the controlled vocabularies
+
+        Skip if you are not proposing a subtype. Definitions of every value are
+        in DATA_MODEL.md section 5.
+
+  - type: "dropdown"
+    id: "maturity"
+    attributes:
+      label: "2.1 Maturity"
+      options:
+        - "Not applicable"
+        - "research, still in laboratories, no product exists"
+        - "emerging, works in the laboratory, first companies scaling"
+        - "pilot, demonstration size, testing real conditions"
+        - "commercial, sold today though not yet everywhere"
+        - "established, routine, widely deployed, often decades old"
+        - "I am not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "risk_tier"
+    attributes:
+      label: "2.2 Risk tier, meaning how much oversight it attracts"
+      options:
+        - "Not applicable"
+        - "routine, ordinary work under standard safety rules"
+        - "controlled, needs a permit, licence or committee sign-off"
+        - "regulated, a national agency must authorise before sale"
+        - "restricted, access to materials or methods is limited by law"
+        - "I am not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "scale"
+    attributes:
+      label: "2.3 Physical scale"
+      options:
+        - "Not applicable"
+        - "bench, millilitres to a few litres"
+        - "pilot, tens to thousands of litres"
+        - "industrial, cubic metres and upward"
+        - "field, open land, water or an animal herd"
+        - "population, whole communities, countries or ecosystems"
+        - "I am not sure"
+    validations:
+      required: false
+
+  - type: "checkboxes"
+    id: "domains"
+    attributes:
+      label: "2.4 Which sectors does it serve?"
+      options:
+        - label: "health"
+        - label: "food"
+        - label: "energy"
+        - label: "materials"
+        - label: "environment"
+        - label: "information"
+        - label: "governance"
+        - label: "security"
+
+  - type: "dropdown"
+    id: "regulatory_status"
+    attributes:
+      label: "2.5 Regulatory status"
+      options:
+        - "Not applicable"
+        - "unregulated, no product-specific approval normally required"
+        - "notified, authorities must be told but no approval needed"
+        - "authorised, a formal licence is required before sale or release"
+        - "varies, jurisdictions reach materially different decisions"
+        - "prohibited, banned in most or all jurisdictions"
+        - "I am not sure"
+    validations:
+      required: false
+
+  - type: "checkboxes"
+    id: "sdgs"
+    attributes:
+      label: "2.6 Which Sustainable Development Goals does it genuinely serve?"
+      description: >-
+        Editorial rule 12: each must survive the question, what would a hostile
+        auditor say? Padding this list is the most common failure mode in impact
+        reporting. Tick sparingly.
+      options:
+        - label: "1 No poverty"
+        - label: "2 Zero hunger"
+        - label: "3 Good health and well-being"
+        - label: "4 Quality education"
+        - label: "5 Gender equality"
+        - label: "6 Clean water and sanitation"
+        - label: "7 Affordable and clean energy"
+        - label: "8 Decent work and economic growth"
+        - label: "9 Industry, innovation and infrastructure"
+        - label: "10 Reduced inequalities"
+        - label: "11 Sustainable cities and communities"
+        - label: "12 Responsible consumption and production"
+        - label: "13 Climate action"
+        - label: "14 Life below water"
+        - label: "15 Life on land"
+        - label: "16 Peace, justice and strong institutions"
+        - label: "17 Partnerships for the goals"
+
+  # ###########################################################################
+  #  SECTION 3: WHY IT IS A DISTINCT RECORD
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 3. Why it is a distinct record
+
+        The part that decides a subtype proposal. Skip for a glossary term or a
+        reference.
+
+  - type: "textarea"
+    id: "distinctness"
+    attributes:
+      label: "3.1 Why is this distinct rather than a facet of an existing record?"
+      description: >-
+        What does it contain that no current record contains? What would a
+        reader lose if the information were added to an existing record instead?
+    validations:
+      required: false
+
+  - type: "input"
+    id: "nearest"
+    attributes:
+      label: "3.2 Which existing record is closest to it?"
+      placeholder: "white.metabolic_engineering"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "boundary"
+    attributes:
+      label: "3.3 Where exactly is the boundary with that record?"
+      description: >-
+        A sentence a reader could apply to decide which of the two a given piece
+        of work belongs in. If you cannot write that sentence, the proposal is
+        probably a cross-reference.
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "overlap"
+    attributes:
+      label: "3.4 How much does it overlap with existing records?"
+      options:
+        - "Almost none, it is a genuinely separate area"
+        - "Some overlap at the edges, which is normal"
+        - "Substantial overlap, but the core is distinct"
+        - "Heavy overlap, and I am proposing it anyway for a reason given above"
+        - "I am not sure, which is why I am asking"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "cross_reference_test"
+    attributes:
+      label: "3.5 Honestly, could this be a cross-reference instead?"
+      description: >-
+        Answering yes does not end the proposal. It makes the discussion shorter
+        and more useful.
+      options:
+        - "No, there is substantive content with no home"
+        - "Possibly, but the content is large enough to deserve a record"
+        - "Possibly, and I would be happy with a cross-reference"
+        - "Yes, on reflection I think a cross-reference is the right answer"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "split_test"
+    attributes:
+      label: "3.6 Could it instead be a section within an existing record?"
+      options:
+        - "No, it would unbalance that record"
+        - "Possibly, as extra applications and challenges"
+        - "Possibly, as an extra metric"
+        - "Yes, that might be better"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "related_records"
+    attributes:
+      label: "3.7 Which existing records should cross-reference it?"
+      description: >-
+        At least two. A record nothing points at is a record nobody finds.
+      placeholder: "white.metabolic_engineering, gold.systems_biology"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 4: EVIDENCE THAT THE FIELD RECOGNISES IT
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 4. Evidence that the field recognises it
+
+  - type: "dropdown"
+    id: "recognition"
+    attributes:
+      label: "4.1 How established is this as a named area?"
+      options:
+        - "It has its own journals and conferences"
+        - "It is a standard chapter in textbooks"
+        - "It is a recognised term with a large literature"
+        - "It is taught as a distinct module in university courses"
+        - "It has a dedicated regulatory category"
+        - "It is a recognised industry sector"
+        - "It has a professional society or trade body"
+        - "It is an emerging term with growing use"
+        - "It is a term I and my colleagues use, without wider adoption"
+        - "It is a term I am proposing"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "sources"
+    attributes:
+      label: "4.2 Sources"
+      description: >-
+        Textbook chapters, review articles, curricula, regulatory categories, or
+        anything else showing the field uses this as a named area. For a
+        formula, the paper or textbook the relationship comes from.
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "naming_dispute"
+    attributes:
+      label: "4.3 Is the name itself contested?"
+      options:
+        - "No, this is the standard name"
+        - "There are two names in common use"
+        - "The name differs between disciplines"
+        - "The name differs between regions"
+        - "The name is new and not yet settled"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "applications"
+    attributes:
+      label: "4.4 Four or more real applications"
+      description: >-
+        Each must name something a reader could go and look up: an approved
+        product class, a completed trial, a deployed programme, a commercial
+        process. Editorial rule 6.
+      placeholder: |
+        - Approved product X for indication Y
+        - Deployed programme Z in country W
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "technologies"
+    attributes:
+      label: "4.5 Four or more enabling technologies"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "challenges"
+    attributes:
+      label: "4.6 Four or more genuine challenges, at least one non-technical"
+      description: >-
+        Editorial rule 7. A field described only by its technical obstacles is
+        being described by its own practitioners, which is a biased sample.
+        Cost, access, regulation, acceptance, capacity, geography.
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "milestones"
+    attributes:
+      label: "4.7 Three or more dated milestones, including a setback"
+      description: >-
+        Editorial rule 8. A timeline of unbroken triumph is a marketing
+        document. If the field has had a failure, it belongs here.
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "metrics"
+    attributes:
+      label: "4.8 Three or more metrics, with symbol, unit and typical range"
+      description: >-
+        ASCII symbols. Units written out. Ranges as text, never a numeric pair,
+        because almost every real range in biology is conditional.
+      render: "text"
+      placeholder: |
+        mu    specific growth rate   1/h    0.1 - 1.2 depending on organism
+    validations:
+      required: false
+
+  - type: "input"
+    id: "organisms"
+    attributes:
+      label: "4.9 Key organisms"
+      placeholder: "escherichia_coli, saccharomyces_cerevisiae"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "techniques"
+    attributes:
+      label: "4.10 Key bench techniques"
+      placeholder: "pcr, chromatography, flow_cytometry"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "regulations"
+    attributes:
+      label: "4.11 Applicable regulations, if any"
+      description: >-
+        Instruments with legal force only. Technical standards go in the next
+        field. Editorial rule 10 keeps them apart.
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "standards"
+    attributes:
+      label: "4.12 Applicable technical standards, if any"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 5: FOR A FORMULA PROPOSAL
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 5. For a formula proposal only
+
+  - type: "textarea"
+    id: "formula_ascii"
+    attributes:
+      label: "5.1 The relationship, in ASCII"
+      description: >-
+        See NOTATION.md. Implicit multiplication is never used, because it does
+        not survive being pasted into a calculator.
+      render: "text"
+      placeholder: "H_c = 1 - 1 / R0"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "formula_latex"
+    attributes:
+      label: "5.2 The same relationship in LaTeX"
+      render: "text"
+      placeholder: "H_c = 1 - \\frac{1}{R_0}"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "formula_symbols"
+    attributes:
+      label: "5.3 Every symbol, with its unit and its permitted range"
+      render: "text"
+      placeholder: |
+        R0   basic reproduction number    dimensionless   > 1
+        H_c  herd immunity threshold      fraction        0 - 1
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "formula_assumptions"
+    attributes:
+      label: "5.4 What does it assume?"
+      description: >-
+        Not optional for a formula. A relationship presented without its
+        assumptions is a way of being wrong with more confidence.
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "formula_domain"
+    attributes:
+      label: "5.5 What should happen outside the domain of validity?"
+      options:
+        - "Not applicable"
+        - "Raise DomainError naming the parameter, the value and the range"
+        - "Return a defined sentinel, explained below"
+        - "Clamp to the boundary, explained below"
+        - "It has no restricted domain"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "formula_examples"
+    attributes:
+      label: "5.6 Two worked examples with numbers a reader can verify"
+      render: "text"
+      placeholder: |
+        R0 = 15  ->  H_c = 0.933   (measles)
+        R0 = 2.5 ->  H_c = 0.600   (seasonal influenza)
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "formula_provenance"
+    attributes:
+      label: "5.7 Where does the relationship come from?"
+      options:
+        - "Not applicable"
+        - "A named original paper"
+        - "A standard textbook derivation"
+        - "A regulatory or standards document"
+        - "A definition rather than a derivation"
+        - "An empirical fit"
+        - "I derived it, and show the working below"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "formula_users"
+    attributes:
+      label: "5.8 Which subtypes would reference it?"
+      placeholder: "red.vaccine_development, green.veterinary_vaccines"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 6: FOR A GLOSSARY, ORGANISM OR TECHNIQUE ENTRY
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 6. For a glossary, organism or technique entry only
+
+  - type: "textarea"
+    id: "definition_technical"
+    attributes:
+      label: "6.1 The technical definition"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "definition_plain"
+    attributes:
+      label: "6.2 The plain definition"
+      description: >-
+        Required for every glossary term. A technical definition alone is
+        rejected in review, because the plain one is what makes the library
+        useful to the audience it exists for.
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "term_group"
+    attributes:
+      label: "6.3 Which group does the term belong to?"
+      options:
+        - "Not applicable"
+        - "Molecular biology and genetics"
+        - "Medicine and therapeutics"
+        - "Immunology and vaccines"
+        - "Bioprocess and industry"
+        - "Agriculture and breeding"
+        - "Environment and ecology"
+        - "Governance, law and ethics"
+        - "Measurement and statistics"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "organism_binomial"
+    attributes:
+      label: "6.4 For an organism, the full binomial and any strain"
+      placeholder: "Escherichia coli K-12 MG1655"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "organism_role"
+    attributes:
+      label: "6.5 For an organism, what role does it play?"
+      options:
+        - "Not applicable"
+        - "Production host"
+        - "Model organism"
+        - "Source of a tool such as an enzyme"
+        - "The subject of the work"
+        - "A pathogen being controlled"
+        - "A crop or farmed species"
+        - "An environmental indicator"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 7: FOR A BIBLIOGRAPHY ENTRY
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 7. For a bibliography entry only
+
+  - type: "textarea"
+    id: "citation_full"
+    attributes:
+      label: "7.1 The full citation"
+      render: "text"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "citation_doi"
+    attributes:
+      label: "7.2 DOI"
+      placeholder: "10.1038/nature15818"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "citation_key"
+    attributes:
+      label: "7.3 Proposed citation key"
+      description: >-
+        First-author surname plus year, or a source prefix plus a slug for an
+        institutional document.
+      placeholder: "naldini2015, or: ema_atmp_guideline"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "citation_role"
+    attributes:
+      label: "7.4 Which role does it play in the five-source pattern?"
+      description: >-
+        Each subtype cites roughly five works: the founding paper, an
+        authoritative modern review, the enabling technology paper, a clinical
+        or field landmark, and the governing document.
+      options:
+        - "Not applicable"
+        - "The founding paper"
+        - "An authoritative modern review"
+        - "The enabling technology paper"
+        - "A landmark result"
+        - "The governing regulatory or standards document"
+        - "It replaces an existing entry that is now outdated"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "citation_cited_by"
+    attributes:
+      label: "7.5 Which record would cite it?"
+      description: >-
+        An unreferenced bibliography entry is flagged by the integrity suite,
+        because an accumulating bibliography nobody points at is how a curated
+        dataset starts to rot.
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 8: PRACTICALITIES
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 8. Practicalities
+
+  - type: "dropdown"
+    id: "who_writes"
+    attributes:
+      label: "8.1 Who would write it?"
+      description: >-
+        A subtype is seven files. A formula is four. Both are copy-and-edit
+        jobs, not from scratch.
+      options:
+        - "I will write the whole record"
+        - "I will write the content, someone else can do the file structure"
+        - "I will write the technical register, someone else the plain one"
+        - "I will write the plain register, someone else the technical one"
+        - "I can review but not write"
+        - "I am proposing it for someone else to write"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "completeness"
+    attributes:
+      label: "8.2 How complete is your material already?"
+      options:
+        - "Just an idea"
+        - "I have the sources but not the text"
+        - "I have a draft of the technical text"
+        - "I have a draft of both registers"
+        - "I have a complete record ready to paste in"
+        - "I have a working branch"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "expertise"
+    attributes:
+      label: "8.3 What is your relationship to this area?"
+      options:
+        - "Prefer not to say"
+        - "I work in this exact area"
+        - "I work in an adjacent area"
+        - "I teach it"
+        - "I regulate or advise on it"
+        - "I studied it"
+        - "I read about it"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "conflict"
+    attributes:
+      label: "8.4 Do you have any interest to declare?"
+      options:
+        - "None"
+        - "I work for an organisation active in this area"
+        - "I hold a patent or commercial interest"
+        - "I receive funding related to it"
+        - "I am an author of a proposed source"
+        - "I am a member of an advocacy organisation on this subject"
+        - "I coined or promote the term being proposed"
+        - "Prefer not to say"
+        - "Other, described below"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "balance_check"
+    attributes:
+      label: "8.5 Can you write the downside as well as the upside?"
+      description: >-
+        Editorial rule 3. This is the most common reason a proposed record is
+        sent back, and it is worth checking before you start writing.
+      options:
+        - "Yes, and I have listed challenges above"
+        - "Yes, but I would need help finding the criticisms"
+        - "I am not sure there are any downsides"
+        - "I would rather someone else wrote that part"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "ongoing"
+    attributes:
+      label: "8.6 Would you maintain the record afterwards?"
+      description: >-
+        Entirely optional and no commitment is implied. GOVERNANCE.md section 6
+        describes domain editors as the intended growth path for this project.
+      options:
+        - "No, this is a one-off contribution"
+        - "Maybe, ask me again"
+        - "Yes, I would review it occasionally"
+        - "Yes, I would like to be the editor for this area"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "timeline"
+    attributes:
+      label: "8.7 Do you need it by a particular time?"
+      options:
+        - "No"
+        - "Within a few months would be useful"
+        - "I have a deadline this year"
+        - "I have a deadline within weeks"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "credit"
+    attributes:
+      label: "8.8 How would you like to be credited?"
+      options:
+        - "By my GitHub handle"
+        - "By my full name, given below"
+        - "By name and affiliation, given below"
+        - "Anonymously"
+        - "Not at all"
+    validations:
+      required: false
+
+  - type: "checkboxes"
+    id: "dual_use"
+    attributes:
+      label: "8.9 Dual-use screening"
+      description: "Required for every content proposal without exception."
+      options:
+        - label: >-
+            The content I am proposing contains no synthesis or acquisition
+            route for a dangerous agent, no method to enhance transmissibility
+            or virulence, no method to evade detection or countermeasures, and
+            nothing that reads as a protocol rather than a description.
+          required: true
+        - label: >-
+            If it did, I would have emailed yunus.imanov@metropolia.fi privately
+            rather than opening a public issue. See SECURITY.md section 2.
+          required: true
+
+  - type: "textarea"
+    id: "anything_else"
+    attributes:
+      label: "8.10 Anything else?"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 9: CONFIRMATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 9. Confirmation
+
+  - type: "checkboxes"
+    id: "confirm"
+    attributes:
+      label: "9.1 Before you submit"
+      options:
+        - label: "I have searched existing records and this is not already covered."
+          required: true
+        - label: >-
+            I have read STYLE_GUIDE.md and understand that a record needs both
+            registers, four applications, four challenges and three milestones.
+          required: true
+        - label: >-
+            I understand that most proposed subtypes turn out to be
+            cross-references, and that this is a good outcome rather than a
+            rejection.
+          required: true
+        - label: >-
+            I understand that scope changes stay open for at least fourteen days
+            and receive written reasons either way.
+          required: true
+        - label: "I agree that my contribution is licensed under the EUPL-1.2."
+          required: true
+        - label: "I have read and agree to follow the Code of Conduct."
+          required: true

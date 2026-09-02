@@ -1,0 +1,920 @@
+# =============================================================================
+#  .github/ISSUE_TEMPLATE/07-documentation.yml
+# -----------------------------------------------------------------------------
+#  Problems with the documentation, the website, accessibility or translation.
+#
+#  SCOPE
+#  This covers HOW the material is presented: the root documents, the generated
+#  reference pages, the site itself, docstrings, examples, accessibility and
+#  language.
+#
+#  It does NOT cover a plain-language explanation being unclear, which is
+#  template 02, nor a fact being wrong, which is template 01. The distinction
+#  matters because those two are editorial decisions about content and this one
+#  is usually a presentation or tooling fix.
+#
+#  ACCESSIBILITY IS IN HERE DELIBERATELY
+#  A reference work whose audience explicitly includes patients, students and
+#  public administration cannot treat accessibility as a separate concern to be
+#  handled later. Section 5 exists so that a reader using assistive technology
+#  can report a barrier without having to argue that it counts as a bug.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "Documentation, accessibility or translation"
+description: "A document, page, example or docstring is wrong, missing, inaccessible or untranslatable"
+title: "docs: "
+labels: ["documentation", "needs-triage"]
+
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        **Is this the right form?**
+
+        | If the problem is | Use |
+        |---|---|
+        | A **fact** is wrong | [Data correction](https://github.com/olaflaitinen/biotechnology/issues/new?template=01-data-correction.yml) |
+        | A **plain-language explanation** is unclear | [Plain-language feedback](https://github.com/olaflaitinen/biotechnology/issues/new?template=02-plain-language.yml) |
+        | The **software** misbehaves | [Bug report](https://github.com/olaflaitinen/biotechnology/issues/new?template=03-bug-report.yml) |
+
+        Everything else about how the material is presented belongs here.
+        Accessibility reports are welcome and are prioritised.
+
+  # ###########################################################################
+  #  SECTION 1: WHERE
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 1. Where
+
+  - type: "dropdown"
+    id: "surface"
+    attributes:
+      label: "1.1 Where did you encounter it?"
+      options:
+        - "The documentation website"
+        - "A root document such as README.md"
+        - "A generated reference page for a subtype"
+        - "A generated reference page for a formula"
+        - "A registry page: glossary, organisms, techniques, bibliography, SDGs"
+        - "A controlled-vocabulary reference page"
+        - "A guide page"
+        - "A docstring, seen in an IDE or with help()"
+        - "Command line help output"
+        - "An error message"
+        - "The PDF download"
+        - "The ePub download"
+        - "The repository file listing on GitHub"
+        - "An issue or pull request template"
+        - "A code comment"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "location"
+    attributes:
+      label: "1.2 Which page, file or command?"
+      placeholder: "STYLE_GUIDE.md section 2, or: branches/red/gene_therapy, or: biotechnology show --help"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "anchor"
+    attributes:
+      label: "1.3 Which section or heading?"
+      placeholder: "Rule 9, or: the metrics table"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "url"
+    attributes:
+      label: "1.4 The URL, if you were on the website"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "generated"
+    attributes:
+      label: "1.5 Is the affected page generated?"
+      description: >-
+        Everything under docs/ except the guide pages is produced by
+        tools/generate_docs.py from src/. A generated page cannot be fixed by
+        editing it; the fix is in the source facet or in the generator.
+      options:
+        - "I do not know"
+        - "No, it is a hand-written root document"
+        - "Yes, it is a generated reference page"
+        - "It is a generated page but the wrong text comes from a record"
+        - "It is a docstring in the source"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "version"
+    attributes:
+      label: "1.6 Which version, if you know?"
+      placeholder: "0.1.0, or: the site as of today"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 2: WHAT IS WRONG
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 2. What is wrong
+
+  - type: "dropdown"
+    id: "problem"
+    attributes:
+      label: "2.1 What kind of problem?"
+      options:
+        - "Content, it describes behaviour that does not match the code"
+        - "Content, it is out of date"
+        - "Content, something important is missing"
+        - "Content, it contradicts another document"
+        - "Content, it contradicts itself"
+        - "Content, an example does not work"
+        - "Content, an example works but is bad practice"
+        - "Content, an example uses an outdated API"
+        - "Content, a claim has no source"
+        - "Structure, I could not find what I needed"
+        - "Structure, the same thing is documented in three places"
+        - "Structure, the reading order does not work"
+        - "Structure, a document is far longer than it needs to be"
+        - "Structure, a document assumes I read another one first"
+        - "Navigation, a page is not linked from anywhere"
+        - "Navigation, the sidebar or table of contents is wrong"
+        - "Search, the site search does not find an obvious term"
+        - "Link, an internal link is broken"
+        - "Link, an external link is dead or moved"
+        - "Link, a citation resolves to the wrong source"
+        - "Link, a link goes somewhere unexpected"
+        - "Rendering, a table is broken"
+        - "Rendering, a diagram is broken"
+        - "Rendering, a code block is broken"
+        - "Rendering, a symbol or unit displays incorrectly"
+        - "Rendering, mathematics does not render"
+        - "Rendering, it is broken on mobile"
+        - "Rendering, it is broken when printed"
+        - "Rendering, a colour is unreadable in one theme"
+        - "Accessibility, described in section 5"
+        - "Language, described in section 6"
+        - "Typo or grammatical error"
+        - "A house-style breach, such as a non-ASCII dash"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "quote"
+    attributes:
+      label: "2.2 The exact text or the exact behaviour"
+      render: "text"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "expected"
+    attributes:
+      label: "2.3 What should it say or do instead?"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "severity"
+    attributes:
+      label: "2.4 How much does it matter?"
+      options:
+        - "Trivial, a typo"
+        - "Minor, slightly confusing"
+        - "Moderate, it wasted my time"
+        - "Serious, it led me to do the wrong thing"
+        - "Serious, it made the documentation unusable for me"
+        - "Blocking, I could not access the content at all"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "audience_affected"
+    attributes:
+      label: "2.5 Who is most affected?"
+      options:
+        - "Anyone reading it"
+        - "New users specifically"
+        - "Experienced users specifically"
+        - "Contributors specifically"
+        - "Non-specialist readers specifically"
+        - "Specialist readers specifically"
+        - "People using assistive technology"
+        - "People reading in a second language"
+        - "People reading offline or in print"
+        - "People on a small screen"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "reproducible"
+    attributes:
+      label: "2.6 Does it happen consistently?"
+      options:
+        - "Yes, every time"
+        - "Only in one browser"
+        - "Only on one device"
+        - "Only in one theme"
+        - "Only when printed or exported"
+        - "Only after a search"
+        - "Intermittently"
+        - "Once so far"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "found_via"
+    attributes:
+      label: "2.7 How did you arrive at the page?"
+      options:
+        - "Site navigation"
+        - "Site search"
+        - "An external search engine"
+        - "A link from another page"
+        - "A link from the README"
+        - "A link from an error message"
+        - "A direct URL"
+        - "Browsing the repository"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 3: WHAT YOU WERE TRYING TO DO
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 3. What you were trying to do
+
+  - type: "dropdown"
+    id: "task"
+    attributes:
+      label: "3.1 What were you trying to achieve?"
+      options:
+        - "Understand what the library is"
+        - "Install it"
+        - "Do something specific with it"
+        - "Understand a field of the data model"
+        - "Understand a formula"
+        - "Find a specific record"
+        - "Cite the project"
+        - "Understand the licence"
+        - "Contribute a correction"
+        - "Contribute code"
+        - "Evaluate whether to adopt it"
+        - "Teach from it"
+        - "Write about it"
+        - "Check a security or compliance question"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "outcome"
+    attributes:
+      label: "3.2 Did you get there in the end?"
+      options:
+        - "Yes, but it took longer than it should have"
+        - "Yes, by reading the source code"
+        - "Yes, by trial and error"
+        - "Yes, by asking someone"
+        - "No, I gave up"
+        - "No, I am still stuck"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "where_looked"
+    attributes:
+      label: "3.3 Where did you look first?"
+      description: >-
+        If the answer existed but in the wrong place, this is the field that
+        tells us where it should have been.
+      options:
+        - "README.md"
+        - "The documentation site home page"
+        - "The site search"
+        - "The API reference"
+        - "DATA_MODEL.md"
+        - "NOTATION.md"
+        - "FAQ.md"
+        - "CONTRIBUTING.md"
+        - "The docstrings"
+        - "The command line help"
+        - "The source code"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 4: ENVIRONMENT, FOR A RENDERING PROBLEM
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 4. Environment, for a rendering problem
+
+  - type: "dropdown"
+    id: "browser"
+    attributes:
+      label: "4.1 Browser or reader"
+      options:
+        - "Not applicable"
+        - "Firefox"
+        - "Chrome or Chromium"
+        - "Safari"
+        - "Edge"
+        - "A mobile browser"
+        - "A text browser such as Lynx or w3m"
+        - "A PDF reader"
+        - "An ePub reader"
+        - "A terminal"
+        - "An IDE"
+        - "A feed or scraping tool"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "device"
+    attributes:
+      label: "4.2 Device"
+      options:
+        - "Not applicable"
+        - "Desktop or laptop"
+        - "Tablet"
+        - "Phone"
+        - "E-reader"
+        - "Printed output"
+        - "A projector or large display"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "screen_width"
+    attributes:
+      label: "4.3 Roughly how wide was the viewport?"
+      options:
+        - "Not applicable"
+        - "Very narrow, a phone in portrait"
+        - "Narrow, a phone in landscape or a small tablet"
+        - "Medium, a tablet or a split window"
+        - "Wide, a normal laptop or desktop"
+        - "Very wide"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "theme"
+    attributes:
+      label: "4.4 Colour scheme"
+      description: >-
+        The site has a light and a dark palette and the branch colours are used
+        in both. A contrast failure in one and not the other is a real and
+        common bug.
+      options:
+        - "Not applicable"
+        - "Light"
+        - "Dark"
+        - "Follows the system setting"
+        - "High contrast or forced colours"
+        - "A custom stylesheet"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "zoom"
+    attributes:
+      label: "4.5 Were you using zoom or enlarged text?"
+      options:
+        - "No"
+        - "Browser zoom up to 200 per cent"
+        - "Browser zoom above 200 per cent"
+        - "Enlarged system font"
+        - "Screen magnification software"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "javascript"
+    attributes:
+      label: "4.6 Was JavaScript enabled?"
+      description: >-
+        The site loads no third-party scripts, but its search and its
+        mathematics rendering are local scripts, and a reader with scripting
+        disabled should still get usable content.
+      options:
+        - "Yes"
+        - "No"
+        - "Partially, blocked by an extension"
+        - "I do not know"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 5: ACCESSIBILITY
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 5. Accessibility
+
+        Skip unless it applies. If it does, it takes priority over most other
+        documentation work.
+
+  - type: "dropdown"
+    id: "assistive_tech"
+    attributes:
+      label: "5.1 Were you using assistive technology?"
+      options:
+        - "No"
+        - "Screen reader, NVDA"
+        - "Screen reader, JAWS"
+        - "Screen reader, VoiceOver"
+        - "Screen reader, TalkBack"
+        - "Screen reader, Orca or another"
+        - "Screen magnification"
+        - "Text-to-speech"
+        - "Braille display"
+        - "Voice control"
+        - "Keyboard only, no pointing device"
+        - "Switch access"
+        - "Eye tracking"
+        - "Reader mode or a simplified view"
+        - "A custom stylesheet"
+        - "Prefer not to say"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "barrier"
+    attributes:
+      label: "5.2 What was the barrier?"
+      options:
+        - "Not applicable"
+        - "Content was unreachable by keyboard"
+        - "A keyboard trap, I could not get out"
+        - "A table was unreadable by a screen reader"
+        - "A table had no header association"
+        - "A diagram had no text alternative"
+        - "An image had no text alternative"
+        - "A colour was used as the only way to convey meaning"
+        - "Contrast was too low to read"
+        - "Text did not reflow when magnified"
+        - "Content was cut off at high zoom"
+        - "Focus order was illogical"
+        - "Focus was not visible"
+        - "A heading level was skipped or misused"
+        - "Link text was uninformative, such as: click here"
+        - "The page had no landmarks or skip link"
+        - "The language of the page was not declared"
+        - "Mathematics was not announced correctly"
+        - "A symbol or unit was announced wrongly"
+        - "An abbreviation was not expanded anywhere"
+        - "Motion or animation could not be stopped"
+        - "A time limit could not be extended"
+        - "Something else"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "wcag"
+    attributes:
+      label: "5.3 If you know it, which WCAG criterion?"
+      description: >-
+        Entirely optional. Most reporters will not know and should not need to.
+      options:
+        - "I do not know"
+        - "1.1.1 Non-text content"
+        - "1.3.1 Info and relationships"
+        - "1.3.2 Meaningful sequence"
+        - "1.4.1 Use of colour"
+        - "1.4.3 Contrast, minimum"
+        - "1.4.4 Resize text"
+        - "1.4.10 Reflow"
+        - "1.4.11 Non-text contrast"
+        - "2.1.1 Keyboard"
+        - "2.1.2 No keyboard trap"
+        - "2.4.1 Bypass blocks"
+        - "2.4.3 Focus order"
+        - "2.4.4 Link purpose"
+        - "2.4.6 Headings and labels"
+        - "2.4.7 Focus visible"
+        - "3.1.1 Language of page"
+        - "3.1.2 Language of parts"
+        - "4.1.2 Name, role, value"
+        - "Another criterion"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "severity_a11y"
+    attributes:
+      label: "5.4 How severe was the barrier?"
+      options:
+        - "Not applicable"
+        - "Annoying but I got through"
+        - "It made the page much slower to use"
+        - "It made part of the page unusable"
+        - "It made the whole page unusable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "a11y_scope"
+    attributes:
+      label: "5.5 Does it affect one page or many?"
+      options:
+        - "Not applicable"
+        - "One page"
+        - "One type of page, such as every subtype page"
+        - "The whole site"
+        - "The generated PDF or ePub"
+        - "I do not know"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 6: LANGUAGE AND TRANSLATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 6. Language and translation
+
+        The library is currently English only. Translating the plain-language
+        register is on the roadmap and is the part that would benefit most,
+        because the analogies are culturally specific: a fire drill and a
+        sniffer dog do not travel equally well.
+
+  - type: "dropdown"
+    id: "language_issue"
+    attributes:
+      label: "6.1 Is this a language issue?"
+      options:
+        - "No"
+        - "The English itself was hard to follow"
+        - "The sentences were too long to parse"
+        - "An idiom or analogy did not translate to my culture"
+        - "A term has a different standard translation in my language"
+        - "A term has a false friend in my language"
+        - "Machine translation produced something misleading"
+        - "A unit or number format was unfamiliar"
+        - "A date format was ambiguous"
+        - "I would like to help translate this material"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "language"
+    attributes:
+      label: "6.2 Which language?"
+      placeholder: "Finnish, Turkish, Spanish"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "translate_help"
+    attributes:
+      label: "6.3 If you offered to translate, how much?"
+      options:
+        - "Not offering"
+        - "One record, to see how it goes"
+        - "One branch"
+        - "The plain-language register across the whole taxonomy"
+        - "The glossary"
+        - "The root documents"
+        - "The command line strings"
+        - "I would review someone else's translation"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "translate_experience"
+    attributes:
+      label: "6.4 Have you translated technical material before?"
+      options:
+        - "Not applicable"
+        - "No"
+        - "Yes, informally"
+        - "Yes, professionally"
+        - "Yes, in this subject area"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 7: HELP
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 7. Help
+
+  - type: "dropdown"
+    id: "willing"
+    attributes:
+      label: "7.1 Would you like to fix it?"
+      options:
+        - "No"
+        - "Yes, I will open a pull request"
+        - "Yes, if someone tells me which file to edit"
+        - "I can supply the wording, someone else can commit it"
+        - "I can test a fix"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "retest"
+    attributes:
+      label: "7.2 Would you re-test with your setup once it is fixed?"
+      description: >-
+        Especially valuable for an accessibility report, because the maintainer
+        cannot reproduce every combination of assistive technology.
+      options:
+        - "Yes"
+        - "Yes, but slowly"
+        - "No"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "credit"
+    attributes:
+      label: "7.3 How would you like to be credited?"
+      options:
+        - "By my GitHub handle"
+        - "By my full name, given below"
+        - "Anonymously"
+        - "Not at all"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "anything_else"
+    attributes:
+      label: "7.4 Anything else?"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 8: THE PAGE IN DETAIL
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 8. The page in detail
+
+        Optional. These separate a content problem from a navigation problem
+        from a rendering problem, which are fixed in three different places.
+
+  - type: "dropdown"
+    id: "page_loaded"
+    attributes:
+      label: "8.1 Did the page load correctly?"
+      options:
+        - "Yes"
+        - "Slowly"
+        - "Partially"
+        - "It returned an error"
+        - "It was blank"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "findable"
+    attributes:
+      label: "8.2 Was the page findable from the home page?"
+      options:
+        - "Yes, easily"
+        - "Yes, with effort"
+        - "Only through search"
+        - "Only through an external search engine"
+        - "Only by guessing the URL"
+        - "I do not think it is linked from anywhere"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "clicks"
+    attributes:
+      label: "8.3 Roughly how many clicks did it take?"
+      options:
+        - "One"
+        - "Two or three"
+        - "Four to six"
+        - "More than six"
+        - "I gave up navigating and searched instead"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "title_accurate"
+    attributes:
+      label: "8.4 Did the page title match its content?"
+      options:
+        - "Yes"
+        - "Roughly"
+        - "No, it promised something else"
+        - "The title was too vague to tell"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "headings"
+    attributes:
+      label: "8.5 Was the heading structure logical?"
+      options:
+        - "Yes"
+        - "Mostly"
+        - "No, a level was skipped"
+        - "No, headings were used for emphasis rather than structure"
+        - "There were too few headings to navigate by"
+        - "There were so many I lost the thread"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "example_present"
+    attributes:
+      label: "8.6 Was there a code example?"
+      options:
+        - "Yes"
+        - "No, and there should have been"
+        - "No, and none was needed"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "example_worked"
+    attributes:
+      label: "8.7 Did the example work when you ran it?"
+      options:
+        - "Not applicable"
+        - "Yes"
+        - "No, it raised an error"
+        - "No, it produced different output"
+        - "It used an API that no longer exists"
+        - "I did not run it"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "copy_paste"
+    attributes:
+      label: "8.8 Could you copy and paste it cleanly?"
+      options:
+        - "Not applicable"
+        - "Yes"
+        - "No, it picked up a prompt character or line numbers"
+        - "No, the copy button did not work"
+        - "No, it wrapped badly"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "diagram_present"
+    attributes:
+      label: "8.9 Was there a diagram?"
+      options:
+        - "Yes"
+        - "No, and one would have helped"
+        - "No, and none was needed"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "diagram_helped"
+    attributes:
+      label: "8.10 Did the diagram help?"
+      options:
+        - "Not applicable"
+        - "Yes"
+        - "No, it was decorative"
+        - "No, it was too dense"
+        - "No, it did not render"
+        - "No, it had no text alternative"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "terminology_consistent"
+    attributes:
+      label: "8.11 Was the terminology consistent with the rest of the project?"
+      options:
+        - "Yes"
+        - "No, it used a different word for the same thing"
+        - "No, it used the same word for two different things"
+        - "I could not tell"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "source_link"
+    attributes:
+      label: "8.12 Was there a link back to the underlying record or source file?"
+      options:
+        - "Yes, and it helped"
+        - "Yes, but it went to the wrong place"
+        - "No, and I wanted one"
+        - "No, and I did not need one"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "api_reference"
+    attributes:
+      label: "8.13 Did you need the API reference, and did it help?"
+      options:
+        - "I did not need it"
+        - "Yes, and it answered the question"
+        - "Yes, but the entry was missing"
+        - "Yes, but the entry had no example"
+        - "Yes, but I could not find the right entry"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "offline"
+    attributes:
+      label: "8.14 Were you reading offline or from a download?"
+      description: >-
+        PDF and ePub are published deliberately, because part of the intended
+        audience reads offline. Problems specific to those formats are easy to
+        miss.
+      options:
+        - "No, online"
+        - "Yes, the PDF"
+        - "Yes, the ePub"
+        - "Yes, a printout"
+        - "Yes, a locally built copy"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "one_change_docs"
+    attributes:
+      label: "8.15 What one change would help most?"
+      options:
+        - "Fix the specific error"
+        - "Add an example"
+        - "Add a diagram"
+        - "Add a link from somewhere obvious"
+        - "Split the page in two"
+        - "Merge it with another page"
+        - "Move the content somewhere more findable"
+        - "Shorten it"
+        - "Add a summary at the top"
+        - "Improve the search"
+        - "Fix the rendering"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "suggested_title"
+    attributes:
+      label: "8.16 If a page is missing, what would you call it?"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 9: CONFIRMATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 9. Confirmation
+
+  - type: "checkboxes"
+    id: "confirm"
+    attributes:
+      label: "9.1 Before you submit"
+      options:
+        - label: "I have searched existing issues and this is not a duplicate."
+          required: true
+        - label: >-
+            This is about how the material is presented, not about a fact being
+            wrong or a plain-language paragraph being unclear.
+          required: true
+        - label: "I agree that my contribution is licensed under the EUPL-1.2."
+          required: true
+        - label: "I have read and agree to follow the Code of Conduct."
+          required: true

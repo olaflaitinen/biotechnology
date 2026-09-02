@@ -1,0 +1,867 @@
+# =============================================================================
+#  .github/ISSUE_TEMPLATE/04-feature-request.yml
+# -----------------------------------------------------------------------------
+#  Proposals for new capability or a change of scope.
+#
+#  DESIGN NOTE
+#  This form deliberately front-loads the constraints. ROADMAP.md lists several
+#  things that have been considered and ruled out, and a proposer should
+#  discover that before writing a long argument, not after.
+#
+#  Scope changes stay open at least fourteen days and receive written reasons
+#  either way. See GOVERNANCE.md section 2.
+#
+#  For NEW CONTENT, meaning a subtype, formula, organism, technique, glossary
+#  term or reference, use template 05 instead. The questions are different.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "Feature request"
+description: "Propose new capability in the library, the CLI, the tooling or the site"
+title: "feat: "
+labels: ["enhancement", "needs-triage"]
+
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        Before writing, please check
+        [ROADMAP.md](https://github.com/olaflaitinen/biotechnology/blob/main/ROADMAP.md).
+
+        The following have been **considered and ruled out**. Reopening one
+        needs a new argument, not a repeat of the old one:
+
+        - a third taxonomy level
+        - company, product or market data
+        - predictions and technology forecasting
+        - advocacy for or against any contested technology
+        - runtime dependencies
+        - generated source of truth
+        - any relaxation of the dual-use content policy
+
+        Everything else is open. Proposing new **content** rather than new
+        capability? Use
+        [template 05](https://github.com/olaflaitinen/biotechnology/issues/new?template=05-new-content.yml)
+        instead.
+
+  # ###########################################################################
+  #  SECTION 1: THE PROBLEM
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 1. The problem
+
+  - type: "textarea"
+    id: "problem"
+    attributes:
+      label: "1.1 What problem does this solve?"
+      description: >-
+        Describe the situation you are in, not the solution you have in mind.
+        "I am building a curriculum and cannot find which subtypes are taught
+        at pilot scale" is a problem. "Add a teaching_level field" is a
+        solution, and there may be a better one.
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "who"
+    attributes:
+      label: "1.2 Who has this problem?"
+      options:
+        - "Me, for one specific piece of work"
+        - "Me, repeatedly"
+        - "My team or department"
+        - "Researchers using the library"
+        - "Educators"
+        - "Students"
+        - "Policy or regulatory users"
+        - "Clinical or veterinary users"
+        - "Journalists and communicators"
+        - "Librarians and information professionals"
+        - "Downstream developers building on the library"
+        - "Anyone reading the documentation site"
+        - "Anyone using assistive technology"
+        - "I am speaking on behalf of a community"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "frequency"
+    attributes:
+      label: "1.3 How often does the problem arise?"
+      options:
+        - "Once, for a specific project"
+        - "Occasionally"
+        - "Weekly"
+        - "Every time I use the library"
+        - "Every time anyone uses this part of the library"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "severity"
+    attributes:
+      label: "1.4 How much does it cost you today?"
+      options:
+        - "Nothing, it is a convenience"
+        - "A few minutes each time"
+        - "An hour or more each time"
+        - "It forces me to maintain my own parallel copy of the data"
+        - "It stops me using the library for this purpose at all"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "workaround_exists"
+    attributes:
+      label: "1.5 Is there a workaround today?"
+      options:
+        - "No, it is impossible with the current API"
+        - "Yes, but it requires reaching into private internals"
+        - "Yes, but it requires a lot of code"
+        - "Yes, by exporting and processing outside the library"
+        - "Yes, by reading the source directly"
+        - "Yes, and it is fine, this is a convenience request"
+        - "I do not know"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "workaround_detail"
+    attributes:
+      label: "1.6 What is the workaround, if there is one?"
+      render: "python"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "prior_art"
+    attributes:
+      label: "1.7 Does another library solve this well?"
+      description: >-
+        Naming one is helpful and does not undermine the request. It may also
+        show that the right answer is to use that library alongside this one.
+      options:
+        - "I do not know of one"
+        - "Yes, and I have named it below"
+        - "Yes, but it is unmaintained"
+        - "Yes, but it has heavy dependencies"
+        - "Yes, but it does not cover this domain"
+        - "No, I have looked"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "prior_art_name"
+    attributes:
+      label: "1.8 Which library, if any?"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 2: THE PROPOSAL
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 2. The proposal
+
+  - type: "dropdown"
+    id: "kind"
+    attributes:
+      label: "2.1 What kind of change is this?"
+      description: >-
+        This decides the process. A convenience function can go straight to a
+        pull request; a structural or scope change stays open for at least
+        fourteen days.
+      options:
+        - "Capability, a new query, filter or traversal"
+        - "Capability, a new export format"
+        - "Capability, a new command line subcommand"
+        - "Capability, a new flag on an existing subcommand"
+        - "Capability, a new rendering or visualisation"
+        - "Capability, something in the formulas engine"
+        - "Capability, a new validation check"
+        - "Ergonomics, an easier way to do something already possible"
+        - "Ergonomics, a better error message"
+        - "Performance"
+        - "Memory use"
+        - "Typing, better type information for callers"
+        - "Structure, a new field on an existing record type"
+        - "Structure, a new facet file in the subtype contract"
+        - "Structure, a new controlled vocabulary"
+        - "Structure, a new member of an existing vocabulary"
+        - "Structure, a new record type entirely"
+        - "Tooling, something under tools/"
+        - "Continuous integration or release process"
+        - "Security hardening"
+        - "Documentation site capability"
+        - "Accessibility"
+        - "Internationalisation or translation infrastructure"
+        - "Scope, something outside the current boundaries"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "proposal"
+    attributes:
+      label: "2.2 What are you proposing?"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "usage"
+    attributes:
+      label: "2.3 What would using it look like?"
+      description: >-
+        Optional but very persuasive. Sketch the call, the command, or the
+        record. It does not have to be valid code.
+      render: "python"
+      placeholder: |
+        bt.by_teaching_level("undergraduate")
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "output"
+    attributes:
+      label: "2.4 What would it return or print?"
+      render: "text"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "alternatives"
+    attributes:
+      label: "2.5 What else did you consider?"
+      description: >-
+        Including doing nothing, and solving it outside the library. Many good
+        proposals turn out to belong in a separate package, and saying so
+        yourself makes the discussion much shorter.
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "scope_size"
+    attributes:
+      label: "2.6 How large do you think the change is?"
+      options:
+        - "A few lines"
+        - "One new function"
+        - "One new module"
+        - "A new subpackage"
+        - "A change to the data model, so every record migrates"
+        - "I have no idea"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "api_surface"
+    attributes:
+      label: "2.7 Would this add to the public API?"
+      options:
+        - "No, internal only"
+        - "Yes, one new function"
+        - "Yes, several new functions"
+        - "Yes, a new class"
+        - "Yes, a new module"
+        - "Yes, a new CLI subcommand"
+        - "I do not know"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 3: CONSTRAINTS
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 3. Constraints
+
+        These are the questions a maintainer will ask anyway. Answering them
+        here saves a round trip.
+
+  - type: "dropdown"
+    id: "dependency"
+    attributes:
+      label: "3.1 Does this require a runtime dependency?"
+      description: >-
+        Zero runtime dependencies is a hard constraint, not a preference. See
+        GOVERNANCE.md section 3.3 and THREAT_MODEL.md section 2. A proposal that
+        needs one is not automatically rejected, but it will be built as an
+        optional extra or as a separate package.
+      options:
+        - "No, standard library only"
+        - "No, but it would need a new optional extra"
+        - "Yes, it needs a third-party package at runtime"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "dependency_name"
+    attributes:
+      label: "3.2 Which dependency, if any?"
+      placeholder: "numpy, networkx, pydantic"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "dependency_avoidable"
+    attributes:
+      label: "3.3 Could it be built without that dependency?"
+      options:
+        - "Not applicable"
+        - "Yes, with more work"
+        - "Yes, but more slowly"
+        - "Yes, but less accurately"
+        - "No, it would mean reimplementing the library"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "breaking"
+    attributes:
+      label: "3.4 Is this a breaking change?"
+      description: >-
+        Subtype keys, branch keys, formula keys, glossary keys and citation keys
+        are public API. External work cites these strings.
+      options:
+        - "No, purely additive"
+        - "No, but it changes output formatting"
+        - "Yes, it changes an existing function signature"
+        - "Yes, it changes the to_dict() contract"
+        - "Yes, it changes a CLI exit code"
+        - "Yes, it renames or removes a public identifier"
+        - "Yes, it changes a facet file contract, so all 85 records migrate"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "migration"
+    attributes:
+      label: "3.5 If it touches records, how many need editing?"
+      options:
+        - "None"
+        - "One or a few"
+        - "One whole branch"
+        - "All eighty-five subtypes"
+        - "All records of every type"
+        - "Not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "python_support"
+    attributes:
+      label: "3.6 Does it work on every supported Python version?"
+      description: "The floor is 3.9, for the reason given in tox.ini."
+      options:
+        - "Yes, 3.9 and upward"
+        - "No, it needs 3.10 or later"
+        - "No, it needs 3.11 or later"
+        - "No, it needs 3.12 or later"
+        - "Not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "platform"
+    attributes:
+      label: "3.7 Does it work on every supported platform?"
+      options:
+        - "Yes, Linux, macOS and Windows"
+        - "No, it is POSIX only"
+        - "No, it needs a specific terminal capability"
+        - "No, it needs network access"
+        - "No, it needs filesystem write access"
+        - "Not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "offline"
+    attributes:
+      label: "3.8 Would it still work offline?"
+      description: >-
+        The library is intended to be importable on air-gapped analysis hosts
+        and in teaching environments with no network.
+      options:
+        - "Yes"
+        - "No, it needs a network call"
+        - "Yes, with a cached fallback"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "determinism"
+    attributes:
+      label: "3.9 Would the output be deterministic?"
+      description: >-
+        Records and exports are diffed and cited. Output that changes between
+        runs breaks both.
+      options:
+        - "Yes, fully deterministic"
+        - "No, it depends on time"
+        - "No, it depends on locale"
+        - "No, it depends on dict or set ordering"
+        - "No, it involves randomness"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "checkboxes"
+    id: "principles"
+    attributes:
+      label: "3.10 Which project principles does this touch?"
+      description: >-
+        Not a trap. A proposal that touches a principle can still be accepted,
+        but it needs to say so.
+      options:
+        - label: "Zero runtime dependencies, GOVERNANCE.md 3.3"
+        - label: "The plain-language mandate, GOVERNANCE.md 3.2"
+        - label: "Identifier stability, GOVERNANCE.md 3.6"
+        - label: "Sources beat opinions, GOVERNANCE.md 3.1"
+        - label: "Stated bias rather than hidden bias, GOVERNANCE.md 3.5"
+        - label: "The dual-use content policy, SECURITY.md 2"
+        - label: "The two-level taxonomy grammar"
+        - label: "The six-facet subtype contract"
+        - label: "No third-party origin on the documentation site"
+        - label: "Reference work, not validated software"
+        - label: "None of these"
+
+  # ###########################################################################
+  #  SECTION 4: CONSEQUENCES
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 4. Consequences
+
+  - type: "dropdown"
+    id: "maintenance"
+    attributes:
+      label: "4.1 What ongoing maintenance would it create?"
+      options:
+        - "None, it is self-contained"
+        - "A little, occasional review"
+        - "It would need updating whenever the data model changes"
+        - "It would need updating whenever an external standard changes"
+        - "It would need periodic data refreshes"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "docs_needed"
+    attributes:
+      label: "4.2 What documentation would it need?"
+      options:
+        - "A docstring only"
+        - "A docstring and a guide page"
+        - "A new section in DATA_MODEL.md"
+        - "A new section in NOTATION.md"
+        - "A change to ARCHITECTURE.md"
+        - "A change to STYLE_GUIDE.md"
+        - "A new root document"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "tests_needed"
+    attributes:
+      label: "4.3 What testing would it need?"
+      options:
+        - "Unit tests only"
+        - "Unit tests and doctests"
+        - "A new integrity check"
+        - "Cross-platform tests"
+        - "Performance tests"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "security_impact"
+    attributes:
+      label: "4.4 Does it change the attack surface?"
+      description: >-
+        See SECURITY.md section 1.2 for the properties this project currently
+        guarantees and checks mechanically.
+      options:
+        - "No"
+        - "Yes, it would need network access"
+        - "Yes, it would need to write files"
+        - "Yes, it would parse external input"
+        - "Yes, it would execute or deserialise something"
+        - "Yes, it would add a third-party origin to the site"
+        - "I do not know"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "accessibility_impact"
+    attributes:
+      label: "4.5 Does it affect accessibility?"
+      options:
+        - "No"
+        - "Yes, it improves it"
+        - "Yes, it adds output that would need alternative text"
+        - "Yes, it adds colour-dependent output"
+        - "Yes, it adds interactive behaviour"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "plain_language_impact"
+    attributes:
+      label: "4.6 Does it affect the plain-language register?"
+      options:
+        - "No"
+        - "Yes, it would surface plain-language text somewhere new"
+        - "Yes, it would need new plain-language content written"
+        - "Yes, it risks making technical text more prominent"
+        - "I do not know"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 5: HELP
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 5. Help
+
+  - type: "dropdown"
+    id: "help"
+    attributes:
+      label: "5.1 Would you be willing to work on it?"
+      description: >-
+        No obligation whatsoever, and saying no does not weaken the proposal. It
+        only affects how it gets scheduled.
+      options:
+        - "Yes, I would like to implement it"
+        - "Yes, I could implement it with some design guidance"
+        - "Yes, I could contribute the content but not the code"
+        - "Yes, I could write the tests"
+        - "Yes, I could review or test it"
+        - "Yes, I could write documentation for it"
+        - "No, I am proposing it for someone else to pick up"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "experience"
+    attributes:
+      label: "5.2 How much Python experience do you have?"
+      description: >-
+        Only asked so that guidance can be pitched correctly. Every level is
+        welcome.
+      options:
+        - "Prefer not to say"
+        - "None"
+        - "Beginner"
+        - "Comfortable"
+        - "Experienced"
+        - "I maintain other packages"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "timeline"
+    attributes:
+      label: "5.3 Do you need this by a particular time?"
+      description: >-
+        An honest answer helps. This is an unfunded academic project with one
+        maintainer, and a deadline is information rather than pressure.
+      options:
+        - "No"
+        - "It would be useful within a few months"
+        - "I have a deadline this year"
+        - "I have a deadline within weeks"
+        - "I need it now and will fork if necessary, which is fine"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "fork_ok"
+    attributes:
+      label: "5.4 If this were declined, what would you do?"
+      description: >-
+        A genuine question, not a rhetorical one. The EUPL permits forks and a
+        fork is a legitimate outcome, not a failure.
+      options:
+        - "Nothing, I would live with it"
+        - "Use the workaround"
+        - "Build it outside the library"
+        - "Fork and maintain the change myself"
+        - "Use a different library"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "credit"
+    attributes:
+      label: "5.5 How would you like to be credited?"
+      options:
+        - "By my GitHub handle"
+        - "By my full name, given below"
+        - "Anonymously"
+        - "Not at all"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "anything_else"
+    attributes:
+      label: "5.6 Anything else?"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 6: DESIGN DETAIL
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 6. Design detail
+
+        Optional throughout. Answering even three of these turns a proposal into
+        something that can be reviewed rather than only discussed.
+
+  - type: "input"
+    id: "proposed_name"
+    attributes:
+      label: "6.1 What would you call it?"
+      description: >-
+        Public names are hard to change later. See GOVERNANCE.md section 3.6 on
+        identifier stability.
+      placeholder: "by_teaching_level"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "shape"
+    attributes:
+      label: "6.2 What shape should it take?"
+      options:
+        - "A module-level function"
+        - "A method on Branch or Subtype"
+        - "A property"
+        - "A new class"
+        - "A command line subcommand"
+        - "A flag on an existing subcommand"
+        - "A field on a record"
+        - "A tools/ script"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "location"
+    attributes:
+      label: "6.3 Where in the package should it live?"
+      options:
+        - "core.registry"
+        - "core.search"
+        - "core.export"
+        - "core.graph"
+        - "core.models"
+        - "core.units or core.text"
+        - "formulas"
+        - "cli"
+        - "tools"
+        - "A new subpackage"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "extra"
+    attributes:
+      label: "6.4 Should it be behind an optional extra?"
+      options:
+        - "No, it belongs in the core"
+        - "Yes, if it needs a dependency"
+        - "Yes, because most users would not want it"
+        - "It should be a separate package entirely"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "error_behaviour"
+    attributes:
+      label: "6.5 What should it do with bad input?"
+      options:
+        - "Raise a typed error inheriting from BiotechnologyError"
+        - "Raise, and suggest the closest valid value"
+        - "Return a default the caller supplies"
+        - "Return an empty result"
+        - "Return None"
+        - "Coerce the input, with a documented rule"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "laziness"
+    attributes:
+      label: "6.6 Should it compute eagerly or lazily?"
+      description: >-
+        The registry builds its indexes eagerly at import, deliberately, so that
+        a collision is found at load rather than at an unlucky moment. A new
+        feature should say which side of that line it sits on.
+      options:
+        - "Eagerly at import, like the registry"
+        - "Lazily on first use"
+        - "On every call, no caching"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "caching"
+    attributes:
+      label: "6.7 Would it need caching?"
+      options:
+        - "No"
+        - "Yes, a simple memo"
+        - "Yes, and cache invalidation would be a problem"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "volume"
+    attributes:
+      label: "6.8 How much data would it handle?"
+      options:
+        - "One record at a time"
+        - "One branch"
+        - "The whole taxonomy, which is small"
+        - "External data supplied by the caller"
+        - "Unbounded, supplied by the caller"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "stability"
+    attributes:
+      label: "6.9 Should it be a stable public API from day one?"
+      options:
+        - "Yes, I would build on it immediately"
+        - "No, mark it provisional for a release or two"
+        - "It should stay internal"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "plugin"
+    attributes:
+      label: "6.10 Would an extension point be enough instead?"
+      description: >-
+        Sometimes the right answer is not the feature but a hook that lets you
+        build it outside, which keeps the core small and lets you move faster.
+      options:
+        - "Yes, a hook would solve my problem"
+        - "Possibly, if the hook were in the right place"
+        - "No, the feature belongs in the library"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "separate_package"
+    attributes:
+      label: "6.11 Would a separate package be acceptable to you?"
+      options:
+        - "Yes, and I would use it"
+        - "Yes, and I would maintain it"
+        - "Only if it were officially linked from the README"
+        - "No, it needs to be in the core to be useful"
+        - "I have no view"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "prototype"
+    attributes:
+      label: "6.12 Link to a prototype, branch or gist, if you have one"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "adoption"
+    attributes:
+      label: "6.13 Would you use it immediately if it existed?"
+      options:
+        - "Yes, today"
+        - "Yes, within a few months"
+        - "Eventually"
+        - "I am proposing it for others rather than for myself"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "others_want"
+    attributes:
+      label: "6.14 How many other people do you think want this?"
+      options:
+        - "Probably just me"
+        - "A handful"
+        - "Anyone doing this kind of work"
+        - "Anyone using the library at all"
+        - "I do not know"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 7: CONFIRMATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 7. Confirmation
+
+  - type: "checkboxes"
+    id: "confirm"
+    attributes:
+      label: "7.1 Before you submit"
+      options:
+        - label: >-
+            I have read the out-of-scope list in ROADMAP.md and this is not one
+            of those things, or I have a new argument.
+          required: true
+        - label: "I have searched existing issues and this is not a duplicate."
+          required: true
+        - label: >-
+            I understand that scope changes stay open for at least fourteen days
+            and receive written reasons either way.
+          required: true
+        - label: >-
+            I understand that a declined proposal is not a judgement about its
+            merit, and that the EUPL permits me to fork and build it.
+          required: true
+        - label: "I agree that my contribution is licensed under the EUPL-1.2."
+          required: true
+        - label: "I have read and agree to follow the Code of Conduct."
+          required: true

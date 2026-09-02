@@ -1,0 +1,117 @@
+# =============================================================================
+#  .github/ISSUE_TEMPLATE/config.yml
+# -----------------------------------------------------------------------------
+#  Issue chooser configuration.
+#
+#  blank_issues_enabled is TRUE, deliberately.
+#
+#  The usual advice is to disable blank issues so that everything arrives in a
+#  structured form. That advice is wrong for this project. A retired virologist
+#  who notices that a date is out by a year, a nurse who found a paragraph
+#  patronising, or a lawyer who spots a superseded regulation should be able to
+#  say so in two sentences without being marched through a form with fifty
+#  fields. A structured template that turns those people away costs far more
+#  than the triage effort it saves.
+#
+#  The eight templates exist to help people who want the structure, not to gate
+#  the people who do not.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+blank_issues_enabled: true
+
+contact_links:
+  # ---------------------------------------------------------------------------
+  #  Security first, and phrased so that somebody in a hurry cannot miss it.
+  # ---------------------------------------------------------------------------
+  - name: "Security vulnerability, do not open an issue"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/SECURITY.md"
+    about: >-
+      Email yunus.imanov@metropolia.fi. Do not open a public issue. Read
+      SECURITY.md section 1 first. Acknowledgement within five working days.
+
+  - name: "Content that reads as operational instructions"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/SECURITY.md"
+    about: >-
+      If you believe anything in this repository crosses the dual-use line,
+      report it privately to yunus.imanov@metropolia.fi rather than opening a
+      public issue that quotes it. See SECURITY.md section 2.4.
+
+  - name: "Threat model"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/THREAT_MODEL.md"
+    about: >-
+      What this project believes its risks are, what it does about each of
+      them, and what it explicitly accepts. Read before reporting a
+      supply-chain concern.
+
+  - name: "Code of conduct concern"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/CODE_OF_CONDUCT.md"
+    about: >-
+      Reports go to yunus.imanov@metropolia.fi and are handled privately. If
+      the report concerns the maintainer, the document explains where else to
+      raise it.
+
+  # ---------------------------------------------------------------------------
+  #  Route people to the right document before they file.
+  # ---------------------------------------------------------------------------
+  - name: "How do I correct something?"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/CONTRIBUTING.md"
+    about: >-
+      Correcting a record is a one-file change and you do not need to be a
+      programmer. CONTRIBUTING.md section 3 explains it in five steps.
+
+  - name: "What are the writing rules?"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/STYLE_GUIDE.md"
+    about: >-
+      Fourteen normative editorial rules covering both registers, plus the
+      review checklist a maintainer will use on your pull request.
+
+  - name: "Why is it built this way?"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/ARCHITECTURE.md"
+    about: >-
+      The six-facet layout, the import graph, immutability, eager indexing, and
+      the things that were considered and rejected.
+
+  - name: "What does each field mean?"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/DATA_MODEL.md"
+    about: >-
+      Field-by-field specification of every record type, including the six
+      controlled vocabularies and what each of their members means.
+
+  - name: "Symbols, units and formulas"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/NOTATION.md"
+    about: >-
+      Why symbols are ASCII, how units are written, and the four-file contract
+      every formula module satisfies.
+
+  - name: "Is this planned already?"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/ROADMAP.md"
+    about: >-
+      What is planned, what is under consideration, and what has been
+      considered and explicitly ruled out.
+
+  - name: "Common questions"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/FAQ.md"
+    about: >-
+      Why ten colours, where each came from, why yellow is disputed, why the
+      dark branch exists, and why every record is written twice.
+
+  - name: "Who decides what?"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/GOVERNANCE.md"
+    about: >-
+      The four kinds of change and how each is decided, the principles that
+      constrain the maintainer, and how to become a domain editor.
+
+  - name: "How do I cite this?"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/CITATION.cff"
+    about: >-
+      Machine-readable citation metadata. GitHub renders a formatted citation
+      from it in the repository sidebar.
+
+  - name: "Licence and reuse questions"
+    url: "https://github.com/olaflaitinen/biotechnology/blob/main/NOTICE.md"
+    about: >-
+      What the EUPL-1.2 permits and requires, how to attribute the work, and
+      the scope disclaimers. Section 2 is a plain-language summary; the LICENCE
+      file governs.

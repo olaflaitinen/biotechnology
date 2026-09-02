@@ -1,0 +1,140 @@
+# =============================================================================
+#  .github/dependabot.yml
+# -----------------------------------------------------------------------------
+#  Automated dependency updates.
+#
+#  WHAT DEPENDABOT CAN AND CANNOT DO HERE
+#  This package has ZERO runtime dependencies. That is a hard constraint stated
+#  in pyproject.toml and in GOVERNANCE.md section 3.3, and a job in
+#  security-audit.yml asserts it still holds on every run. So there is nothing
+#  for Dependabot to update in the shipped artefact, and that is the point: the
+#  usual supply-chain risk class does not exist for this project.
+#
+#  What remains, and what this file covers:
+#
+#    1. GITHUB ACTIONS. Every workflow calls third-party actions. Those are
+#       executable code running with repository permissions, and they are by
+#       some distance the largest real attack surface in this repository.
+#       See THREAT_MODEL.md, threat T-01.
+#    2. DEVELOPMENT-TIME TOOLING. pytest, ruff, black, mypy, mkdocs and the
+#       rest, declared in the optional extras. They never reach a user, but a
+#       compromised linter runs on a maintainer machine and in CI.
+#       See THREAT_MODEL.md, threat T-03.
+#
+#  UPDATE PHILOSOPHY
+#  Grouped and infrequent. A stream of individual pull requests for patch bumps
+#  in a linter trains a maintainer to merge without reading, which defeats the
+#  purpose. Monthly and grouped, with security updates exempt from grouping so
+#  that they arrive alone and get read.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+version: 2
+
+updates:
+  # ===========================================================================
+  #  1. GitHub Actions, the real attack surface.
+  #
+  #  Checked weekly rather than monthly. An action compromise is the scenario
+  #  that would actually matter, and a week of exposure is materially different
+  #  from a month.
+  #
+  #  Note that every action reference in this repository is pinned to a full
+  #  commit SHA, enforced by tools/check_action_pinning.py. Dependabot
+  #  understands SHA pins and updates both the SHA and the trailing version
+  #  comment together.
+  # ===========================================================================
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Helsinki"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(ci)"
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "security"
+    groups:
+      github-official:
+        patterns:
+          - "actions/*"
+          - "github/codeql-action*"
+      third-party-actions:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "actions/*"
+          - "github/codeql-action*"
+
+  # ===========================================================================
+  #  2. Python development tooling.
+  #
+  #  Monthly. None of this reaches a user of the package; it only affects
+  #  contributors and CI. Grouped by role, so that a maintainer reviews "the
+  #  linters moved" rather than six separate pull requests.
+  # ===========================================================================
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Europe/Helsinki"
+    open-pull-requests-limit: 3
+    versioning-strategy: "increase-if-necessary"
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    labels:
+      - "dependencies"
+      - "python"
+    groups:
+      linting:
+        patterns:
+          - "ruff"
+          - "black"
+          - "mypy"
+          - "pre-commit"
+      testing:
+        patterns:
+          - "pytest"
+          - "pytest-*"
+      documentation:
+        patterns:
+          - "mkdocs"
+          - "mkdocs-*"
+      packaging:
+        patterns:
+          - "build"
+          - "twine"
+          - "cffconvert"
+          - "setuptools"
+          - "wheel"
+      security-tooling:
+        patterns:
+          - "pip-audit"
+          - "bandit"
+          - "cyclonedx-bom"
+          - "zizmor"
+    ignore:
+      # -----------------------------------------------------------------------
+      #  Major bumps of the formatting and linting tools are held back
+      #  deliberately. A major black or ruff release reformats the whole
+      #  repository, which turns every subsequent git blame on a facet file
+      #  into an archaeology exercise, and git blame is how a reviewer finds
+      #  out who last verified a factual claim and when.
+      #
+      #  These are adopted intentionally, in their own commit, with the
+      #  reformatting isolated. Not automatically.
+      # -----------------------------------------------------------------------
+      - dependency-name: "black"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "ruff"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "mypy"
+        update-types: ["version-update:semver-major"]

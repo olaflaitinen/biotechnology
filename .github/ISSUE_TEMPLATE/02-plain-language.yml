@@ -1,0 +1,942 @@
+# =============================================================================
+#  .github/ISSUE_TEMPLATE/02-plain-language.yml
+# -----------------------------------------------------------------------------
+#  Feedback on the public register.
+#
+#  WHY THIS TEMPLATE EXISTS SEPARATELY
+#  Every record in this library is written twice, and the second version exists
+#  for people who are not scientists. Those readers are the ones qualified to
+#  say when it fails, and they are exactly the readers least likely to open an
+#  issue on a Python repository, because nothing about a GitHub issue form
+#  invites them.
+#
+#  So this form asks for no technical detail whatsoever. No version number, no
+#  traceback, no reproduction. It asks whether a paragraph made sense, which is
+#  the only question that matters here.
+#
+#  ONLY TWO FIELDS ARE REQUIRED, and they are both in section 1. Everything
+#  after that is optional. The form is long because the answers are genuinely
+#  useful for diagnosing why a paragraph failed, not because any of it is
+#  demanded of you. Answer three questions and stop; that is a complete and
+#  welcome report.
+#
+#  Editorial rules 1, 2 and 3 in STYLE_GUIDE.md are what this template tests in
+#  the field.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "Plain-language feedback"
+description: "A plain-language explanation is unclear, condescending, unbalanced or misleading"
+title: "plain: "
+labels: ["plain-language", "documentation", "needs-triage"]
+
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        **You are the reader this part of the library exists for.**
+
+        Every record in this project is written twice: once in technical
+        language for specialists, and once in plain language for everybody
+        else. Journalists, teachers, nurses, patients, policy staff, students,
+        procurement officers, farmers, and anyone who has to make a decision
+        about biotechnology without practising it.
+
+        If a plain-language explanation needed a second reading, it has failed.
+        If an analogy was patronising, or assumed something you had no reason
+        to know, it has failed. Telling us so is a real contribution and will
+        be credited in `AUTHORS.md`.
+
+        ### You need to answer only two questions
+
+        They are both in section 1. Everything else is optional, and stopping
+        after three or four answers is completely normal. **You do not need any
+        scientific background to file this.** That is the entire point.
+
+  # ###########################################################################
+  #  SECTION 1: THE MINIMUM
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 1. The minimum
+
+  - type: "input"
+    id: "record"
+    attributes:
+      label: "1.1 Which record?"
+      description: >-
+        The name or the dotted path, whichever you have. "The gene therapy
+        page" is perfectly sufficient.
+      placeholder: "red.gene_therapy, or just: the gene therapy one"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "quote"
+    attributes:
+      label: "1.2 Which sentence or phrase did not work?"
+      description: "Copy and paste it, or describe roughly where it was."
+      render: "text"
+    validations:
+      required: true
+
+  - type: "markdown"
+    attributes:
+      value: |
+        **That is enough.** You can submit now. Everything below is optional and
+        helps us work out why it failed rather than only that it did.
+
+  # ###########################################################################
+  #  SECTION 2: WHERE AND WHAT
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 2. Where you were reading, and which part
+
+  - type: "dropdown"
+    id: "where"
+    attributes:
+      label: "2.1 Where were you reading it?"
+      options:
+        - "The documentation website"
+        - "The GitHub repository"
+        - "The command line, biotechnology show"
+        - "In Python, reading a field directly"
+        - "A PDF download"
+        - "An ePub download"
+        - "A printout"
+        - "Somewhere else quoted it"
+        - "A search engine snippet"
+        - "I do not remember"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "field"
+    attributes:
+      label: "2.2 Which part of the record?"
+      options:
+        - "The plain-language paragraph"
+        - "The everyday analogy"
+        - "The why-it-matters paragraph"
+        - "The one-line summary"
+        - "The technical description, which I was also trying to read"
+        - "A glossary definition"
+        - "A branch overview"
+        - "A metric note"
+        - "A milestone description"
+        - "A challenge in the challenges list"
+        - "An application in the applications list"
+        - "A heading or a label"
+        - "More than one of these"
+        - "I am not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "branch"
+    attributes:
+      label: "2.3 Which colour branch, if you know?"
+      options:
+        - "I do not know"
+        - "red, medicine"
+        - "green, agriculture"
+        - "white, industry"
+        - "blue, marine"
+        - "yellow, food"
+        - "grey, environment"
+        - "brown, arid land"
+        - "gold, computing"
+        - "dark, biosecurity"
+        - "purple, law and ethics"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "reading_goal"
+    attributes:
+      label: "2.4 What were you trying to find out?"
+      description: >-
+        Very useful. Text that works for someone browsing often fails for
+        someone looking for one specific thing.
+      options:
+        - "What this thing is, in general"
+        - "Whether it is real yet or still experimental"
+        - "Whether it is safe"
+        - "Whether it is legal, or how it is regulated"
+        - "How much it costs, or who can get it"
+        - "How it actually works"
+        - "Who does it, or where"
+        - "What the arguments against it are"
+        - "How it relates to something else"
+        - "I was browsing, with no particular goal"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "time_spent"
+    attributes:
+      label: "2.5 How long did you spend before giving up or moving on?"
+      options:
+        - "I did not give up"
+        - "A few seconds"
+        - "A minute or two"
+        - "Several minutes"
+        - "I read it repeatedly and still did not get it"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 3: WHAT WENT WRONG
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 3. What went wrong
+
+  - type: "dropdown"
+    id: "problem"
+    attributes:
+      label: "3.1 What was the main problem?"
+      options:
+        - "I did not understand it at all"
+        - "I had to read it twice"
+        - "I understood the words but not the point"
+        - "It used a word it did not explain"
+        - "It used a word I know differently in ordinary speech"
+        - "It used an abbreviation without expanding it"
+        - "The analogy confused me"
+        - "The analogy gave me an idea that turned out to be wrong"
+        - "The analogy relied on something I have no experience of"
+        - "It felt condescending"
+        - "It felt like it was selling something"
+        - "It felt like it was warning me off something"
+        - "It assumed something I had no reason to know"
+        - "It only mentioned the good side"
+        - "It only mentioned the bad side"
+        - "It seemed to contradict the technical description"
+        - "It seemed to contradict another record"
+        - "The sentences were too long"
+        - "There was too much of it"
+        - "There was not enough of it"
+        - "The important point came too late"
+        - "It was fine, but I think it could be clearer"
+    validations:
+      required: false
+
+  - type: "checkboxes"
+    id: "problems_all"
+    attributes:
+      label: "3.2 Tick every problem that applied"
+      description: "More than one usually does."
+      options:
+        - label: "An unexplained word"
+        - label: "An unexplained abbreviation"
+        - label: "A sentence that was too long"
+        - label: "A sentence I had to read twice"
+        - label: "An analogy that did not help"
+        - label: "An analogy that actively misled me"
+        - label: "A tone that felt talking-down"
+        - label: "A tone that felt promotional"
+        - label: "A number I could not interpret"
+        - label: "A unit I did not recognise"
+        - label: "A date or period that was unclear"
+        - label: "A claim with no indication of how certain it is"
+        - label: "Only the benefits mentioned"
+        - label: "Only the risks mentioned"
+        - label: "A contradiction with something else on the page"
+        - label: "Something culturally specific I did not recognise"
+        - label: "Layout or formatting that made it hard to follow"
+
+  - type: "textarea"
+    id: "what_happened"
+    attributes:
+      label: "3.3 What happened when you read it?"
+      description: >-
+        In your own words. "I thought it meant X" is extremely useful even if X
+        turns out to be wrong. Especially if X turns out to be wrong, in fact,
+        because that is the misunderstanding the text created.
+      placeholder: |
+        I thought "vector" meant a direction, like in maths. I did not
+        realise it was talking about a virus until two sentences later.
+    validations:
+      required: false
+
+  - type: "input"
+    id: "unexplained_word"
+    attributes:
+      label: "3.4 If a word was unexplained, which word?"
+      description: >-
+        One of the most actionable things you can tell us, because the fix is a
+        glossary entry that then helps every future reader.
+      placeholder: "vector, titre, in vitro"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "word_kind"
+    attributes:
+      label: "3.5 What kind of word was it?"
+      options:
+        - "Not applicable"
+        - "A technical term I had never met"
+        - "A technical term I had met but could not define"
+        - "An ordinary word used in a special sense"
+        - "An abbreviation or acronym"
+        - "A Latin or Greek phrase"
+        - "A unit of measurement"
+        - "A name of an organisation or a law"
+        - "A name of an organism"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "severity"
+    attributes:
+      label: "3.6 How badly did it fail?"
+      options:
+        - "Minor, I worked it out"
+        - "Annoying, I had to reread or look something up"
+        - "Serious, I gave up on that paragraph"
+        - "Serious, I gave up on the whole record"
+        - "Serious, I came away believing something incorrect"
+        - "Harmful, someone could act on this misunderstanding"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "misleading_direction"
+    attributes:
+      label: "3.7 If you came away with the wrong impression, in which direction?"
+      description: >-
+        Editorial rule 3 requires a why-it-matters paragraph to state a cost or
+        a controversy alongside the benefit. If it does not, this is the field
+        that tells us.
+      options:
+        - "Not applicable"
+        - "It made the technology sound safer than it is"
+        - "It made the technology sound more dangerous than it is"
+        - "It made it sound more established than it is"
+        - "It made it sound more experimental than it is"
+        - "It made it sound cheaper or more available than it is"
+        - "It made it sound more expensive or rarer than it is"
+        - "It made it sound settled when it is disputed"
+        - "It made it sound disputed when it is settled"
+        - "It made it sound simpler than it is"
+        - "It made it sound more complicated than it is"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "tone"
+    attributes:
+      label: "3.8 How did the tone come across?"
+      options:
+        - "Neutral and clear, no problem"
+        - "Talking down to me"
+        - "Assuming I already knew things"
+        - "Enthusiastic in a way that felt like advertising"
+        - "Alarmed in a way that felt like campaigning"
+        - "Cold or clinical about something that affects people"
+        - "Hedged so heavily it said nothing"
+        - "Something else"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "compared_technical"
+    attributes:
+      label: "3.9 Did you read the technical version too?"
+      options:
+        - "No"
+        - "Yes, and it was clearer than the plain one"
+        - "Yes, and it disagreed with the plain one"
+        - "Yes, and it filled the gap"
+        - "Yes, and I could not follow either"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "reading_aloud"
+    attributes:
+      label: "3.10 Could you read it aloud comfortably?"
+      description: >-
+        A useful test, and one this project applies deliberately: if a
+        fourteen-year-old could not read the paragraph aloud and then
+        paraphrase it, it has not done its job.
+      options:
+        - "Yes"
+        - "No, the sentences were too long to say in one breath"
+        - "No, I stumbled on the vocabulary"
+        - "No, the structure kept doubling back"
+        - "I did not try"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 4: THE ANALOGY
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 4. The analogy
+
+        Skip unless the analogy was the problem. Editorial rule 2 says an
+        analogy must be checkable and must show its own limits.
+
+  - type: "dropdown"
+    id: "analogy_problem"
+    attributes:
+      label: "4.1 What was wrong with the analogy?"
+      options:
+        - "Not applicable"
+        - "I did not understand the thing it compared to"
+        - "I understood it but the comparison did not fit"
+        - "It fitted at first and then broke down"
+        - "It made me think the technology does something it does not"
+        - "It made the technology sound trivial"
+        - "It made the technology sound frightening"
+        - "It was culturally specific to somewhere I do not live"
+        - "It assumed a hobby, job or experience I do not have"
+        - "It was so long I lost the thread"
+        - "There was no analogy and there should be one"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "analogy_wrong_idea"
+    attributes:
+      label: "4.2 What did the analogy make you think?"
+      description: >-
+        Even, and especially, if it was wrong. That is the misunderstanding the
+        text produced, and it is the single most useful sentence you can write.
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "analogy_better"
+    attributes:
+      label: "4.3 Can you think of a better comparison?"
+      description: "Genuinely optional. Many good reports have nothing here."
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "analogy_familiar"
+    attributes:
+      label: "4.4 Were you familiar with the thing it compared to?"
+      options:
+        - "Not applicable"
+        - "Yes, completely"
+        - "Roughly"
+        - "Only by name"
+        - "Not at all"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 5: HOW YOU WOULD FIX IT
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 5. How you would fix it
+
+  - type: "textarea"
+    id: "suggestion"
+    attributes:
+      label: "5.1 How would you say it?"
+      description: >-
+        Optional, and genuinely optional. Spotting the problem is the hard part.
+        Wording is ours to fix.
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "fix_type"
+    attributes:
+      label: "5.2 What kind of fix does it need?"
+      options:
+        - "Explain one word"
+        - "Replace one word with a simpler one"
+        - "Expand an abbreviation on first use"
+        - "Split a long sentence"
+        - "Split the paragraph in two"
+        - "Replace the analogy entirely"
+        - "Remove the analogy"
+        - "Add a sentence saying what it is not"
+        - "Add the cost or the downside"
+        - "Add the benefit, it is all downside"
+        - "Add a concrete example"
+        - "Add a number to make the scale clear"
+        - "Remove some of it"
+        - "Reorder it, the important thing comes too late"
+        - "Say how certain the claim is"
+        - "I do not know, it just did not work"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "priority"
+    attributes:
+      label: "5.3 How much does fixing it matter to you?"
+      options:
+        - "Not much, I am reporting it for completeness"
+        - "Somewhat, it would help the next reader"
+        - "A lot, I could not use the record as it stands"
+        - "Urgently, I think it misleads people"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "generalises"
+    attributes:
+      label: "5.4 Did you notice the same problem elsewhere?"
+      options:
+        - "I only read this one record"
+        - "No, the others I read were fine"
+        - "Yes, in one or two other records"
+        - "Yes, it seems to run through the whole branch"
+        - "Yes, it seems to be a habit across the project"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "other_records"
+    attributes:
+      label: "5.5 Which other records, if any?"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 6: ACCESSIBILITY AND LANGUAGE
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 6. Accessibility and language
+
+        Skip unless it applies. If it does, it takes priority over most other
+        editorial work.
+
+  - type: "dropdown"
+    id: "assistive_tech"
+    attributes:
+      label: "6.1 Were you using assistive technology?"
+      options:
+        - "No"
+        - "Screen reader"
+        - "Screen magnification"
+        - "Text-to-speech"
+        - "Braille display"
+        - "Reader mode or a simplified view"
+        - "A custom stylesheet or larger text"
+        - "Translation software"
+        - "Voice control"
+        - "Prefer not to say"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "assistive_problem"
+    attributes:
+      label: "6.2 Did the assistive technology make it worse?"
+      options:
+        - "Not applicable"
+        - "No, the text itself was the problem"
+        - "Yes, the reading order was confusing"
+        - "Yes, an abbreviation was read out letter by letter"
+        - "Yes, a symbol or unit was announced wrongly"
+        - "Yes, a table was unreadable"
+        - "Yes, something had no text alternative"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "reading_difficulty"
+    attributes:
+      label: "6.3 Do you have any reading difficulty you would like us to know about?"
+      description: >-
+        Entirely optional and never recorded anywhere but this issue. It helps
+        because text that fails for a dyslexic reader usually fails for a tired
+        reader too, and fixing it helps everyone.
+      options:
+        - "Prefer not to say"
+        - "No"
+        - "Dyslexia"
+        - "A concentration or attention difficulty"
+        - "A visual impairment"
+        - "A cognitive difficulty"
+        - "I was reading in a second language"
+        - "I was reading in difficult circumstances, tired or rushed"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "first_language"
+    attributes:
+      label: "6.4 Is English your first language?"
+      description: >-
+        The library is currently English only. Knowing when a sentence fails for
+        a reader in their second or third language is one of the most useful
+        things we can learn. Translation is on the roadmap.
+      options:
+        - "Prefer not to say"
+        - "Yes"
+        - "No, but I read English comfortably"
+        - "No, and I found the English itself difficult here"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "language"
+    attributes:
+      label: "6.5 If not English, which language do you read most comfortably?"
+      placeholder: "Finnish, Turkish, Spanish"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "translation_issue"
+    attributes:
+      label: "6.6 Was this a translation problem?"
+      options:
+        - "Not applicable"
+        - "An idiom did not translate to my culture"
+        - "A term has a different standard translation in my language"
+        - "Machine translation produced something misleading"
+        - "The sentence structure was too complex to translate"
+        - "I would like to help translate this material"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "translate_help"
+    attributes:
+      label: "6.7 If you offered to translate, how much?"
+      options:
+        - "Not offering"
+        - "One record, to see how it goes"
+        - "One branch"
+        - "The plain-language register across the whole taxonomy"
+        - "The glossary"
+        - "The root documents"
+        - "I would review someone else's translation"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 7: ABOUT YOU
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 7. About you
+
+        Entirely optional, and there is no wrong answer. It helps us know who a
+        piece of text failed for, which is the whole value of this feedback.
+
+  - type: "dropdown"
+    id: "background"
+    attributes:
+      label: "7.1 Roughly what is your background?"
+      options:
+        - "Prefer not to say"
+        - "No scientific background at all"
+        - "School level, general interest"
+        - "Student in a non-science subject"
+        - "Student in a science subject"
+        - "Journalist or communicator"
+        - "Teacher or lecturer"
+        - "Librarian or information professional"
+        - "Policy, regulatory or public administration"
+        - "Lawyer"
+        - "Healthcare professional, not a researcher"
+        - "Patient, carer or patient advocate"
+        - "Farmer, grower or food producer"
+        - "Working scientist in a different field"
+        - "Working scientist in this field"
+        - "Software developer"
+        - "Retired from one of the above"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "why_reading"
+    attributes:
+      label: "7.2 Why were you reading it?"
+      options:
+        - "Prefer not to say"
+        - "Curiosity"
+        - "For study or coursework"
+        - "To teach it to someone else"
+        - "For work"
+        - "To write about it"
+        - "To make or advise on a decision"
+        - "Because it affects me or someone close to me"
+        - "To evaluate the library itself"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "expectation"
+    attributes:
+      label: "7.3 What level of explanation were you hoping for?"
+      options:
+        - "A one-line answer"
+        - "A paragraph"
+        - "Enough to explain it to someone else"
+        - "Enough to write about it accurately"
+        - "Enough to make a decision"
+        - "As much detail as possible"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "credit"
+    attributes:
+      label: "7.4 How would you like to be credited in AUTHORS.md?"
+      options:
+        - "By my GitHub handle"
+        - "By my full name, given below"
+        - "Anonymously"
+        - "Not at all"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "followup"
+    attributes:
+      label: "7.5 May we ask you to look at a rewrite?"
+      description: >-
+        The most valuable thing a plain-language reviewer can do, and there is
+        no obligation whatever.
+      options:
+        - "Yes, gladly"
+        - "Yes, if it is quick"
+        - "Maybe, ask me"
+        - "No"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "anything_else"
+    attributes:
+      label: "7.6 Anything else?"
+      description: "Including your name if you asked to be credited that way."
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 8: THE REST OF THE RECORD
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 8. The rest of the record
+
+        Optional, and a different kind of useful. These questions are about the
+        record as a whole rather than the sentence that failed, and they help us
+        see whether the problem was one paragraph or the shape of the page.
+
+  - type: "dropdown"
+    id: "read_whole"
+    attributes:
+      label: "8.1 Did you read the whole record?"
+      options:
+        - "Yes, all of it"
+        - "Most of it"
+        - "Only the plain-language part"
+        - "Only the beginning"
+        - "I skimmed it"
+        - "I stopped at the part that failed"
+    validations:
+      required: false
+
+  - type: "checkboxes"
+    id: "fields_read"
+    attributes:
+      label: "8.2 Which parts did you read?"
+      options:
+        - label: "The one-line summary"
+        - label: "The plain-language paragraph"
+        - label: "The analogy"
+        - label: "The why-it-matters paragraph"
+        - label: "The technical description"
+        - label: "The applications list"
+        - label: "The technologies list"
+        - label: "The challenges list"
+        - label: "The metrics"
+        - label: "The history"
+        - label: "The regulations and standards"
+        - label: "The cross-references"
+        - label: "The glossary terms"
+
+  - type: "dropdown"
+    id: "summary_accurate"
+    attributes:
+      label: "8.3 Did the one-line summary match what the record turned out to be about?"
+      options:
+        - "Yes"
+        - "Roughly"
+        - "No, it promised something different"
+        - "It was too vague to tell"
+        - "I did not read it"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "length"
+    attributes:
+      label: "8.4 Was the record the right length?"
+      options:
+        - "About right"
+        - "Too long"
+        - "Far too long"
+        - "Too short"
+        - "The right length but badly ordered"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "applications_help"
+    attributes:
+      label: "8.5 Did the applications list help?"
+      options:
+        - "Yes, it made the thing concrete"
+        - "Partly"
+        - "No, the entries meant nothing to me"
+        - "No, I could not tell which are real today"
+        - "I did not read it"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "challenges_help"
+    attributes:
+      label: "8.6 Did the challenges list help?"
+      description: >-
+        Editorial rule 7 requires at least one non-technical challenge, because
+        a field described only by its technical obstacles is described by its
+        own practitioners.
+      options:
+        - "Yes, it gave me the balance I needed"
+        - "Partly"
+        - "No, it was all technical"
+        - "No, it read as excuses rather than limits"
+        - "I did not read it"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "history_help"
+    attributes:
+      label: "8.7 Did the history help?"
+      description: >-
+        Dates settle a question no amount of description settles: is this real
+        yet?
+      options:
+        - "Yes, it told me how established this is"
+        - "Partly"
+        - "No, the events meant nothing to me"
+        - "No, it was a list of triumphs with nothing that went wrong"
+        - "I did not read it"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "metrics_help"
+    attributes:
+      label: "8.8 Did the metrics help or confuse?"
+      options:
+        - "Helped, the numbers made it concrete"
+        - "Confused, I could not interpret the units"
+        - "Confused, I could not tell how reliable the numbers are"
+        - "Confused, the ranges were too wide to mean anything"
+        - "I skipped them"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "followed_link"
+    attributes:
+      label: "8.9 Did you follow a cross-reference to another record?"
+      options:
+        - "Yes, and it helped"
+        - "Yes, and it did not help"
+        - "Yes, and I got lost"
+        - "No, but I would have if one had been offered"
+        - "No"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "used_glossary"
+    attributes:
+      label: "8.10 Did you use the glossary?"
+      options:
+        - "Yes, and it answered my question"
+        - "Yes, and the definition was also unclear"
+        - "I looked and the term was not there"
+        - "I did not know there was one"
+        - "No"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "missing"
+    attributes:
+      label: "8.11 What did you expect to find that was not there?"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "one_change"
+    attributes:
+      label: "8.12 What one change would have helped most?"
+      options:
+        - "Explain the words"
+        - "Shorter sentences"
+        - "A better analogy"
+        - "A concrete example"
+        - "A number to give the scale"
+        - "The downside stated as clearly as the upside"
+        - "Say how certain the claims are"
+        - "Put the main point first"
+        - "Less material overall"
+        - "More material"
+        - "A picture or a diagram"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 9: CONFIRMATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 9. Confirmation
+
+  - type: "checkboxes"
+    id: "confirm"
+    attributes:
+      label: "9.1 Before you submit"
+      options:
+        - label: >-
+            I agree that my contribution is licensed under the EUPL-1.2.
+          required: true
+        - label: >-
+            I have read and agree to follow the Code of Conduct.
+          required: true

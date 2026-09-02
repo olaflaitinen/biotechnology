@@ -1,0 +1,911 @@
+# =============================================================================
+#  .github/ISSUE_TEMPLATE/03-bug-report.yml
+# -----------------------------------------------------------------------------
+#  Software defects only.
+#
+#  SCOPE NOTE
+#  This template is for the machinery: the registry, search, path parsing,
+#  exporters, formula implementations, typing, packaging and the command line.
+#  It is NOT for something in the taxonomy being factually wrong. That is a
+#  data correction and has its own template, because the information needed to
+#  act on it is completely different.
+#
+#  The routing table at the top sends people who arrive here by mistake to the
+#  right place before they spend effort filling this in.
+#
+#  WHY IT IS LONG
+#  Every question below is one a maintainer would otherwise have to ask, and
+#  each round trip costs a day. Eight fields are required; the rest sharpen the
+#  diagnosis and can be skipped freely.
+#
+#  SPDX-License-Identifier: EUPL-1.2
+# =============================================================================
+
+name: "Bug report"
+description: "Something in the software does not work as documented"
+title: "bug: "
+labels: ["bug", "needs-triage"]
+
+body:
+  - type: "markdown"
+    attributes:
+      value: |
+        Thanks for taking the time to report this.
+
+        **Is this the right form?**
+
+        | If the problem is | Use |
+        |---|---|
+        | A number, date, regulation or fact is **wrong** | [Data correction](https://github.com/olaflaitinen/biotechnology/issues/new?template=01-data-correction.yml) |
+        | A plain-language explanation is **unclear** | [Plain-language feedback](https://github.com/olaflaitinen/biotechnology/issues/new?template=02-plain-language.yml) |
+        | You want the library to **do something new** | [Feature request](https://github.com/olaflaitinen/biotechnology/issues/new?template=04-feature-request.yml) |
+        | A **document or page** is wrong or inaccessible | [Documentation](https://github.com/olaflaitinen/biotechnology/issues/new?template=07-documentation.yml) |
+        | A **security vulnerability** | Do **not** open an issue. Email <yunus.imanov@metropolia.fi>. See [SECURITY.md](https://github.com/olaflaitinen/biotechnology/blob/main/SECURITY.md). |
+        | Content that reads as **operational instructions** | Do **not** open a public issue quoting it. Email <yunus.imanov@metropolia.fi>. |
+
+  # ###########################################################################
+  #  SECTION 1: WHAT HAPPENED
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 1. What happened
+
+  - type: "dropdown"
+    id: "area"
+    attributes:
+      label: "1.1 Which part of the library?"
+      options:
+        - "Lookup, get(), get_branch(), get_subtype()"
+        - "Lookup, path parsing and normalisation"
+        - "Lookup, aliases, a name that should resolve but does not"
+        - "Lookup, an error message that is wrong or unhelpful"
+        - "Search, results are wrong"
+        - "Search, ranking is wrong"
+        - "Search, scoping to a branch"
+        - "Filters, by_sdg()"
+        - "Filters, by_domain()"
+        - "Filters, by_maturity(), by_risk_tier() or by_scale()"
+        - "Graph, related_to()"
+        - "Graph, timeline()"
+        - "Formulas, a calculation returns the wrong number"
+        - "Formulas, a calculation raises unexpectedly"
+        - "Formulas, a domain check is too strict"
+        - "Formulas, a domain check is too loose"
+        - "Formulas, a doctest fails"
+        - "Units, conversion or parsing"
+        - "Export, to_dict() or to_json()"
+        - "Export, CSV"
+        - "Export, Markdown"
+        - "Export, DOT or graph output"
+        - "Rendering, tree()"
+        - "Rendering, text wrapping"
+        - "Rendering, symbol or unit rendering"
+        - "Command line, an argument or subcommand"
+        - "Command line, output formatting"
+        - "Command line, exit codes"
+        - "Command line, help text"
+        - "Import, the package fails to import"
+        - "Import, something is missing from the public API"
+        - "Typing, mypy reports something wrong"
+        - "Typing, an IDE cannot see a symbol"
+        - "Packaging, installation fails"
+        - "Packaging, a file is missing from the wheel"
+        - "Packaging, the console script is not created"
+        - "Performance, something is unexpectedly slow"
+        - "Memory, something uses unexpectedly much"
+        - "Validation, the integrity suite reports something wrong"
+        - "Documentation describes behaviour that does not match the code"
+        - "Other"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "what_happened"
+    attributes:
+      label: "1.2 What did you observe?"
+      description: "What actually happened, in your own words."
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "expected"
+    attributes:
+      label: "1.3 What did you expect instead?"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "expectation_source"
+    attributes:
+      label: "1.4 Where did your expectation come from?"
+      description: >-
+        A mismatch between documentation and behaviour is a bug in one of the
+        two, and knowing which you read tells us where to start.
+      options:
+        - "The README"
+        - "The documentation website"
+        - "A docstring"
+        - "DATA_MODEL.md"
+        - "NOTATION.md"
+        - "ARCHITECTURE.md"
+        - "The command line help"
+        - "A type annotation"
+        - "An error message"
+        - "How a similar function behaves"
+        - "General Python convention"
+        - "My own assumption"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "severity"
+    attributes:
+      label: "1.5 How severe is it?"
+      options:
+        - "Blocking, the library is unusable for my purpose"
+        - "Major, a documented feature does not work and there is no workaround"
+        - "Moderate, it works but the result is wrong or misleading"
+        - "Minor, cosmetic or an annoyance with an easy workaround"
+        - "Trivial, a typo in output or a message"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "correctness"
+    attributes:
+      label: "1.6 Is the output wrong, or absent, or an error?"
+      options:
+        - "Wrong value returned, silently"
+        - "Nothing returned when something should be"
+        - "Something returned when nothing should be"
+        - "An exception was raised that should not have been"
+        - "No exception was raised when one should have been"
+        - "The wrong exception type was raised"
+        - "The exception message was unhelpful"
+        - "It hung or never finished"
+        - "It crashed the interpreter"
+        - "Output formatting only"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "silent"
+    attributes:
+      label: "1.7 Would a user notice this without checking?"
+      description: >-
+        A silently wrong answer is far more serious than a loud failure in a
+        library that people cite.
+      options:
+        - "No, it fails silently and looks correct"
+        - "Probably not, the result is plausible"
+        - "Yes, the result is obviously wrong"
+        - "Yes, it raises an error"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "frequency"
+    attributes:
+      label: "1.8 How often does it happen?"
+      options:
+        - "Every time, deterministically"
+        - "Most of the time"
+        - "Intermittently"
+        - "Only once so far"
+        - "Only with particular input"
+        - "Only on one platform"
+        - "Only on one Python version"
+        - "Only under load or with large input"
+        - "Only on a cold start"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "regression"
+    attributes:
+      label: "1.9 Did this work before?"
+      options:
+        - "I do not know, this is my first use"
+        - "No, it has never worked for me"
+        - "Yes, it worked in an earlier version"
+        - "Yes, it worked before I changed my Python version"
+        - "Yes, it worked before I changed platform"
+        - "Yes, it worked before I changed environment or installer"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "last_good"
+    attributes:
+      label: "1.10 If it is a regression, what was the last working version?"
+      placeholder: "0.1.0"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "data_or_code"
+    attributes:
+      label: "1.11 Do you think the problem is in the code or in the data?"
+      options:
+        - "I do not know"
+        - "The code, the logic is wrong"
+        - "The data, a record is malformed"
+        - "The contract between them, the code assumes something the data does not guarantee"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 2: REPRODUCTION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 2. Reproduction
+
+  - type: "textarea"
+    id: "reproduction"
+    attributes:
+      label: "2.1 Minimal reproduction"
+      description: >-
+        The shortest code or command that shows the problem. Rendered as
+        Python; paste a shell command as-is if that is what it was.
+      render: "python"
+      placeholder: |
+        import biotechnology as bt
+        bt.get("red.gene_therapy")
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "minimal"
+    attributes:
+      label: "2.2 Have you reduced it to a minimal case?"
+      options:
+        - "Yes, this is the smallest thing that reproduces it"
+        - "Mostly, there may be a little that is not needed"
+        - "No, this is the code from my project"
+        - "I could not reproduce it in isolation"
+    validations:
+      required: true
+
+  - type: "textarea"
+    id: "actual_output"
+    attributes:
+      label: "2.3 The actual output"
+      render: "text"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "expected_output"
+    attributes:
+      label: "2.4 The output you expected"
+      render: "text"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "traceback"
+    attributes:
+      label: "2.5 Full traceback"
+      description: >-
+        Complete and unedited, please. The middle of a traceback is usually
+        where the answer is, and it is the part most often trimmed.
+      render: "text"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "input_source"
+    attributes:
+      label: "2.6 Where did the input come from?"
+      description: >-
+        Relevant because the library takes arbitrary strings in `get()` and
+        `search()`, and pathological input is a known risk class.
+      options:
+        - "A literal in my code"
+        - "User input"
+        - "A file"
+        - "A database"
+        - "Another library"
+        - "Generated programmatically"
+        - "Copied from the documentation"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "input_shape"
+    attributes:
+      label: "2.7 Anything unusual about the input?"
+      options:
+        - "No, it is ordinary"
+        - "Very long"
+        - "Empty or whitespace only"
+        - "Contains non-ASCII characters"
+        - "Contains mixed case"
+        - "Contains punctuation or separators"
+        - "Contains a null or None"
+        - "Is of an unexpected type"
+        - "Is at a numeric boundary, zero, negative or very large"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "workaround"
+    attributes:
+      label: "2.8 Workaround"
+      description: >-
+        If you found one, it often narrows down the cause faster than anything
+        else in this form.
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "bisected"
+    attributes:
+      label: "2.9 Have you narrowed it down further?"
+      options:
+        - "No"
+        - "I know which function is involved"
+        - "I know which line is involved"
+        - "I have bisected the commits"
+        - "I have a candidate fix"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "suspect_location"
+    attributes:
+      label: "2.10 If you know where, which file and line?"
+      placeholder: "src/biotechnology/core/registry.py:142"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 3: ENVIRONMENT
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 3. Environment
+
+  - type: "input"
+    id: "version"
+    attributes:
+      label: "3.1 Library version"
+      description: "python -c \"import biotechnology; print(biotechnology.__version__)\""
+      placeholder: "0.1.0"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "python"
+    attributes:
+      label: "3.2 Python version"
+      options:
+        - "3.9"
+        - "3.10"
+        - "3.11"
+        - "3.12"
+        - "3.13"
+        - "3.14"
+        - "Older than 3.9, which is unsupported"
+        - "A pre-release or development build"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "implementation"
+    attributes:
+      label: "3.3 Python implementation"
+      options:
+        - "CPython, the usual one"
+        - "PyPy"
+        - "Free-threaded CPython, the no-GIL build"
+        - "Pyodide or WebAssembly"
+        - "GraalPy"
+        - "MicroPython or another minimal build"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "os"
+    attributes:
+      label: "3.4 Operating system"
+      options:
+        - "Linux"
+        - "macOS on Apple silicon"
+        - "macOS on Intel"
+        - "Windows 11"
+        - "Windows 10"
+        - "Windows Server"
+        - "Windows Subsystem for Linux"
+        - "A container image"
+        - "A CI runner"
+        - "FreeBSD or another BSD"
+        - "Other"
+    validations:
+      required: true
+
+  - type: "input"
+    id: "os_version"
+    attributes:
+      label: "3.5 Operating system version, if you know it"
+      placeholder: "Ubuntu 24.04, macOS 15.1, Windows 11 26200"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "architecture"
+    attributes:
+      label: "3.6 Processor architecture"
+      options:
+        - "x86-64"
+        - "ARM64 or Apple silicon"
+        - "32-bit x86"
+        - "RISC-V"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "install"
+    attributes:
+      label: "3.7 How was it installed?"
+      options:
+        - "pip install biotechnology"
+        - "pip install -e . from a clone"
+        - "From a built wheel"
+        - "From the source distribution"
+        - "conda, mamba or pixi"
+        - "uv"
+        - "poetry"
+        - "pdm or hatch"
+        - "Vendored into another project"
+        - "A distribution package manager"
+        - "Not sure"
+    validations:
+      required: true
+
+  - type: "dropdown"
+    id: "environment_kind"
+    attributes:
+      label: "3.8 What kind of environment?"
+      options:
+        - "A virtual environment"
+        - "The system Python"
+        - "A conda environment"
+        - "A container"
+        - "A CI job"
+        - "A Jupyter notebook"
+        - "An IDE-managed environment"
+        - "A managed or locked-down machine"
+        - "An air-gapped machine"
+        - "Not sure"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "clean_env"
+    attributes:
+      label: "3.9 Have you reproduced it in a clean environment?"
+      description: >-
+        A fresh virtual environment with only this package installed rules out
+        an interaction with something else, which is the most common false lead.
+      options:
+        - "Yes, it reproduces cleanly"
+        - "No, I have not tried"
+        - "I tried and it did NOT reproduce, so something else is involved"
+        - "I cannot create a clean environment here"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "locale"
+    attributes:
+      label: "3.10 Anything unusual about locale or encoding?"
+      description: >-
+        A surprising number of text bugs are encoding bugs. If your terminal is
+        not UTF-8, or your locale is not English, that is a strong clue.
+      options:
+        - "No, UTF-8 and an English locale"
+        - "UTF-8 but a non-English locale"
+        - "A non-UTF-8 terminal encoding"
+        - "Windows console with a legacy code page"
+        - "Output redirected to a file"
+        - "Output piped into another command"
+        - "A right-to-left locale"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "terminal"
+    attributes:
+      label: "3.11 If it is a command line problem, which terminal?"
+      options:
+        - "Not applicable"
+        - "bash or zsh"
+        - "fish"
+        - "PowerShell"
+        - "cmd.exe"
+        - "Windows Terminal"
+        - "An IDE integrated terminal"
+        - "A CI log"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "pip_list"
+    attributes:
+      label: "3.12 Output of pip list, if the environment might be relevant"
+      render: "text"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 4: IMPACT
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 4. Impact
+
+  - type: "dropdown"
+    id: "urgency"
+    attributes:
+      label: "4.1 Is anything blocked on this?"
+      options:
+        - "No, I am reporting it for completeness"
+        - "It is inconvenient but I have a workaround"
+        - "It blocks a piece of work with no deadline"
+        - "It blocks a piece of work with a deadline"
+        - "It blocks something in production"
+        - "It blocks teaching or an exam"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "usage_context"
+    attributes:
+      label: "4.2 What were you using the library for?"
+      options:
+        - "Prefer not to say"
+        - "Exploring it"
+        - "Teaching or coursework"
+        - "Research"
+        - "Building software on top of it"
+        - "Preparing a report or publication"
+        - "Policy or regulatory work"
+        - "Evaluating whether to adopt it"
+        - "Data analysis"
+        - "Something else"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "affected_others"
+    attributes:
+      label: "4.3 Does it affect anyone besides you?"
+      options:
+        - "Only me"
+        - "My team"
+        - "A class or cohort I teach"
+        - "Users of something I built"
+        - "Anyone who uses this feature"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "data_integrity"
+    attributes:
+      label: "4.4 Could this have produced wrong results that were used?"
+      description: >-
+        If a silently wrong value has already gone into a report or a
+        curriculum, that changes the priority and may warrant a changelog note.
+      options:
+        - "No"
+        - "Possibly, I am checking"
+        - "Yes, and I have caught it"
+        - "Yes, and it may already be published somewhere"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "security_relevant"
+    attributes:
+      label: "4.5 Could this have a security dimension?"
+      description: >-
+        If yes, please close this form and email
+        yunus.imanov@metropolia.fi instead. See SECURITY.md section 1.3.
+      options:
+        - "No"
+        - "I do not think so, but I am flagging it"
+        - "Possibly, and I will email instead"
+    validations:
+      required: true
+
+  # ###########################################################################
+  #  SECTION 5: HELP
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 5. Help
+
+  - type: "dropdown"
+    id: "willing_fix"
+    attributes:
+      label: "5.1 Would you like to fix it?"
+      description: "No obligation. Saying no does not slow anything down."
+      options:
+        - "No"
+        - "Yes, I would like to open a pull request"
+        - "Yes, with some guidance on where to look"
+        - "I can write a failing test but not the fix"
+        - "I can test a fix if someone else writes it"
+        - "I can review a fix"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "willing_test"
+    attributes:
+      label: "5.2 Could you test a fix on your platform?"
+      description: >-
+        Especially valuable for a platform-specific bug, since the maintainer
+        cannot reproduce every environment.
+      options:
+        - "Yes"
+        - "Yes, but slowly"
+        - "No"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "contactable"
+    attributes:
+      label: "5.3 May we ask follow-up questions?"
+      options:
+        - "Yes"
+        - "Yes, but I may be slow to reply"
+        - "No, please proceed without me"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "credit"
+    attributes:
+      label: "5.4 How would you like to be credited?"
+      options:
+        - "By my GitHub handle"
+        - "By my full name, given below"
+        - "Anonymously"
+        - "Not at all"
+    validations:
+      required: false
+
+  - type: "textarea"
+    id: "context"
+    attributes:
+      label: "5.5 Anything else?"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 6: NARROWING IT DOWN
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 6. Narrowing it down
+
+        Optional. Each answer here removes a hypothesis, and a removed
+        hypothesis is worth more than another paragraph of description.
+
+  - type: "dropdown"
+    id: "checked_changelog"
+    attributes:
+      label: "6.1 Did you check the changelog?"
+      options:
+        - "Yes, and nothing looked relevant"
+        - "Yes, and something looked relevant"
+        - "No"
+        - "I did not know there was one"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "checked_issues"
+    attributes:
+      label: "6.2 Did you check closed issues as well as open ones?"
+      options:
+        - "Yes, both"
+        - "Open only"
+        - "No"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "documented_behaviour"
+    attributes:
+      label: "6.3 Is there documented behaviour that covers this case?"
+      options:
+        - "Yes, and the code disagrees with it"
+        - "Yes, and the documentation is ambiguous"
+        - "No, the case is not documented"
+        - "The documentation says this is deliberate, and I disagree"
+        - "I could not find anything"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "cli_and_api"
+    attributes:
+      label: "6.4 Does it happen through both the API and the command line?"
+      options:
+        - "Only through the Python API"
+        - "Only through the command line"
+        - "Both"
+        - "I only tried one"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "fresh_install"
+    attributes:
+      label: "6.5 Does it happen on a fresh install?"
+      options:
+        - "Yes"
+        - "No, only in my existing environment"
+        - "I have not tried"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "previous_release"
+    attributes:
+      label: "6.6 Have you tried a previous release?"
+      options:
+        - "Yes, and it happened there too"
+        - "Yes, and it did not happen there"
+        - "No"
+        - "There is no previous release to try"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "wheel_or_sdist"
+    attributes:
+      label: "6.7 Does it differ between the wheel and the source distribution?"
+      description: >-
+        Relevant for anything that looks like a missing file, since a file
+        present in the repository but absent from the wheel is a packaging bug
+        rather than a code bug.
+      options:
+        - "I only tried one"
+        - "Same in both"
+        - "Only with the wheel"
+        - "Only with the source distribution"
+        - "Only with an editable install"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "input_size"
+    attributes:
+      label: "6.8 Does the size of the input matter?"
+      options:
+        - "No, it happens with any input"
+        - "Only with large input"
+        - "Only with empty input"
+        - "Only with a single item"
+        - "It gets slower as input grows"
+        - "Not applicable"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "concurrency"
+    attributes:
+      label: "6.9 Were you using threads, async or multiple processes?"
+      description: >-
+        Every record in this library is a frozen dataclass and the indexes are
+        built once at import, so the package is intended to be safe to share
+        across threads without locking. A counter-example would be important.
+      options:
+        - "No, single-threaded"
+        - "Threads"
+        - "asyncio"
+        - "Multiple processes"
+        - "A web server or worker pool"
+        - "I do not know"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "other_libs"
+    attributes:
+      label: "6.10 Was another library involved?"
+      options:
+        - "No"
+        - "A data frame or analysis library"
+        - "A web framework"
+        - "A notebook environment"
+        - "A serialisation library"
+        - "A test framework"
+        - "Yes, named below"
+    validations:
+      required: false
+
+  - type: "input"
+    id: "other_libs_name"
+    attributes:
+      label: "6.11 Which other library, if any?"
+    validations:
+      required: false
+
+  - type: "dropdown"
+    id: "expected_fix"
+    attributes:
+      label: "6.12 What kind of fix do you think it needs?"
+      options:
+        - "I have no idea"
+        - "A logic correction"
+        - "An extra validation check"
+        - "A relaxed validation check"
+        - "A better error message"
+        - "A documentation change instead"
+        - "A data record correction instead"
+        - "A packaging change"
+        - "A performance change"
+    validations:
+      required: false
+
+  # ###########################################################################
+  #  SECTION 7: CONFIRMATION
+  # ###########################################################################
+  - type: "markdown"
+    attributes:
+      value: |
+        ---
+        ## Section 7. Confirmation
+
+  - type: "checkboxes"
+    id: "confirm"
+    attributes:
+      label: "7.1 Before you submit"
+      options:
+        - label: "I have searched existing issues and this is not a duplicate."
+          required: true
+        - label: "This is a software defect, not a factual error in the taxonomy."
+          required: true
+        - label: >-
+            This is not a security vulnerability. If it is, I will close this
+            and email yunus.imanov@metropolia.fi instead.
+          required: true
+        - label: >-
+            I have included a reproduction, or explained why I cannot produce
+            one.
+          required: true
+        - label: >-
+            I am using a supported version, meaning 0.1.x on Python 3.9 or
+            later, or I have said which unsupported version I am on.
+          required: true
+        - label: "I agree that my contribution is licensed under the EUPL-1.2."
+          required: true
+        - label: "I have read and agree to follow the Code of Conduct."
+          required: true
