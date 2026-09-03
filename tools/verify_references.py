@@ -72,6 +72,13 @@ ROOT = Path(__file__).resolve().parent.parent
 BIBLIOGRAPHY = ROOT / "BIBLIOGRAPHY.md"
 CACHE = ROOT / "tools" / ".crossref_cache.json"
 
+#: Directories not scanned for loose DOIs. `docs/` is generated from these same
+#: sources, so scanning it would report every finding twice and attribute it to
+#: a file nobody edits.
+SKIP_DIRS = frozenset(
+    {".git", "docs", "site", "build", "dist", "__pycache__", ".tox", ".venv"}
+)
+
 #: Crossref asks that automated clients identify themselves and offers a faster
 #: pool to those that do. Sending a contact address is the polite convention
 #: and costs nothing.
@@ -165,6 +172,57 @@ def read_entries() -> List[Entry]:
             continue
         entries.append(Entry(key, text, number))
     return entries
+
+
+# =============================================================================
+#  MATCHING A DOI IN PROSE
+#
+#  A DOI may legitimately contain parentheses, and Elsevier suffixes are the
+#  common case: `10.1016/S0140-6736(22)01841-4` is the Lancet DOI for the
+#  `swen2023` entry. A pattern that stops at the first closing parenthesis
+#  truncates it to `10.1016/S0140-6736(22`, which then fails to resolve, and
+#  the checker reports a fabricated citation that is in fact correct.
+#
+#  That is exactly what the first repository-wide run did. So parentheses are
+#  allowed inside the match, and a trailing one is stripped only when it is
+#  UNBALANCED, which is the case where it belongs to the surrounding sentence
+#  rather than to the identifier.
+# =============================================================================
+
+#: A DOI anywhere in running prose, not only inside a bibliography table.
+DOI_ANYWHERE = re.compile(r"\b(10\.\d{4,9}/[^\s\]<>,;\"']+)")
+
+
+def tidy_doi(raw: str) -> str:
+    """Strip sentence punctuation a DOI picked up from the prose around it."""
+    doi = raw.rstrip(".,;:")
+    while doi.endswith(")") and doi.count(")") > doi.count("("):
+        doi = doi[:-1].rstrip(".,;:")
+    return doi
+
+
+def read_loose_dois() -> Dict[str, List[str]]:
+    """Every DOI in every Markdown file, mapped to where it appears.
+
+    The bibliography is the structured source and gets field-by-field
+    comparison. This second pass exists because a citation written in Nature
+    style at the foot of README.md is just as citable, and just as capable of
+    pointing at nothing, as a row in a table. A guarantee that covered one file
+    would be a guarantee about the wrong thing.
+    """
+    found: Dict[str, List[str]] = {}
+    for path in sorted(ROOT.rglob("*.md")):
+        if any(part in SKIP_DIRS for part in path.relative_to(ROOT).parts):
+            continue
+        for number, line in enumerate(
+            path.read_text(encoding="utf-8").splitlines(), start=1
+        ):
+            for raw in DOI_ANYWHERE.findall(line):
+                doi = tidy_doi(raw)
+                found.setdefault(doi, []).append(
+                    "{0}:{1}".format(path.relative_to(ROOT), number)
+                )
+    return found
 
 
 # =============================================================================
@@ -368,14 +426,40 @@ def main(argv: Optional[List[str]] = None) -> int:
         if problems:
             failures.append((entry, problems))
 
+    # -- second pass: every DOI in every Markdown file ------------------------
+    #  The bibliography rows above get field-by-field comparison. This pass
+    #  asks only whether the DOI resolves, which is the check that matters most
+    #  and the one that applies to a citation written in prose.
+    loose_unresolved: List[Tuple[str, List[str]]] = []
+    loose_checked = 0
+    if not args.key:
+        for doi, places in sorted(read_loose_dois().items()):
+            cached = cache.get(doi)
+            if cached is None:
+                if args.offline:
+                    cold += 1
+                    continue
+                status, record = fetch(doi)
+                fetched += 1
+                cache[doi] = {"status": status, "message": record}
+                time.sleep(REQUEST_PAUSE_SECONDS)
+                cached = cache[doi]
+            loose_checked += 1
+            if cached["status"] == "notfound":
+                loose_unresolved.append((doi, places))
+
     if fetched:
         save_cache(cache)
 
     # -- report ---------------------------------------------------------------
     print(
-        "{0} entries, {1} with a DOI, {2} without, {3} fetched this run.".format(
-            len(entries), len(with_doi), len(without_doi), fetched
+        "{0} bibliography entries, {1} with a DOI, {2} without.".format(
+            len(entries), len(with_doi), len(without_doi)
         )
+    )
+    print(
+        "{0} distinct DOI(s) across all Markdown files, {1} fetched this "
+        "run.".format(loose_checked, fetched)
     )
     if without_doi:
         print()
@@ -395,7 +479,20 @@ def main(argv: Optional[List[str]] = None) -> int:
         )
         return 3
 
-    if unresolved or failures:
+    if loose_unresolved:
+        print()
+        print(
+            "FAIL: {0} DOI(s) cited in Markdown DO NOT RESOLVE.".format(
+                len(loose_unresolved)
+            )
+        )
+        for doi, places in loose_unresolved:
+            print(
+                "  - {0}".format(doi)
+            )
+            print("      cited at {0}".format(", ".join(places[:3])))
+
+    if unresolved or failures or loose_unresolved:
         print()
         if unresolved:
             print("FAIL: {0} DOI(s) DO NOT RESOLVE.".format(len(unresolved)))
