@@ -83,6 +83,22 @@ SKIP_DIRS = {
 SKIP_FILES = {"LICENCE", "LICENSE"}
 
 # -----------------------------------------------------------------------------
+#  Exact paths never scanned, each for a stated reason.
+#
+#  `docs/project/licence.md` is the generated mirror of the root LICENCE, which
+#  `tools/generate_docs.py` copies into the documentation tree because mkdocs
+#  can only serve what is inside `docs_dir`. It carries the EUPL text verbatim,
+#  typographic quotation marks and dashes included.
+#
+#  Excluding it follows the same principle as excluding the root LICENCE and
+#  not a different one: the text is a published legal instrument, and running
+#  `--fix` over it would alter the licence. The exclusion is by exact path
+#  rather than by filename so that a future document called `licence.md`
+#  somewhere else is still checked.
+# -----------------------------------------------------------------------------
+SKIP_PATHS = {Path("docs") / "project" / "licence.md"}
+
+# -----------------------------------------------------------------------------
 #  Extensions scanned. Anything not listed is treated as binary or irrelevant.
 # -----------------------------------------------------------------------------
 TEXT_SUFFIXES = {
@@ -161,6 +177,8 @@ def iter_text_files() -> List[Path]:
         if any(part in SKIP_DIRS for part in rel.parts):
             continue
         if rel.name in SKIP_FILES:
+            continue
+        if rel in SKIP_PATHS:
             continue
         if rel.suffix in TEXT_SUFFIXES or rel.name in TEXT_NAMES:
             out.append(path)
