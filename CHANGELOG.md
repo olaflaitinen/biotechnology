@@ -26,29 +26,36 @@ date.
 
 ### Added
 
-- The **blue branch**, complete at eight of eight subtypes: `marine_genomics`,
-  `marine_natural_products`, `marine_enzymes`, `algal_biotechnology`,
-  `seaweed_cultivation`, `aquaculture_biotechnology`, `marine_biomaterials`
-  and `marine_biofouling_control`. Fifty-seven files, ordered from reading the
-  sea through growing it to defending against it.
+- `white.biopolymers` subtype package, seven facets. Organised around the
+  independence of biobased content and biodegradability, and around the
+  distinction between disintegration and mineralisation that the restriction
+  of oxo-degradable plastics turned on.
+- `white.cell_free_biomanufacturing` subtype package, seven facets. Completes
+  the white branch at nine of nine. It is the only white record at
+  `Maturity.PILOT` and the only one at `Scale.BENCH`, both deliberate: the
+  technology is established as a research reagent and at demonstration scale
+  as a manufacturing platform.
+- `tools/check_enum_members.py`, which validates every controlled-vocabulary
+  reference under `src/biotechnology/branches/` against `core/enums.py` using
+  the abstract syntax tree, with no import. It is the only check in the
+  repository that gives a useful answer while the library is half written,
+  which is exactly when the error it catches is invisible to Python.
+- The new check is wired into `.pre-commit-config.yaml`, the `data` target of
+  the `Makefile` and the taxonomy integrity job of `ci.yml`.
 
-  Three records carry findings that shape the branch. `marine_natural_products`
-  is organised around supply rather than discovery, since the interesting
-  molecules occur at roughly a gram per tonne of animal and no marine-derived
-  medicine has reached a market by harvesting. `marine_biomaterials` sits at
-  the opposite end of the same problem, with waste raw materials and
-  variability rather than scarcity as its constraint. And
-  `marine_biofouling_control` closes the branch by inverting it, treating
-  marine life as the adversary, and carries the clearest case in the library of
-  a technology that was excellent at its purpose and unacceptable in its
-  consequences.
+### Fixed
 
-  Two vocabulary values differ from every other record in the branch and are
-  argued in place: `marine_natural_products` is `Scale.BENCH` despite marketed
-  products, because the discipline's unit is milligrams and the supply problem
-  exists precisely because that never rises; `seaweed_cultivation` is
-  `Scale.FIELD`, the only record in the branch grown in a place rather than in
-  a vessel.
+- `branches/white/__init__.py` referred to a `Branch.prefers_dark_text` method
+  that does not exist. The property is `Branch.is_light`. Found by importing
+  the assembled branch rather than by reading the diff.
+- Two `governance.py` facets used controlled-vocabulary members that do not
+  exist: `RiskTier.MODERATE` and `RiskTier.LOW`, where the vocabulary offers
+  `ROUTINE`, `CONTROLLED`, `REGULATED` and `RESTRICTED` and measures governance
+  intensity rather than danger; and `Domain.AGRICULTURE`, `Domain.INDUSTRY` and
+  `Domain.HEALTHCARE`, where the vocabulary groups by who pays and offers
+  `FOOD`, `MATERIALS` and `HEALTH`. Both records were corrected and the values
+  justified in comments. `tools/check_enum_members.py` exists so that this
+  class of error cannot recur silently.
 
 ---
 
