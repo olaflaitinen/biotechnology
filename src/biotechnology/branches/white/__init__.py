@@ -22,10 +22,11 @@
 #
 #  WHY THE COLOUR IS ALMOST WHITE
 #  The colour token below is a very light grey rather than pure white, because
-#  a pure white swatch is invisible against a white page. This is the only
-#  branch in the library for which `Branch.is_light` returns True, meaning
-#  black text is more readable than white on the swatch. `core/models.py`
-#  documents that property with this branch as its worked example.
+#  a pure white swatch is invisible against a white page. It is the lightest
+#  branch in the library by a wide margin, and one of two for which
+#  `Branch.is_light` returns True, meaning black text is more readable than
+#  white on the swatch. Yellow is the other. `core/models.py` documents that
+#  property with this branch as its worked example.
 #
 #  SPDX-License-Identifier: EUPL-1.2
 #  Copyright (c) 2026 Gustav Olaf Yunus Laitinen-Fredriksson Lundstrom-Imanov
