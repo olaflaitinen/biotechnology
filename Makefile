@@ -131,10 +131,24 @@ validate:
 	$(PYTHON) $(TOOLS)/check_references.py
 	$(PYTHON) $(TOOLS)/check_ascii.py
 	$(PYTHON) $(TOOLS)/check_defensive.py
+	$(PYTHON) $(TOOLS)/check_packaging.py
 	$(PYTHON) -m pytest $(TESTS)/test_integrity.py -q
 
 # Repository invariants that hold regardless of the taxonomy content. Fast
 # enough to run constantly, and each failure prints its own remedy.
+# -----------------------------------------------------------------------------
+#  citations
+#  Resolves every DOI in BIBLIOGRAPHY.md against Crossref. Separate from
+#  `validate` because it needs the network, and a target that fails on a train
+#  is a target people stop running. `--offline` verifies against the cache.
+# -----------------------------------------------------------------------------
+citations:
+	$(PYTHON) $(TOOLS)/verify_references.py
+
+citations-offline:
+	$(PYTHON) $(TOOLS)/verify_references.py --offline
+
+
 policy:
 	$(PYTHON) $(TOOLS)/check_no_dependencies.py
 	$(PYTHON) $(TOOLS)/check_dashes.py

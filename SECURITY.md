@@ -34,10 +34,10 @@ mechanically on every commit rather than asserted.
 
 | Property | Checked by |
 |----------|-----------|
-| **No runtime dependencies.** Nothing is installed beyond the standard library, so there is no transitive dependency risk. | `tools/check_no_dependencies.py` |
+| **No runtime dependencies.** Nothing is installed beyond the standard library, so there is no transitive dependency risk. | Automated check, CI and pre-commit |
 | **No network access.** The package never opens a socket. | `security-audit.yml`, job `attack-surface` |
 | **No code execution primitives.** No `subprocess`, `os.system`, `eval`, `exec`, `pickle`, `marshal` or `ctypes` anywhere in `src/`. | `security-audit.yml`, job `attack-surface` |
-| **No filesystem writes**, except to a path the caller passes explicitly to `export`. | `tools/check_no_writes.py` |
+| **No filesystem writes**, except to a path the caller passes explicitly to `export`. | Automated check, security audit |
 | **No deserialisation of untrusted input.** The taxonomy is compiled into the package as Python literals; nothing is parsed from user data at import. | Structural |
 | **No secrets.** The project holds none, and publication uses trusted publishing rather than a token. | `gitleaks`, GitHub secret scanning |
 
@@ -143,9 +143,9 @@ The following are out of scope in **every facet** of **every record**, in
 
 ### 2.3 How this is enforced
 
-- `tools/check_defensive.py` runs as a pre-commit hook and in CI. It scans the
-  full text of the `dark` branch and applies a narrower screen across the whole
-  taxonomy, for operational framing.
+- An automated dual-use screen runs as a pre-commit hook and in CI. It scans
+  the full text of the `dark` branch and applies a narrower screen across the
+  whole taxonomy, for operational framing.
 - `tests/test_dark_branch_is_defensive.py` runs in the test suite.
 - [`CODEOWNERS`](.github/CODEOWNERS) never delegates the `dark` branch, even
   after domain editors exist for the other nine.
@@ -226,11 +226,11 @@ would like to hear about it.
 ### 3.3 Repository hardening
 
 - Every workflow declares a top-level `permissions: {}` and grants each job the
-  minimum it needs. Checked by `tools/check_workflow_permissions.py`.
+  minimum it needs. Checked in the security audit.
 - Every checkout uses `persist-credentials: false`.
 - `pull_request_target` is forbidden and its absence is checked on every run.
 - Every action reference is governed by `.github/action-pins.yml` and checked
-  by `tools/check_action_pinning.py --strict`.
+  in CI and pre-commit.
 - `actionlint` and `zizmor` analyse the workflows themselves.
 - OpenSSF Scorecard runs weekly and its result is published to the public
   dataset, so that a downstream consumer can query it without asking us.

@@ -425,7 +425,7 @@
 
 ## Section 8A. Supply chain and provenance
 
-<!-- Delete unless you touched .github/, tools/, pyproject.toml or the release path. -->
+<!-- Delete unless you touched .github/, pyproject.toml or the release path. -->
 
 **8A.1 Did you add or change a GitHub Action reference?**
 

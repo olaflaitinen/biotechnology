@@ -14,7 +14,7 @@
 
 **A machine-readable, dual-register taxonomy of the ten colour-coded branches of biotechnology.**
 
-*Ten branches · 85 subtypes · every record written twice - once for specialists, once for everybody else.*
+*Ten branches | 85 subtypes | every record written twice - once for specialists, once for everybody else.*
 
 [![License: EUPL-1.2](https://img.shields.io/badge/License-EUPL--1.2-blue.svg)](LICENCE)
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13%20%7C%203.14-blue.svg)](pyproject.toml)
@@ -28,11 +28,11 @@
 
 ## What this is
 
-Biotechnology is conventionally divided into ten colour-coded branches - red for
-medicine, green for agriculture, white for industry, and so on. That scheme is
-taught in every introductory course and used in policy documents, funding calls
-and curricula across Europe. It has never existed as structured, queryable,
-citable data.
+Biotechnology is conventionally divided into colour-coded branches - red for
+medicine, green for agriculture, white for industry, and so on.<sup>[1](#ref-1)</sup>
+The scheme is taught in introductory courses and used in policy documents,
+funding calls and curricula across Europe. It has never existed as structured,
+queryable, citable data.
 
 This library is that data.
 
@@ -65,6 +65,12 @@ Three problems this library was built to solve.
 Ask "which parts of biotechnology are at pilot scale and require
 national-agency authorisation?" and there is no dataset to query. Here it is one
 line: `[s for s in bt.subtypes() if s.scale is Scale.PILOT and s.risk_tier is RiskTier.REGULATED]`.
+Every record carries a stable identifier, a controlled vocabulary placement and
+an explicit licence, which is what makes the taxonomy findable, accessible,
+interoperable and reusable in the sense the FAIR principles
+set out.<sup>[2](#ref-2)</sup> A structured vocabulary changes what can be asked
+of a field, which is the lesson of the Gene Ontology: the value was never the
+definitions, it was that they became queryable.<sup>[3](#ref-3)</sup>
 
 **2. Technical writing excludes the people who decide about biotechnology.**
 Parliamentary committees, procurement officers, journalists and school students
@@ -79,8 +85,8 @@ rejects it.
 This one is not. Every subtype's `metrics` carry symbols, units, typical ranges
 and an evidence grade, and most link to a `formulas` module that computes them.
 The description of qPCR diagnostics points at the module that calculates
-ΔΔCt; the description of vaccine development points at the one that computes a
-herd-immunity threshold from R₀.
+delta-delta Ct; the description of vaccine development points at the one that computes a
+herd-immunity threshold from R0.
 
 ---
 
@@ -99,8 +105,9 @@ herd-immunity threshold from R₀.
 | `dark` | Dark Biotechnology | Biosecurity, biosafety, misuse risk | 8 | `#212121` |
 | `purple` | Purple Biotechnology | Law, ethics, patents, intellectual property | 9 | `#6A1B9A` |
 
-The colour scheme is a convention, not a standard. It grew out of European
-science-policy writing rather than being designed, so the boundaries overlap:
+The colour scheme is a convention, not a standard.<sup>[1](#ref-1)</sup> It grew
+out of European science-policy writing rather than being designed, so the
+boundaries overlap:
 an enzyme in a washing powder is white, the same enzyme in a cheese vat is
 yellow, and the algorithm that designed it is gold. This library records the
 conventional assignment and then makes the overlaps navigable through explicit
@@ -285,13 +292,13 @@ mechanically on every commit rather than asserted.
 
 | Property | Checked by |
 |---|---|
-| Zero runtime dependencies | `tools/check_no_dependencies.py` |
+| Zero runtime dependencies | Automated check, CI and pre-commit |
 | No network access, the package never opens a socket | `security-audit.yml` |
 | No `subprocess`, `eval`, `exec`, `pickle`, `marshal` or `ctypes` | `security-audit.yml` |
-| No filesystem writes except an explicit export path | `tools/check_no_writes.py` |
+| No filesystem writes except an explicit export path | Automated check, security audit |
 | No secrets, publication uses trusted publishing not a token | `gitleaks`, PyPI OIDC |
-| Every GitHub Action governed and pinned | `tools/check_action_pinning.py` |
-| Every workflow least-privilege, `persist-credentials: false` | `tools/check_workflow_permissions.py` |
+| Every GitHub Action governed and pinned | Automated check, CI and pre-commit |
+| Every workflow least-privilege, `persist-credentials: false` | Automated check, security audit |
 
 Releases carry a **signed tag**, a **build provenance attestation** and a
 **CycloneDX SBOM**. Verify one with:
@@ -386,6 +393,33 @@ GitHub renders a formatted citation from it in the sidebar.
   license   = {EUPL-1.2}
 }
 ```
+
+---
+
+## References
+
+Numbered in order of first appearance, in the style of *Nature*. Every DOI here
+is resolved against Crossref by an automated check, which fails the build if a
+DOI does not resolve or if any stored field disagrees with the publisher's
+deposited record. Run it with `make citations`.
+
+<a id="ref-1"></a>
+1. Barcelos, M. C. S., Lupki, F. B., Campolina, G. A., Nelson, D. L. & Molina, G.
+   The colors of biotechnology: general overview and developments of white,
+   green and blue areas. *FEMS Microbiology Letters* **365**, fny239 (2018).
+   DOI: 10.1093/femsle/fny239
+
+<a id="ref-2"></a>
+2. Wilkinson, M. D. *et al.* The FAIR Guiding Principles for scientific data
+   management and stewardship. *Scientific Data* **3**, 160018 (2016).
+   DOI: 10.1038/sdata.2016.18
+
+<a id="ref-3"></a>
+3. Ashburner, M. *et al.* Gene Ontology: tool for the unification of biology.
+   *Nature Genetics* **25**, 25-29 (2000). DOI: 10.1038/75556
+
+The full bibliography for the taxonomy itself, one entry for every citation key
+used in any record, is in [`BIBLIOGRAPHY.md`](BIBLIOGRAPHY.md).
 
 ---
 
