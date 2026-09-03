@@ -169,6 +169,17 @@ repos:
         pass_filenames: false
         files: "^src/biotechnology/branches/.*/metrics\\.py$"
 
+      # This hook works on the syntax tree rather than by importing, so it is
+      # the one check that still gives a useful answer while a branch package
+      # is only half written. That is deliberate: an invented vocabulary member
+      # would otherwise sit undetected until the branch became importable.
+      - id: "vocabulary-members"
+        name: "controlled vocabulary references all resolve"
+        entry: "python tools/check_enum_members.py"
+        language: "system"
+        pass_filenames: false
+        files: "^src/biotechnology/(branches/|core/enums\\.py)"
+
       - id: "no-em-dash"
         name: "no em dashes or en dashes anywhere"
         entry: "python tools/check_dashes.py"

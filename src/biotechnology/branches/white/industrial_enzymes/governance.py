@@ -63,21 +63,25 @@ __all__ = [
 MATURITY = Maturity.ESTABLISHED
 
 # -----------------------------------------------------------------------------
-#  RISK_TIER = LOW, with one qualification that must be stated rather than
-#  buried.
+#  RISK_TIER = CONTROLLED, and the choice needs explaining because a reader
+#  could argue for either neighbouring value.
 #
-#  The product is a protein that is digested like any other dietary protein,
-#  is not infectious, does not replicate, and does not persist in the
-#  environment. Against most hazards this is as benign as an industrial
-#  chemical gets.
+#  The vocabulary measures GOVERNANCE INTENSITY rather than danger. CONTROLLED
+#  means a permit or licence is needed, and that is universally true here: the
+#  production organism is a genetically modified microorganism handled under a
+#  contained use authorisation, whatever the enzyme is later used for.
 #
-#  THE QUALIFICATION: enzymes are potent respiratory sensitisers. Occupational
-#  asthma among detergent workers in 1969 nearly ended the industry. LOW is the
-#  correct tier for the product in use; it is not a statement that handling
-#  bulk enzyme dust is safe, and the controls in STANDARDS below exist because
-#  it is not.
+#  It is not ROUTINE, because of that permit and because enzymes are potent
+#  respiratory sensitisers whose handling is subject to occupational controls
+#  well beyond ordinary factory practice. The 1969 episode in `history.py` is
+#  the reason.
+#
+#  It is not REGULATED, even though food and feed grades genuinely do require
+#  agency authorisation before sale, because that applies to a subset rather
+#  than to the class. That fact is carried by REGULATORY_STATUS below instead
+#  of by inflating this tier.
 # -----------------------------------------------------------------------------
-RISK_TIER = RiskTier.LOW
+RISK_TIER = RiskTier.CONTROLLED
 
 # -----------------------------------------------------------------------------
 #  SCALE = INDUSTRIAL. The unit of operation is a fermenter of tens to hundreds
@@ -87,13 +91,15 @@ RISK_TIER = RiskTier.LOW
 SCALE = Scale.INDUSTRIAL
 
 # -----------------------------------------------------------------------------
-#  DOMAINS. INDUSTRY is the sector. FOOD is claimed because baking, dairy,
-#  starch and juice processing are among the largest applications and bring
-#  their own legal regime. ENVIRONMENT is claimed for the displaced chlorine,
-#  solvent and phosphate documented in `narrative.WHY_IT_MATTERS`.
+#  DOMAINS. MATERIALS is the sector, since the vocabulary's industrial label
+#  covers chemicals, fibres and process stock, which is what these catalysts
+#  are sold into. FOOD is claimed because baking, dairy, starch and juice
+#  processing are among the largest applications and bring their own legal
+#  regime. ENVIRONMENT is claimed for the displaced chlorine, solvent and
+#  phosphorus documented in `narrative.WHY_IT_MATTERS`.
 # -----------------------------------------------------------------------------
 DOMAINS: Tuple[Domain, ...] = (
-    Domain.INDUSTRY,
+    Domain.MATERIALS,
     Domain.FOOD,
     Domain.ENVIRONMENT,
 )

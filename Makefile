@@ -127,6 +127,7 @@ coverage:
 validate:
 	$(PYTHON) -m $(PKG) validate --strict
 	$(PYTHON) $(TOOLS)/check_facets.py
+	$(PYTHON) $(TOOLS)/check_enum_members.py
 	$(PYTHON) $(TOOLS)/check_references.py
 	$(PYTHON) $(TOOLS)/check_ascii.py
 	$(PYTHON) $(TOOLS)/check_defensive.py

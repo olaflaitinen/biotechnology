@@ -63,7 +63,9 @@ BRANCH = Branch.build(
         "bioeconomy",
         "grey industrial",
     ),
-    domains=(Domain.INDUSTRY, Domain.ENERGY, Domain.ENVIRONMENT),
+    # MATERIALS is the vocabulary's label for chemicals, fibres and process
+    # stock, which is what this branch manufactures. ENERGY covers the fuels.
+    domains=(Domain.MATERIALS, Domain.ENERGY, Domain.ENVIRONMENT),
     summary="Industrial processes, biofuels, biomaterials and biobased chemicals.",
     description=(
         "White biotechnology uses enzymes and whole cells as manufacturing "

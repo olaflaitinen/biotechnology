@@ -65,20 +65,18 @@ __all__ = [
 MATURITY = Maturity.ESTABLISHED
 
 # -----------------------------------------------------------------------------
-#  RISK_TIER = MODERATE, and the reasoning is worth stating because a reader
-#  might expect either extreme.
+#  RISK_TIER = REGULATED. The vocabulary measures GOVERNANCE INTENSITY, not
+#  danger, and this value means a national agency decides before the product
+#  may be sold. That is exactly the position: a veterinary vaccine requires a
+#  marketing authorisation, a dossier, batch release and pharmacovigilance.
 #
-#  It is not LOW: live attenuated vaccines can revert or recombine, mass
-#  administration removes any possibility of individual clinical judgement, and
-#  residues in food-producing animals are a human exposure route. Working with
-#  seed material for high-consequence pathogens such as foot-and-mouth disease
-#  requires high-containment facilities.
-#
-#  It is not HIGH: the products are administered to animals rather than people,
-#  the platforms are long-established, and the counterfactual is an untreated
-#  outbreak whose risk is considerably greater.
+#  It is not RESTRICTED, because access to the technology is not deliberately
+#  limited by law. The one place where it approaches that tier is work with
+#  seed material for high-consequence pathogens such as foot-and-mouth disease,
+#  which requires high containment, and that is a facility restriction rather
+#  than a restriction on the product class.
 # -----------------------------------------------------------------------------
-RISK_TIER = RiskTier.MODERATE
+RISK_TIER = RiskTier.REGULATED
 
 # -----------------------------------------------------------------------------
 #  SCALE = POPULATION. This matches `red.vaccine_development` and for the same
@@ -90,15 +88,18 @@ RISK_TIER = RiskTier.MODERATE
 SCALE = Scale.POPULATION
 
 # -----------------------------------------------------------------------------
-#  DOMAINS. AGRICULTURE is the sector, HEALTHCARE is claimed because zoonosis
-#  control and antimicrobial stewardship are human health interventions
-#  delivered through animals, and RESEARCH covers the surveillance and strain
-#  matching that keep the products current.
+#  DOMAINS. FOOD is the sector, since the great majority of doses go into
+#  food-producing animals. HEALTH is claimed deliberately and is the entry a
+#  reader might not expect: zoonosis control and antimicrobial stewardship are
+#  human health interventions that happen to be delivered through animals.
+#  ENVIRONMENT covers the wildlife programmes, above all the oral rabies
+#  vaccination of wild foxes recorded in `history.py`, which act on an
+#  ecosystem rather than on a farm.
 # -----------------------------------------------------------------------------
 DOMAINS: Tuple[Domain, ...] = (
-    Domain.AGRICULTURE,
-    Domain.HEALTHCARE,
-    Domain.RESEARCH,
+    Domain.FOOD,
+    Domain.HEALTH,
+    Domain.ENVIRONMENT,
 )
 
 # -----------------------------------------------------------------------------

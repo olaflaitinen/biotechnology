@@ -166,6 +166,9 @@ jobs:
       - name: "Facet contract"
         run: "python tools/check_facets.py"
 
+      - name: "Controlled vocabulary references resolve"
+        run: "python tools/check_enum_members.py"
+
       - name: "Cross-references resolve"
         run: "python tools/check_references.py"
 
