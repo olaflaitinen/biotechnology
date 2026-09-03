@@ -170,3 +170,7 @@ taxonomy.json
 taxonomy.csv
 graph.dot
 *.svg.tmp
+
+# Crossref metadata cache written by tools/verify_references.py. Regenerable,
+# and it would otherwise be a large churning blob in every diff.
+tools/.crossref_cache.json
