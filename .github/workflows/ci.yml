@@ -71,12 +71,12 @@ jobs:
       contents: "read"
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "3.12"
           cache: "pip"
@@ -107,12 +107,12 @@ jobs:
       contents: "read"
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "3.12"
 
@@ -146,12 +146,12 @@ jobs:
       contents: "read"
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "3.12"
           cache: "pip"
@@ -212,12 +212,12 @@ jobs:
             python-version: "3.13"
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "${{ matrix.python-version }}"
           cache: "pip"
@@ -231,7 +231,7 @@ jobs:
 
       - name: "Upload coverage"
         if: "matrix.os == 'ubuntu-latest' && matrix.python-version == '3.12'"
-        uses: "actions/upload-artifact@v4"
+        uses: "actions/upload-artifact@v7"
         with:
           name: "coverage-xml"
           path: "coverage.xml"
@@ -253,12 +253,12 @@ jobs:
       contents: "read"
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "3.12"
           cache: "pip"
@@ -299,12 +299,12 @@ jobs:
       contents: "read"
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
       - name: "Set up Python"
-        uses: "actions/setup-python@v5"
+        uses: "actions/setup-python@v7"
         with:
           python-version: "3.12"
           cache: "pip"
@@ -339,7 +339,7 @@ jobs:
           echo "Clean install has no third-party dependencies."
 
       - name: "Upload distribution"
-        uses: "actions/upload-artifact@v4"
+        uses: "actions/upload-artifact@v7"
         with:
           name: "distribution"
           path: "dist/"

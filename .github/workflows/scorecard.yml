@@ -64,7 +64,7 @@ jobs:
 
     steps:
       - name: "Check out"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v7"
         with:
           persist-credentials: false
 
@@ -84,14 +84,14 @@ jobs:
       #  maintainer comparing this quarter with last quarter needs the file.
       # -----------------------------------------------------------------------
       - name: "Upload artefact"
-        uses: "actions/upload-artifact@v4"
+        uses: "actions/upload-artifact@v7"
         with:
           name: "scorecard-results"
           path: "scorecard-results.sarif"
           retention-days: 90
 
       - name: "Upload to the Security tab"
-        uses: "github/codeql-action/upload-sarif@v3"
+        uses: "github/codeql-action/upload-sarif@v4"
         with:
           sarif_file: "scorecard-results.sarif"
           category: "scorecard"
