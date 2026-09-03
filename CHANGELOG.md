@@ -26,7 +26,36 @@ date.
 
 ### Added
 
-- Nothing yet.
+- `white.biopolymers` subtype package, seven facets. Organised around the
+  independence of biobased content and biodegradability, and around the
+  distinction between disintegration and mineralisation that the restriction
+  of oxo-degradable plastics turned on.
+- `white.cell_free_biomanufacturing` subtype package, seven facets. Completes
+  the white branch at nine of nine. It is the only white record at
+  `Maturity.PILOT` and the only one at `Scale.BENCH`, both deliberate: the
+  technology is established as a research reagent and at demonstration scale
+  as a manufacturing platform.
+- `tools/check_enum_members.py`, which validates every controlled-vocabulary
+  reference under `src/biotechnology/branches/` against `core/enums.py` using
+  the abstract syntax tree, with no import. It is the only check in the
+  repository that gives a useful answer while the library is half written,
+  which is exactly when the error it catches is invisible to Python.
+- The new check is wired into `.pre-commit-config.yaml`, the `data` target of
+  the `Makefile` and the taxonomy integrity job of `ci.yml`.
+
+### Fixed
+
+- `branches/white/__init__.py` referred to a `Branch.prefers_dark_text` method
+  that does not exist. The property is `Branch.is_light`. Found by importing
+  the assembled branch rather than by reading the diff.
+- Two `governance.py` facets used controlled-vocabulary members that do not
+  exist: `RiskTier.MODERATE` and `RiskTier.LOW`, where the vocabulary offers
+  `ROUTINE`, `CONTROLLED`, `REGULATED` and `RESTRICTED` and measures governance
+  intensity rather than danger; and `Domain.AGRICULTURE`, `Domain.INDUSTRY` and
+  `Domain.HEALTHCARE`, where the vocabulary groups by who pays and offers
+  `FOOD`, `MATERIALS` and `HEALTH`. Both records were corrected and the values
+  justified in comments. `tools/check_enum_members.py` exists so that this
+  class of error cannot recur silently.
 
 ---
 
