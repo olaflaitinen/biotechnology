@@ -176,10 +176,17 @@ def test_unwritten_registries_list_what_they_owe(generated: Path) -> None:
 
 
 def test_generated_pages_are_marked_as_generated(generated: Path) -> None:
-    """The first thing anyone does with a docs tree is edit a page in it."""
+    """The first thing anyone does with a docs tree is edit a page in it.
+
+    The banner names the SOURCE the page was produced from rather than the
+    program that produced it, so a reader is sent to the file they should
+    actually edit.
+    """
     text = (generated / "branches" / "grey" / "biomining.md").read_text(encoding="utf-8")
     assert "GENERATED FILE" in text
-    assert "generate_docs.py" in text
+    assert "Do not edit" in text
+    assert "src/biotechnology/branches/grey/biomining/" in text
+    assert "make docs" in text
 
 
 # =============================================================================
