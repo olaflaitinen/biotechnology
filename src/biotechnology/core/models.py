@@ -519,9 +519,18 @@ class Branch:
 
             Y = 0.299 R + 0.587 G + 0.114 B
 
-        White biotechnology is the only branch where this returns ``True``,
-        which is exactly why the check exists: its swatch would otherwise be
-        rendered with invisible white-on-white labels.
+        Two branches return ``True``: white at a luma of about 238, and
+        yellow at about 177. White is the reason the check exists, since its
+        swatch would otherwise be rendered with invisible white-on-white
+        labels, and yellow needs the same treatment for the same reason in
+        weaker form.
+
+        One caution for anyone changing a branch colour. Gold sits at a luma
+        of roughly 160, which is within half a unit of the threshold, so a
+        small adjustment to that swatch would flip its label colour. The
+        threshold is a convention rather than a perceptual constant, and a
+        renderer needing guaranteed contrast should compute a contrast ratio
+        against its actual text colour rather than relying on this property.
         """
         r, g, b = self.rgb
         return (0.299 * r + 0.587 * g + 0.114 * b) > 160
