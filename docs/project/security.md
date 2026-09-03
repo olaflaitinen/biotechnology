@@ -149,9 +149,9 @@ The following are out of scope in **every facet** of **every record**, in
 
 ### 2.3 How this is enforced
 
-- Automated dual-use screen, CI and pre-commit runs as a pre-commit hook and in CI. It scans the
-  full text of the `dark` branch and applies a narrower screen across the whole
-  taxonomy, for operational framing.
+- An automated dual-use screen runs as a pre-commit hook and in CI. It scans
+  the full text of the `dark` branch and applies a narrower screen across the
+  whole taxonomy, for operational framing.
 - `tests/test_dark_branch_is_defensive.py` runs in the test suite.
 - [`CODEOWNERS`](https://github.com/olaflaitinen/biotechnology/blob/main/.github/CODEOWNERS) never delegates the `dark` branch, even
   after domain editors exist for the other nine.
@@ -232,11 +232,11 @@ would like to hear about it.
 ### 3.3 Repository hardening
 
 - Every workflow declares a top-level `permissions: {}` and grants each job the
-  minimum it needs. Checked by Automated check, security audit.
+  minimum it needs. Checked in the security audit.
 - Every checkout uses `persist-credentials: false`.
 - `pull_request_target` is forbidden and its absence is checked on every run.
 - Every action reference is governed by `.github/action-pins.yml` and checked
-  by Automated check, CI and pre-commit.
+  in CI and pre-commit.
 - `actionlint` and `zizmor` analyse the workflows themselves.
 - OpenSSF Scorecard runs weekly and its result is published to the public
   dataset, so that a downstream consumer can query it without asking us.

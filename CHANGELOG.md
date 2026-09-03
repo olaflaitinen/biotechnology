@@ -93,9 +93,9 @@ date.
   `RiskTier.RESTRICTED`, and the restriction attaches to the subject, a
   protected species, rather than to the method, which is ordinary molecular
   biology.
-- an automated controlled-vocabulary check, which validates every controlled-vocabulary
-  reference under `src/biotechnology/branches/` against `core/enums.py` using
-  the abstract syntax tree, with no import. It is the only check in the
+- An automated controlled-vocabulary check, which validates every reference
+  under `src/biotechnology/branches/` against `core/enums.py` using the
+  abstract syntax tree, with no import. It is the only check in the
   repository that gives a useful answer while the library is half written,
   which is exactly when the error it catches is invisible to Python.
 - The new check is wired into `.pre-commit-config.yaml`, the `data` target of
@@ -112,8 +112,8 @@ date.
   intensity rather than danger; and `Domain.AGRICULTURE`, `Domain.INDUSTRY` and
   `Domain.HEALTHCARE`, where the vocabulary groups by who pays and offers
   `FOOD`, `MATERIALS` and `HEALTH`. Both records were corrected and the values
-  justified in comments. an automated controlled-vocabulary check exists so that this
-  class of error cannot recur silently.
+  justified in comments. An automated controlled-vocabulary check now exists
+  so that this class of error cannot recur silently.
 
 ---
 

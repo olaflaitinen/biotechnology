@@ -399,9 +399,9 @@ GitHub renders a formatted citation from it in the sidebar.
 ## References
 
 Numbered in order of first appearance, in the style of *Nature*. Every DOI here
-is resolved against Crossref by an automated Crossref resolution check, which fails the
-build if one does not resolve or if any stored field disagrees with the
-publisher's deposited record. Run it with `make citations`.
+is resolved against Crossref by an automated check, which fails the build if a
+DOI does not resolve or if any stored field disagrees with the publisher's
+deposited record. Run it with `make citations`.
 
 <a id="ref-1"></a>
 1. Barcelos, M. C. S., Lupki, F. B., Campolina, G. A., Nelson, D. L. & Molina, G.

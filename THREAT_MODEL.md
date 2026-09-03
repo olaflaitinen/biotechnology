@@ -63,7 +63,7 @@ checked mechanically.
 
 | Property | Risk class removed | Enforced by |
 |----------|--------------------|-------------|
-| **Zero runtime dependencies** | Every transitive dependency compromise | Automated check, CI and pre-commit, run in CI, in the security audit, in dependency review and as a pre-commit hook |
+| **Zero runtime dependencies** | Every transitive dependency compromise | Automated check, run in CI, in the security audit, in dependency review and as a pre-commit hook |
 | **No network capability** | Data exfiltration, callback, beaconing | `security-audit.yml`, job `attack-surface` |
 | **No code execution primitives** | Deserialisation attacks, command injection, sandbox escape | `security-audit.yml`, job `attack-surface`, greps for `subprocess`, `os.system`, `eval`, `exec`, `pickle`, `marshal`, `ctypes` |
 | **No filesystem writes except an explicit export path** | Path traversal, arbitrary write | Automated check, security audit |
@@ -91,8 +91,8 @@ against projects with otherwise good hygiene.
 
 - Every `uses:` reference is recorded in `.github/action-pins.yml` with a
   pinned commit SHA, a review date and a justification.
-  Automated check, CI and pre-commit fails CI on any reference that is
-  not governed by that file.
+  An automated check fails CI on any reference that is not governed by that
+  file.
 - Top-level `permissions: {}` in every workflow. Each job re-grants only what
   it needs; most get `contents: read` and nothing else.
 - `persist-credentials: false` on every checkout, so the token is not left in
@@ -238,8 +238,8 @@ later compromised, executing in the browser of every reader.
 
 - The site loads **no third-party JavaScript, stylesheet or font**. MathJax is
   vendored into `docs/javascripts/` and served same-origin.
-- Automated check, documentation build fails the documentation build if any external
-  origin appears in the built output.
+- An automated check fails the documentation build if any external origin
+  appears in the built output.
 - Deployment happens only from a push to `main`, never from a fork.
 - `pages: write` is held by one small job that does nothing except deploy.
 
@@ -260,7 +260,7 @@ content-policy footnote.
 
 - `SECURITY.md` section 2 states exactly what is out of scope, in every facet
   of every record, in every branch.
-- Automated dual-use screen, CI and pre-commit screens the taxonomy on every commit, in
+- An automated dual-use screen scans the taxonomy on every commit, in
   pre-commit and in CI.
 - `tests/test_dark_branch_is_defensive.py` runs in the test suite.
 - `CODEOWNERS` never delegates the `dark` branch, even after domain editors
