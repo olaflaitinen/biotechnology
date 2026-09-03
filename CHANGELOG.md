@@ -26,7 +26,29 @@ date.
 
 ### Added
 
-- Nothing yet.
+- The **blue branch**, complete at eight of eight subtypes: `marine_genomics`,
+  `marine_natural_products`, `marine_enzymes`, `algal_biotechnology`,
+  `seaweed_cultivation`, `aquaculture_biotechnology`, `marine_biomaterials`
+  and `marine_biofouling_control`. Fifty-seven files, ordered from reading the
+  sea through growing it to defending against it.
+
+  Three records carry findings that shape the branch. `marine_natural_products`
+  is organised around supply rather than discovery, since the interesting
+  molecules occur at roughly a gram per tonne of animal and no marine-derived
+  medicine has reached a market by harvesting. `marine_biomaterials` sits at
+  the opposite end of the same problem, with waste raw materials and
+  variability rather than scarcity as its constraint. And
+  `marine_biofouling_control` closes the branch by inverting it, treating
+  marine life as the adversary, and carries the clearest case in the library of
+  a technology that was excellent at its purpose and unacceptable in its
+  consequences.
+
+  Two vocabulary values differ from every other record in the branch and are
+  argued in place: `marine_natural_products` is `Scale.BENCH` despite marketed
+  products, because the discipline's unit is milligrams and the supply problem
+  exists precisely because that never rises; `seaweed_cultivation` is
+  `Scale.FIELD`, the only record in the branch grown in a place rather than in
+  a vessel.
 
 ---
 
