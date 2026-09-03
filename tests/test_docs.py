@@ -24,8 +24,8 @@
 
 from __future__ import annotations
 
+import importlib.util
 import re
-import subprocess
 import sys
 from pathlib import Path
 from typing import Tuple
@@ -40,14 +40,33 @@ GENERATOR = ROOT / "tools" / "generate_docs.py"
 DOCS = ROOT / "docs"
 
 
+def _load_generator():
+    """Import the generator as a module rather than running it as a process.
+
+    A subprocess was the obvious first choice and it does not work here. Under
+    pytest's output capture on Windows the child inherits handles pytest has
+    replaced, and every call fails with `OSError: [WinError 6] The handle is
+    invalid` before the generator runs at all.
+
+    Importing is also the better test regardless of platform: it is faster, it
+    shows a real traceback when the generator raises, and it exercises exactly
+    the `main()` the command line calls. `tests/test_cli.py` calls the CLI
+    in-process for the same reasons.
+
+    `tools/` is not a package, so the module is loaded from its path.
+    """
+    spec = importlib.util.spec_from_file_location("generate_docs", GENERATOR)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["generate_docs"] = module
+    spec.loader.exec_module(module)
+    return module
+
+
 def generate(into: Path) -> None:
-    result = subprocess.run(
-        [sys.executable, str(GENERATOR), "--output", str(into)],
-        capture_output=True,
-        text=True,
-        cwd=str(ROOT),
-    )
-    assert result.returncode == 0, result.stderr
+    module = _load_generator()
+    code = module.main(["--output", str(into)])
+    assert code == 0, "generator exited {0}".format(code)
 
 
 @pytest.fixture(scope="session")

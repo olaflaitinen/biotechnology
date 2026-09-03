@@ -781,9 +781,16 @@ def main(argv: Optional[List[str]] = None) -> int:
         if write_once(out / "guide" / page, guide_starter(title)):
             created += 1
 
-    print(
-        "Wrote {0} generated page(s) to {1}/".format(written, out.relative_to(ROOT))
-    )
+    # `--output` may point anywhere, and the test suite generates into a
+    # temporary directory so that a test run never touches the working tree.
+    # `Path.relative_to` raises for a path outside the repository, so the
+    # absolute path is the fallback rather than a crash in the final line
+    # after all the work has succeeded.
+    try:
+        shown = out.relative_to(ROOT)
+    except ValueError:
+        shown = out
+    print("Wrote {0} generated page(s) to {1}/".format(written, shown))
     if created:
         print(
             "Created {0} authored guide page(s); they will never be "
