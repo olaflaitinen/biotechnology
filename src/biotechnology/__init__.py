@@ -40,6 +40,8 @@
 
 from __future__ import annotations
 
+from typing import Optional
+
 # -----------------------------------------------------------------------------
 #  Controlled vocabularies. Re-exported at the top level because filtering is
 #  a first-class use of this library and `from biotechnology import Maturity`
@@ -80,6 +82,7 @@ from .core.errors import (
 # -----------------------------------------------------------------------------
 #  Record types.
 # -----------------------------------------------------------------------------
+from .branches import PENDING_COLOURS, WRITTEN_COLOURS
 from .core.models import Branch, Metric, Milestone, Node, Subtype
 
 # -----------------------------------------------------------------------------
@@ -149,17 +152,47 @@ GREY = get_branch("grey")
 #: US-spelling alias of :data:`GREY`. The same object, not a copy.
 GRAY = GREY
 
-#: Arid zones, deserts and degraded land.
-BROWN = get_branch("brown")
+# -----------------------------------------------------------------------------
+#  THE FOUR CONSTANTS BELOW ARE None UNTIL THEIR BRANCH IS WRITTEN.
+#
+#  Every constant above is bound eagerly because its branch exists. These four
+#  cannot be, and the previous unconditional `get_branch("brown")` is what made
+#  `import biotechnology` fail outright:
+#
+#      UnknownBranchError: unknown branch 'brown';
+#      valid branchs: red, green, white, blue, yellow, grey
+#
+#  Six finished branches were unreachable because four were not started.
+#
+#  `None` is chosen over omitting the name entirely, and the difference
+#  matters. An absent attribute makes `from biotechnology import BROWN` an
+#  ImportError, which is indistinguishable from a typo. A `None` makes the same
+#  import succeed and the value announce itself, and `PENDING_COLOURS` says
+#  authoritatively which ones they are.
+#
+#  When a branch lands, its line here becomes a plain `get_branch` call like
+#  the six above, and nothing else changes.
+# -----------------------------------------------------------------------------
+def _branch_or_pending(key: str) -> Optional[Branch]:
+    """Return the branch if its package is written, otherwise None."""
+    return get_branch(key) if key not in PENDING_COLOURS else None
+
+
+#: Arid zones, deserts and degraded land. None until the branch is written.
+BROWN = _branch_or_pending("brown")
 
 #: Bioinformatics, computation, data analysis and nanobiotechnology.
-GOLD = get_branch("gold")
+GOLD = _branch_or_pending("gold")
 
 #: Biosecurity, biosafety and the governance of misuse risk. Defensive only.
-DARK = get_branch("dark")
+DARK = _branch_or_pending("dark")
 
 #: Law, ethics, patents and intellectual property.
-PURPLE = get_branch("purple")
+PURPLE = _branch_or_pending("purple")
+
+#: Colour keys whose branch package has not been written yet. Empty when the
+#: taxonomy is complete, and the honest answer to "what is missing".
+PENDING = PENDING_COLOURS
 
 #: Every branch, in colour-wheel order. Same objects as the constants above.
 ALL_BRANCHES = branches()

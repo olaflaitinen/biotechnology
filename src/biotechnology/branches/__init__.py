@@ -53,7 +53,13 @@ from . import (
     yellow,
 )
 
-__all__ = ["ALL_BRANCHES", "BRANCH_MODULES", "COLOUR_ORDER"]
+__all__ = [
+    "ALL_BRANCHES",
+    "BRANCH_MODULES",
+    "COLOUR_ORDER",
+    "PENDING_COLOURS",
+    "WRITTEN_COLOURS",
+]
 
 # -----------------------------------------------------------------------------
 #  Presentation order.
@@ -97,13 +103,53 @@ BRANCH_MODULES: Dict[str, object] = {
 }
 
 # -----------------------------------------------------------------------------
+#  WHICH BRANCHES ARE ACTUALLY WRITTEN
+#
+#  COLOUR_ORDER above names all ten colours because the presentation order is
+#  a published contract and should not change as packages land. A colour whose
+#  package has not been written yet is an empty directory, so importing it
+#  yields a namespace package with no `BRANCH` attribute.
+#
+#  BEFORE THIS WAS HANDLED, THAT MADE THE WHOLE LIBRARY UNIMPORTABLE.
+#
+#      AttributeError: module 'biotechnology.branches.brown'
+#      has no attribute 'BRANCH'
+#
+#  and because `biotechnology/__init__.py` imports `core.registry`, which
+#  imports this module, the failure was not confined to the missing colour. It
+#  took down `import biotechnology` entirely, and with it the command line, the
+#  validator, the documentation generator and every test. Six complete branches
+#  and fifty-one finished records were unreachable because four directories
+#  were empty.
+#
+#  So a branch is included when it defines `BRANCH`, and recorded in
+#  PENDING_COLOURS when it does not. This is deliberately NOT a silent skip:
+#  the pending set is public, `counts()` reports against it, and the
+#  documentation generator states the coverage rather than implying the
+#  taxonomy is complete.
+#
+#  The check is `hasattr` rather than a try/except around the attribute access,
+#  because an ImportError raised INSIDE a written branch package must still
+#  propagate. Swallowing that would turn a real syntax error in a facet into a
+#  silently missing branch, which is precisely the failure mode this library
+#  cannot afford.
+# -----------------------------------------------------------------------------
+PENDING_COLOURS: Tuple[str, ...] = tuple(
+    key for key in COLOUR_ORDER if not hasattr(BRANCH_MODULES[key], "BRANCH")
+)
+
+WRITTEN_COLOURS: Tuple[str, ...] = tuple(
+    key for key in COLOUR_ORDER if key not in PENDING_COLOURS
+)
+
+# -----------------------------------------------------------------------------
 #  The assembled tuple every other module imports.
 #
 #  Built from COLOUR_ORDER rather than from dict order so that the presentation
 #  order is stated once and cannot drift.
 # -----------------------------------------------------------------------------
 ALL_BRANCHES: Tuple[Branch, ...] = tuple(
-    BRANCH_MODULES[key].BRANCH for key in COLOUR_ORDER  # type: ignore[attr-defined]
+    BRANCH_MODULES[key].BRANCH for key in WRITTEN_COLOURS  # type: ignore[attr-defined]
 )
 
 # -----------------------------------------------------------------------------
@@ -112,9 +158,13 @@ ALL_BRANCHES: Tuple[Branch, ...] = tuple(
 #  These are cheap and they fail loudly. A branch package whose BRANCH.key does
 #  not match its directory name would otherwise produce a taxonomy that looks
 #  fine until someone tries to resolve a path.
+#
+#  They run over the written colours only. A pending colour has nothing to
+#  check, and demanding subtypes from an empty directory is what made the
+#  package unimportable in the first place.
 # -----------------------------------------------------------------------------
-for _key, _module in BRANCH_MODULES.items():
-    _branch = _module.BRANCH  # type: ignore[attr-defined]
+for _key in WRITTEN_COLOURS:
+    _branch = BRANCH_MODULES[_key].BRANCH  # type: ignore[attr-defined]
     if _branch.key != _key:
         raise ImportError(
             f"branch package {_key!r} defines BRANCH.key = {_branch.key!r}; "
@@ -123,7 +173,10 @@ for _key, _module in BRANCH_MODULES.items():
     if not _branch.subtypes:
         raise ImportError(f"branch package {_key!r} defines no subtypes")
 
-if len(ALL_BRANCHES) != len(COLOUR_ORDER):
+if len(ALL_BRANCHES) != len(WRITTEN_COLOURS):
+    raise ImportError("WRITTEN_COLOURS and ALL_BRANCHES disagree about the branch list")
+
+if set(WRITTEN_COLOURS) | set(PENDING_COLOURS) != set(COLOUR_ORDER):
     raise ImportError("COLOUR_ORDER and BRANCH_MODULES disagree about the branch list")
 
-del _key, _module, _branch
+del _key, _branch
