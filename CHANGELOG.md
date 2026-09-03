@@ -58,6 +58,41 @@ date.
   `Maturity.PILOT` and the only one at `Scale.BENCH`, both deliberate: the
   technology is established as a research reagent and at demonstration scale
   as a manufacturing platform.
+- The **yellow branch**, complete at nine of nine subtypes:
+  `food_fermentation`, `precision_fermentation`, `alternative_proteins`,
+  `cultivated_meat`, `probiotics_and_prebiotics`, `food_biopreservation`,
+  `food_safety_biotechnology`, `biofortification` and `nutrigenomics`.
+
+  This entry was omitted from the pull request that added the branch, to avoid
+  a third conflict on the same changelog line after the one that lost the blue
+  entry at merge. It is restored here rather than left missing.
+- The **grey branch**, complete at nine of nine subtypes: `bioremediation`,
+  `bioaugmentation`, `phytoremediation`, `wastewater_treatment`,
+  `biowaste_treatment`, `air_biotreatment`, `biomining`,
+  `environmental_biomonitoring` and `biodiversity_conservation`. Sixty-four
+  files, ordered from cleaning the ground, through treating the streams, to
+  recovering, measuring and conserving.
+
+  Three findings shape the branch. `wastewater_treatment` is the largest
+  deliberate use of microorganisms anywhere and is organised around the
+  observation that the engineering selects the organisms rather than supplying
+  them, which is the exact inverse of `white.microbial_fermentation`.
+  `bioaugmentation` is the only record in the library whose subject usually
+  fails, written that way because that is the field's own repeated finding, and
+  it holds the colonisation-resistance evidence that `green.biofertilisers` and
+  `yellow.probiotics_and_prebiotics` reached independently. And `biomining`
+  states without softening that it is the acid mine drainage reaction performed
+  deliberately inside a lined containment: the technology and the pollution are
+  the same chemistry.
+
+  Two vocabulary values differ from the rest of the branch and are argued in
+  place. `bioaugmentation` is `RiskTier.CONTROLLED` and
+  `RegulatoryStatus.NOTIFIED` rather than higher, because safety is regulated
+  and efficacy is not, which is the record's central point rather than an
+  oversight. `biodiversity_conservation` is the branch's only
+  `RiskTier.RESTRICTED`, and the restriction attaches to the subject, a
+  protected species, rather than to the method, which is ordinary molecular
+  biology.
 - `tools/check_enum_members.py`, which validates every controlled-vocabulary
   reference under `src/biotechnology/branches/` against `core/enums.py` using
   the abstract syntax tree, with no import. It is the only check in the
