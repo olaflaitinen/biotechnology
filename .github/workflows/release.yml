@@ -338,7 +338,7 @@ jobs:
         run: "python tools/extract_release_notes.py --version '${{ needs.verify.outputs.version }}' --output release-notes.md"
 
       - name: "Create release"
-        uses: "softprops/action-gh-release@v2"
+        uses: "softprops/action-gh-release@v3"
         with:
           body_path: "release-notes.md"
           files: "dist/*"
