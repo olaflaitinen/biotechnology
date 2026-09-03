@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/white/biofuels/.
+  Produced from src/biotechnology/branches/white/biofuels/.
   Edit the source and run `make docs`.
 -->
 

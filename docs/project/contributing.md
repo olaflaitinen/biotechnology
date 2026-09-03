@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from CONTRIBUTING.md.
+  Produced from CONTRIBUTING.md.
   Edit the source and run `make docs`.
 -->
 

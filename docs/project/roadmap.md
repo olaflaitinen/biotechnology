@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from ROADMAP.md.
+  Produced from ROADMAP.md.
   Edit the source and run `make docs`.
 -->
 

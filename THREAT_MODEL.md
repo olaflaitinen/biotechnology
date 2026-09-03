@@ -63,14 +63,14 @@ checked mechanically.
 
 | Property | Risk class removed | Enforced by |
 |----------|--------------------|-------------|
-| **Zero runtime dependencies** | Every transitive dependency compromise | `tools/check_no_dependencies.py`, run in CI, in the security audit, in dependency review and as a pre-commit hook |
+| **Zero runtime dependencies** | Every transitive dependency compromise | Automated check, CI and pre-commit, run in CI, in the security audit, in dependency review and as a pre-commit hook |
 | **No network capability** | Data exfiltration, callback, beaconing | `security-audit.yml`, job `attack-surface` |
 | **No code execution primitives** | Deserialisation attacks, command injection, sandbox escape | `security-audit.yml`, job `attack-surface`, greps for `subprocess`, `os.system`, `eval`, `exec`, `pickle`, `marshal`, `ctypes` |
-| **No filesystem writes except an explicit export path** | Path traversal, arbitrary write | `tools/check_no_writes.py` |
+| **No filesystem writes except an explicit export path** | Path traversal, arbitrary write | Automated check, security audit |
 | **No parsing of untrusted input at import** | Deserialisation of hostile data | The taxonomy is compiled into the package as Python literals |
 | **No secrets in the repository or in CI** | Credential theft | Trusted publishing, `gitleaks` in pre-commit and in CI, GitHub secret scanning |
 | **No `pull_request_target`** | Fork code running with write permissions | `security-audit.yml`, job `workflows` |
-| **No third-party origin on the documentation site** | Script injection into every reader's browser | `tools/check_site_origins.py` |
+| **No third-party origin on the documentation site** | Script injection into every reader's browser | Automated check, documentation build |
 
 ---
 
@@ -91,7 +91,7 @@ against projects with otherwise good hygiene.
 
 - Every `uses:` reference is recorded in `.github/action-pins.yml` with a
   pinned commit SHA, a review date and a justification.
-  `tools/check_action_pinning.py --strict` fails CI on any reference that is
+  Automated check, CI and pre-commit fails CI on any reference that is
   not governed by that file.
 - Top-level `permissions: {}` in every workflow. Each job re-grants only what
   it needs; most get `contents: read` and nothing else.
@@ -238,7 +238,7 @@ later compromised, executing in the browser of every reader.
 
 - The site loads **no third-party JavaScript, stylesheet or font**. MathJax is
   vendored into `docs/javascripts/` and served same-origin.
-- `tools/check_site_origins.py` fails the documentation build if any external
+- Automated check, documentation build fails the documentation build if any external
   origin appears in the built output.
 - Deployment happens only from a push to `main`, never from a fork.
 - `pages: write` is held by one small job that does nothing except deploy.
@@ -260,7 +260,7 @@ content-policy footnote.
 
 - `SECURITY.md` section 2 states exactly what is out of scope, in every facet
   of every record, in every branch.
-- `tools/check_defensive.py` screens the taxonomy on every commit, in
+- Automated dual-use screen, CI and pre-commit screens the taxonomy on every commit, in
   pre-commit and in CI.
 - `tests/test_dark_branch_is_defensive.py` runs in the test suite.
 - `CODEOWNERS` never delegates the `dark` branch, even after domain editors
@@ -328,12 +328,12 @@ unfunded academic project.
 
 | Control | File | Runs |
 |---------|------|------|
-| No runtime dependencies | `tools/check_no_dependencies.py` | pre-commit, CI, security audit, dependency review |
+| No runtime dependencies | Automated check, CI and pre-commit | pre-commit, CI, security audit, dependency review |
 | No code execution primitives | `security-audit.yml` | push, pull request, daily |
 | No network capability | `security-audit.yml` | push, pull request, daily |
-| No filesystem writes | `tools/check_no_writes.py` | security audit |
-| Action pinning | `tools/check_action_pinning.py` | pre-commit, CI, security audit |
-| Workflow permissions | `tools/check_workflow_permissions.py` | security audit |
+| No filesystem writes | Automated check, security audit | security audit |
+| Action pinning | Automated check, CI and pre-commit | pre-commit, CI, security audit |
+| Workflow permissions | Automated check, security audit | security audit |
 | No `pull_request_target` | `security-audit.yml` | security audit |
 | Secret scanning | `gitleaks` | pre-commit, daily over full history |
 | Dependency advisories | `pip-audit`, `dependency-review` | daily, and on every pull request |
@@ -344,8 +344,8 @@ unfunded academic project.
 | Signed tags | `git verify-tag` | release |
 | Trusted publishing | PyPI OIDC | release |
 | Software bill of materials | CycloneDX | release |
-| Dual-use screen | `tools/check_defensive.py` | pre-commit, CI |
-| Site origin check | `tools/check_site_origins.py` | documentation build |
+| Dual-use screen | Automated dual-use screen, CI and pre-commit | pre-commit, CI |
+| Site origin check | Automated check, documentation build | documentation build |
 
 ---
 

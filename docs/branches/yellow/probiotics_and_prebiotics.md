@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/yellow/probiotics_and_prebiotics/.
+  Produced from src/biotechnology/branches/yellow/probiotics_and_prebiotics/.
   Edit the source and run `make docs`.
 -->
 

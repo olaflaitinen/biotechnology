@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from STYLE_GUIDE.md.
+  Produced from STYLE_GUIDE.md.
   Edit the source and run `make docs`.
 -->
 

@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/yellow/food_fermentation/.
+  Produced from src/biotechnology/branches/yellow/food_fermentation/.
   Edit the source and run `make docs`.
 -->
 

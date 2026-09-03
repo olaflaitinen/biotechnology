@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/white/cell_free_biomanufacturing/.
+  Produced from src/biotechnology/branches/white/cell_free_biomanufacturing/.
   Edit the source and run `make docs`.
 -->
 

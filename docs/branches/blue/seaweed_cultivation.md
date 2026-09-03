@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/blue/seaweed_cultivation/.
+  Produced from src/biotechnology/branches/blue/seaweed_cultivation/.
   Edit the source and run `make docs`.
 -->
 

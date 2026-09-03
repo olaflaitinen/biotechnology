@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from CODE_OF_CONDUCT.md.
+  Produced from CODE_OF_CONDUCT.md.
   Edit the source and run `make docs`.
 -->
 

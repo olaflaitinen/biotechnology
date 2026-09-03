@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/grey/biomining/.
+  Produced from src/biotechnology/branches/grey/biomining/.
   Edit the source and run `make docs`.
 -->
 

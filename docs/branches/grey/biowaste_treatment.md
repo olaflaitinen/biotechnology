@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/grey/biowaste_treatment/.
+  Produced from src/biotechnology/branches/grey/biowaste_treatment/.
   Edit the source and run `make docs`.
 -->
 

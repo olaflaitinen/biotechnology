@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/green/plant_tissue_culture/.
+  Produced from src/biotechnology/branches/green/plant_tissue_culture/.
   Edit the source and run `make docs`.
 -->
 

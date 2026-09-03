@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/grey/biodiversity_conservation/.
+  Produced from src/biotechnology/branches/grey/biodiversity_conservation/.
   Edit the source and run `make docs`.
 -->
 

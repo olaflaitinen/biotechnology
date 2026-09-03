@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from DATA_MODEL.md.
+  Produced from DATA_MODEL.md.
   Edit the source and run `make docs`.
 -->
 

@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/white/bioprocess_engineering/.
+  Produced from src/biotechnology/branches/white/bioprocess_engineering/.
   Edit the source and run `make docs`.
 -->
 

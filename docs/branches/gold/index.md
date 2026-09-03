@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from the taxonomy.
+  Produced from the taxonomy.
   Edit the source and run `make docs`.
 -->
 

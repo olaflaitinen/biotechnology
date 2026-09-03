@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/yellow/cultivated_meat/.
+  Produced from src/biotechnology/branches/yellow/cultivated_meat/.
   Edit the source and run `make docs`.
 -->
 

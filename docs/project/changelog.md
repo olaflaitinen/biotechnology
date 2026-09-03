@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from CHANGELOG.md.
+  Produced from CHANGELOG.md.
   Edit the source and run `make docs`.
 -->
 
@@ -99,7 +99,7 @@ date.
   `RiskTier.RESTRICTED`, and the restriction attaches to the subject, a
   protected species, rather than to the method, which is ordinary molecular
   biology.
-- `tools/check_enum_members.py`, which validates every controlled-vocabulary
+- an automated controlled-vocabulary check, which validates every controlled-vocabulary
   reference under `src/biotechnology/branches/` against `core/enums.py` using
   the abstract syntax tree, with no import. It is the only check in the
   repository that gives a useful answer while the library is half written,
@@ -118,7 +118,7 @@ date.
   intensity rather than danger; and `Domain.AGRICULTURE`, `Domain.INDUSTRY` and
   `Domain.HEALTHCARE`, where the vocabulary groups by who pays and offers
   `FOOD`, `MATERIALS` and `HEALTH`. Both records were corrected and the values
-  justified in comments. `tools/check_enum_members.py` exists so that this
+  justified in comments. an automated controlled-vocabulary check exists so that this
   class of error cannot recur silently.
 
 ---

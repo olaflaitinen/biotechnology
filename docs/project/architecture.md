@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from ARCHITECTURE.md.
+  Produced from ARCHITECTURE.md.
   Edit the source and run `make docs`.
 -->
 
@@ -62,7 +62,6 @@ biotechnology/
 ├── .gitattributes
 ├── .github/                    workflows, issue templates, CODEOWNERS
 ├── docs/                       generated reference pages
-├── tools/                      generators and maintenance scripts
 ├── tests/                      the test suite
 └── src/biotechnology/          the package
 ```
@@ -298,7 +297,7 @@ cross-references are exactly what rots first in a hand-curated dataset.
 |------|--------|------|
 | `src/**` | **Authored** | Hand-written and hand-reviewed. Never generated. |
 | `tests/**` | **Authored** | |
-| `docs/**` | **Generated** | Produced by `tools/generate_docs.py` from `src/`. Do not edit; edit the source facet and re-run `make docs`. |
+| `docs/**` | **Generated** | Produced by the documentation generator from `src/`. Do not edit; edit the source facet and re-run `make docs`. |
 | Root `*.md` | **Authored** | |
 
 The generator reads the same objects the library exposes, so the documentation

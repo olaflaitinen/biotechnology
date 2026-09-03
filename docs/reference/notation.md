@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from NOTATION.md.
+  Produced from NOTATION.md.
   Edit the source and run `make docs`.
 -->
 

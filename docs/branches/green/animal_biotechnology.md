@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/green/animal_biotechnology/.
+  Produced from src/biotechnology/branches/green/animal_biotechnology/.
   Edit the source and run `make docs`.
 -->
 

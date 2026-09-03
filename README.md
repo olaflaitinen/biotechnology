@@ -292,13 +292,13 @@ mechanically on every commit rather than asserted.
 
 | Property | Checked by |
 |---|---|
-| Zero runtime dependencies | `tools/check_no_dependencies.py` |
+| Zero runtime dependencies | Automated check, CI and pre-commit |
 | No network access, the package never opens a socket | `security-audit.yml` |
 | No `subprocess`, `eval`, `exec`, `pickle`, `marshal` or `ctypes` | `security-audit.yml` |
-| No filesystem writes except an explicit export path | `tools/check_no_writes.py` |
+| No filesystem writes except an explicit export path | Automated check, security audit |
 | No secrets, publication uses trusted publishing not a token | `gitleaks`, PyPI OIDC |
-| Every GitHub Action governed and pinned | `tools/check_action_pinning.py` |
-| Every workflow least-privilege, `persist-credentials: false` | `tools/check_workflow_permissions.py` |
+| Every GitHub Action governed and pinned | Automated check, CI and pre-commit |
+| Every workflow least-privilege, `persist-credentials: false` | Automated check, security audit |
 
 Releases carry a **signed tag**, a **build provenance attestation** and a
 **CycloneDX SBOM**. Verify one with:
@@ -399,7 +399,7 @@ GitHub renders a formatted citation from it in the sidebar.
 ## References
 
 Numbered in order of first appearance, in the style of *Nature*. Every DOI here
-is resolved against Crossref by `tools/verify_references.py`, which fails the
+is resolved against Crossref by an automated Crossref resolution check, which fails the
 build if one does not resolve or if any stored field disagrees with the
 publisher's deposited record. Run it with `make citations`.
 

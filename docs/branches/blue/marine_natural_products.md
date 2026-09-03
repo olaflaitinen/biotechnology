@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/blue/marine_natural_products/.
+  Produced from src/biotechnology/branches/blue/marine_natural_products/.
   Edit the source and run `make docs`.
 -->
 

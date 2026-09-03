@@ -1,6 +1,6 @@
 <!--
   GENERATED FILE. Do not edit.
-  Produced by tools/generate_docs.py from src/biotechnology/branches/green/molecular_plant_breeding/.
+  Produced from src/biotechnology/branches/green/molecular_plant_breeding/.
   Edit the source and run `make docs`.
 -->
 
